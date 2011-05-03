@@ -44,7 +44,7 @@ public class DriverImpl implements Driver {
 		return conn;
 	}
 	
-	void close(Connection conn){
+	static void close(Connection conn){
 		try {
 			if(conn != null){
 				conn.close();
@@ -55,7 +55,7 @@ public class DriverImpl implements Driver {
 		}
 	}
 	
-	void close(ResultSet rs){
+	static void close(ResultSet rs){
 		try {
 			if(rs != null){
 				rs.close();
@@ -66,7 +66,7 @@ public class DriverImpl implements Driver {
 		}
 	}
 	
-	void close(Statement s){
+	static void close(Statement s){
 		try {
 			if(s != null){
 				s.close();
