@@ -1,6 +1,6 @@
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.util.User;
+import de.unihamburg.zbh.fishoracle_db_api.data.User;
 
 public interface UserAdaptor {
 
@@ -20,4 +20,5 @@ public interface UserAdaptor {
 	
 	public User[] fetchAllUsers();
 	
+	final static String TYPE = "UserAdaptor";	
 }

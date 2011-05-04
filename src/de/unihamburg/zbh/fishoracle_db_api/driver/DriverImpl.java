@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.util.FishOracleConnection;
+import de.unihamburg.zbh.fishoracle_db_api.util.FishOracleConnection;
 
 public class DriverImpl implements Driver {
 
@@ -84,12 +84,16 @@ public class DriverImpl implements Driver {
 
 	@Override
 	public synchronized void removeAdaptor(Adaptor adaptor) {
-		// TODO Auto-generated method stub
+		removeAdaptor(adaptor.getType());
 	}
 	
 	@Override
 	public synchronized void removeAdaptor(String type) {
-		// TODO Auto-generated method stub
+		BaseAdaptor adaptor = (BaseAdaptor) adaptors.remove(type);
+	    if (adaptor != null) {
+	      adaptor.driver = null;
+	      logger.fine(adaptor.getClass().getName() + " from FODriver removed");
+	    }
 	}
 	
 	@Override
@@ -101,7 +105,7 @@ public class DriverImpl implements Driver {
 
 	@Override
 	public synchronized Adaptor getAdaptor(String type) {
-		return adaptors.get(type) ;
+		return adaptors.get(type);
 	}
 
 	@Override

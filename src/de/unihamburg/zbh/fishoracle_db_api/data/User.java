@@ -15,7 +15,7 @@
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-package de.unihamburg.zbh.fishoracle_db_api.data.util;
+package de.unihamburg.zbh.fishoracle_db_api.data;
 
 public class User {
 
@@ -108,6 +108,11 @@ public class User {
 		return isActive;
 	}
 
+	public int getIsActiveAsInt() {
+		return (isActive) ? 1 : 0;
+	}
+
+	
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
@@ -115,9 +120,19 @@ public class User {
 	public Boolean getIsAdmin() {
 		return isAdmin;
 	}
+	
+	public int getIsAdminAsInt() {
+		return (isAdmin) ? 1 : 0;
+	}
 
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+	
+	public String toString(){
+		return "ID: " + id + " First Name: " + firstName + " " +
+				"Last Name: " + lastName + "Username: " + userName + " " +
+				"E-Mail: email" + " Active?: " + isActive + " Admin?: " + isAdmin;
 	}
 	
 }

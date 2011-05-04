@@ -15,8 +15,9 @@ public abstract class BaseAdaptor implements Adaptor{
 	protected FODriverImpl driver;
 	private String featureType;
 	
-	protected BaseAdaptor(FODriverImpl driver) {
+	protected BaseAdaptor(FODriverImpl driver, String type) {
 		this.driver = driver;
+		this.featureType = type;
 	}
 	
 	public final FODriver getDriver() {
@@ -156,7 +157,12 @@ public abstract class BaseAdaptor implements Adaptor{
 		return -1;
 	}
 	
+	
 	public long fetchCount(){
+		return fetchCount("");
+	}
+	
+	public long fetchCount(String constraint){
 		long result = 0;
 		String query = null;
 		Connection conn = null;
@@ -164,8 +170,10 @@ public abstract class BaseAdaptor implements Adaptor{
 		try {
 			conn = getConnection();
 			String tablename = getPrimaryTableName();
-			query = "SELECT count(distinct(" + tablename + "_id))" + " FROM "
-					+ tablename;
+			query = "SELECT count(distinct(" + tablename + "_id))" + " FROM "+ tablename;
+			if(!constraint.equals("")){
+				query += " WHERE " + constraint;
+			}
 			ResultSet rs = executeQuery(conn, query);
 			if (rs.next())
 				result = rs.getLong(1);

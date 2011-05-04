@@ -5,10 +5,16 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	public FODriverImpl(String host, String database, String user,
 			String password, String port) {
 		super(host, database, user, password, port);
+		loadAdaptors();
 	}
 	
 	protected void loadAdaptors() {
-		//addAdaptor(new XXXAdaptorImpl(this));
+		addAdaptor(new UserAdaptorImpl(this));
+	}
+
+	@Override
+	public synchronized UserAdaptor getUserAdaptor() {
+		return (UserAdaptor) getAdaptor(UserAdaptor.TYPE);
 	}
 
 }

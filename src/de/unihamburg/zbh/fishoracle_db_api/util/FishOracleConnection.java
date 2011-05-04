@@ -15,7 +15,7 @@
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-package de.unihamburg.zbh.fishoracle_db_api.data.util;
+package de.unihamburg.zbh.fishoracle_db_api.util;
 
 import java.sql.*;
 
@@ -26,7 +26,7 @@ import java.sql.*;
 public class FishOracleConnection {
 
 	public static Connection connect(String host, String db, String user, String pw, String port) throws Exception {
-		String url = "jdbc:mysql://" + host + "/" + db + ":" + port + "";
+		String url = "jdbc:mysql://" + host + ":" + port + "/" + db;
 		String userName = user;
 		String password = pw;
 		
