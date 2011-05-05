@@ -18,6 +18,8 @@ public class DriverImpl implements Driver {
 	private String password;
 	private String port;
 	
+	private String databaseName = null;
+	
 	private final static Logger logger = Logger.getLogger(DriverImpl.class
 		      .getName());
 	
@@ -114,5 +116,21 @@ public class DriverImpl implements Driver {
 	    Adaptor[] adaptorArray = new Adaptor[length];
 	    adaptors.values().toArray(adaptorArray);
 	    return adaptorArray;
+	}
+	
+	@Override
+	public String fetchDatabaseName() {
+		if (databaseName==null) {
+			Connection conn = null;
+			try {
+				conn = getConnection(); 
+				databaseName = conn.getCatalog();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(conn);
+			}  
+		}
+		return databaseName;
 	}
 }

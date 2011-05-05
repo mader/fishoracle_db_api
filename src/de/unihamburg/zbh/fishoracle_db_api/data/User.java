@@ -40,6 +40,7 @@ public class User {
 		this.lastName = lastName;
 		this.userName = userName;
 		this.email = email;
+		this.pw = "";
 		this.isActive = isActive;
 		this.isAdmin = isAdmin;
 	}
@@ -130,9 +131,9 @@ public class User {
 	}
 	
 	public String toString(){
-		return "ID: " + id + " First Name: " + firstName + " " +
-				"Last Name: " + lastName + "Username: " + userName + " " +
-				"E-Mail: email" + " Active?: " + isActive + " Admin?: " + isAdmin;
+		return "ID: " + id + ", First Name: " + firstName + ", " +
+				"Last Name: " + lastName + ", Username: " + userName + ", " +
+				"E-Mail: " + email + ", Active?: " + isActive + ", Admin?: " + isAdmin;
 	}
 	
 }

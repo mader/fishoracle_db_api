@@ -13,5 +13,6 @@ void removeAdaptor(Adaptor adaptor);
 void removeAdaptor(String type);
 
 void removeAllAdaptors();
-	
+
+public String fetchDatabaseName();
 }

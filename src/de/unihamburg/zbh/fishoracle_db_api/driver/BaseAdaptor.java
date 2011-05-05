@@ -157,6 +157,28 @@ public abstract class BaseAdaptor implements Adaptor{
 		return -1;
 	}
 	
+	public void truncateTable(String table){
+		String query = null;
+		Connection conn = null;
+
+		try {
+			conn = getConnection();
+			query = "TRUNCATE TABLE "+ table;
+
+			executeUpdate(conn, query);
+
+			query = "ALTER TABLE "+ table + " AUTO_INCREMENT = 1";
+			
+			executeUpdate(conn, query);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.warning(e.getMessage());
+		} finally {
+			close(conn);
+		}
+	}
+	
 	
 	public long fetchCount(){
 		return fetchCount("");

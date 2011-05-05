@@ -1,6 +1,7 @@
 package de.unihamburg.zbh.fishoracle_db_api.example;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
+import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.UserAdaptor;
@@ -22,8 +23,14 @@ public class Example {
 		
 		i = ua.storeUser(user1);
 		
-		System.out.println(i);
+		//System.out.println(i);
 
+		User user2 = ua.fetchUserByID(1);
+		
+		//System.out.println(user2.toString());
+		
+		//ua.deleteUser(user2);
+		
 	}
 
 }
