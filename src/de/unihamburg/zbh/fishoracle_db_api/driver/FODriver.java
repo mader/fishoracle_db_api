@@ -4,4 +4,6 @@ public interface FODriver extends Driver {
 
 	UserAdaptor getUserAdaptor();
 	
+	OrganAdaptor getOrganAdaptor();
+	
 }

@@ -7,9 +7,10 @@ public class Organ {
 	private String type;
 	private String activty;
 	
-	public Organ(int id, String label, String activty) {
+	public Organ(int id, String label, String type, String activty) {
 		this.id = id;
 		this.label = label;
+		this.type = type;
 		this.activty = activty;
 	}
 

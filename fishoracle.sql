@@ -255,7 +255,7 @@ CREATE TABLE `project` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
-t
+
 -- 
 -- Table structure for table `group_project_access`
 -- 
@@ -264,7 +264,7 @@ CREATE TABLE `group_project_access` (
   `group_project_access_id` int UNSIGNED NOT NULL auto_increment,
   `project_id` int NOT NULL,
   `group_id` int NOT NULL,
-  `access_type` varchar(2) NOT NULL,
+  `access_type` varchar(2),
   PRIMARY KEY  (`group_project_access_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

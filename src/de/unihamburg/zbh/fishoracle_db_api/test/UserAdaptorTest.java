@@ -16,7 +16,7 @@ public class UserAdaptorTest extends TestCase {
 	
 	protected void setUp() {
 
-		driver = new FODriverImpl("localhost", "newfo", "fouser", "fish4me", "3306");
+		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 		ua = (UserAdaptor) driver.getAdaptor("UserAdaptor");
 		
 		user1 = new User("Bugs", "Bunny", "bugs", "bugs@loony.tunes", "123secret", false, false);

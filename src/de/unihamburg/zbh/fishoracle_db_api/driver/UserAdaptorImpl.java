@@ -125,8 +125,6 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 				isAdmin = userRs.getBoolean(7);
 			}
 			
-			user = new User(id, fistName, lastName, dbUserName, email, isActive, isAdmin);
-			
 			if(userId == 0){
 				
 				throw new AdaptorException("A user with ID: " + id + " does not exist.");
