@@ -6,4 +6,5 @@ public interface FODriver extends Driver {
 	
 	OrganAdaptor getOrganAdaptor();
 	
+	PropertyAdaptor getPropertyAdaptor();
 }
