@@ -3,22 +3,33 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
 public class CnSegment {
 
 	private int id;
-	private String stableId;
 	private String chromosome;
 	private int start;
 	private int end;
-	private int mean;
+	private double mean;
 	private int numberOfMarkers;
+	private int microarraystudyId;
 	
-	public CnSegment(int id, String stableId, String chromosome, int start,
-			int end, int mean, int numberOfMarkers) {
+	public CnSegment(int id, String chromosome, int start, int end,
+			double mean, int numberOfMarkers) {
 		this.id = id;
-		this.stableId = stableId;
 		this.chromosome = chromosome;
 		this.start = start;
 		this.end = end;
 		this.mean = mean;
 		this.numberOfMarkers = numberOfMarkers;
+		this.microarraystudyId = 0;
+	}
+	
+	public CnSegment(int id, String chromosome, int start,
+			int end, double mean, int numberOfMarkers, int microarraystudyId) {
+		this.id = id;
+		this.chromosome = chromosome;
+		this.start = start;
+		this.end = end;
+		this.mean = mean;
+		this.numberOfMarkers = numberOfMarkers;
+		this.microarraystudyId = microarraystudyId;
 	}
 
 	public int getId() {
@@ -28,15 +39,6 @@ public class CnSegment {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getStableId() {
-		return stableId;
-	}
-
-	public void setStableId(String stableId) {
-		this.stableId = stableId;
-	}
-
 	public String getChromosome() {
 		return chromosome;
 	}
@@ -61,11 +63,11 @@ public class CnSegment {
 		this.end = end;
 	}
 
-	public int getMean() {
+	public double getMean() {
 		return mean;
 	}
 
-	public void setMean(int mean) {
+	public void setMean(double mean) {
 		this.mean = mean;
 	}
 
@@ -75,5 +77,13 @@ public class CnSegment {
 
 	public void setNumberOfMarkers(int numberOfMarkers) {
 		this.numberOfMarkers = numberOfMarkers;
+	}
+
+	public int getMicroarraystudyId() {
+		return microarraystudyId;
+	}
+
+	public void setMicroarraystudyId(int microarraystudyId) {
+		this.microarraystudyId = microarraystudyId;
 	}
 }

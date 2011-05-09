@@ -145,7 +145,6 @@ INSERT INTO `property` (`property_id`, `property_label`, `property_type`, `prope
 
 CREATE TABLE `cn_segment` (
   `cn_segment_id` int UNSIGNED NOT NULL auto_increment,
-  `cn_segment_stable_id` varchar(16),
   `cn_segment_chromosome` varchar(16) NOT NULL,
   `cn_segment_start` int NOT NULL,
   `cn_segment_end` int NOT NULL,

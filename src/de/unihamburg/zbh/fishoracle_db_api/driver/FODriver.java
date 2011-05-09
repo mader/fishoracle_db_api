@@ -11,4 +11,6 @@ public interface FODriver extends Driver {
 	TissueSampleAdaptor getTissueSampleAdaptor();
 	
 	ChipAdaptor getChipAdaptor();
+	
+	CnSegmentAdaptor getCnSegmentAdaptor();
 }
