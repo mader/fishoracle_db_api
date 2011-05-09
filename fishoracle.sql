@@ -191,7 +191,6 @@ CREATE TABLE `tissue_sample_property` (
 
 CREATE TABLE `tissue_sample` (
   `tissue_sample_id` int UNSIGNED  NOT NULL auto_increment,
-  `tissue_sample_sample_id` int NOT NULL,
   `tissue_sample_organ_id` int NOT NULL,
   PRIMARY KEY  (`tissue_sample_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

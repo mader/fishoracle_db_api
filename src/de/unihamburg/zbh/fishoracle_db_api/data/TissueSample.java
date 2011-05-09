@@ -6,7 +6,7 @@ public class TissueSample {
 	private Organ organ;
 	private Property[] properties;
 	
-	public TissueSample(Organ organ, int id, Property[] properties) {
+	public TissueSample(int id, Organ organ, Property[] properties) {
 		this.id = id;
 		this.organ = organ;
 		this.properties = properties;
