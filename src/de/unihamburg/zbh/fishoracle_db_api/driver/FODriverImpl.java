@@ -12,6 +12,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new UserAdaptorImpl(this));
 		addAdaptor(new OrganAdaptorImpl(this));
 		addAdaptor(new PropertyAdaptorImpl(this));
+		addAdaptor(new TissueSampleAdaptorImpl(this));
+		addAdaptor(new ChipAdaptorImpl(this));
 	}
 
 	@Override
@@ -27,5 +29,15 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	@Override
 	public PropertyAdaptor getPropertyAdaptor() {
 		return (PropertyAdaptor) getAdaptor(PropertyAdaptor.TYPE);
+	}
+	
+	@Override
+	public TissueSampleAdaptor getTissueSampleAdaptor() {
+		return (TissueSampleAdaptor) getAdaptor(TissueSampleAdaptor.TYPE);
+	}
+	
+	@Override
+	public ChipAdaptor getChipAdaptor() {
+		return (ChipAdaptor) getAdaptor(ChipAdaptor.TYPE);
 	}
 }

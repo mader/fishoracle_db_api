@@ -11,7 +11,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.TissueSampleAdaptor;
 import junit.framework.TestCase;
 
-public class TissueAdaptorTest extends TestCase{
+public class TissueSampleAdaptorTest extends TestCase{
 
 	private FODriver driver;
 	private OrganAdaptor oa;
@@ -37,6 +37,9 @@ public class TissueAdaptorTest extends TestCase{
 		testorgans[0] = organ1;
 		testorgans[1] = organ2;
 
+		oa.storeOrgan(organ1);
+		oa.storeOrgan(organ2);
+		
 		pa = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 		
 		property1 = new Property(1, "G0", "grade", "enabled");
@@ -45,6 +48,9 @@ public class TissueAdaptorTest extends TestCase{
 		testpropertys[0] = property1;
 		testpropertys[1] = property2;
 		
+		pa.storeProperty(property1);
+		pa.storeProperty(property2);
+	
 		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		
 		tissue1 = new TissueSample(1, oa.fetchOrganById(1), pa.fetchAllProperties());
@@ -86,13 +92,15 @@ public class TissueAdaptorTest extends TestCase{
 		ta.deleteTissueSample(t1);
 		assertTrue(((BaseAdaptor) ta).fetchCount() == 1);
 		ta.deleteTissueSample(t2);
-		assertTrue(((BaseAdaptor) ta).fetchCount() == 2);
+		assertTrue(((BaseAdaptor) ta).fetchCount() == 0);
 	}
 	
 	protected void tearDown() {
-		if(((BaseAdaptor) oa).fetchCount() == 0){
-			((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
+		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
+		((BaseAdaptor) pa).truncateTable(((BaseAdaptor) pa).getPrimaryTableName());
+		if(((BaseAdaptor) ta).fetchCount() == 0){
+			((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
+			((BaseAdaptor) ta).truncateTable("tissue_sample_property");
 		}
 	}
-	
 }

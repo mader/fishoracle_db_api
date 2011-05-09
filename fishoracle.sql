@@ -18,9 +18,10 @@ CREATE TABLE `area_access` (
 -- 
 
 CREATE TABLE `chip` (
+  `chip_id` int UNSIGNED NOT NULL auto_increment,
   `chip_name` varchar(64) NOT NULL,
   `chip_type` varchar(64) NOT NULL,
-  PRIMARY KEY  (`chip_name`)
+  PRIMARY KEY  (`chip_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 

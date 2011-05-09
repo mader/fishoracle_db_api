@@ -4,9 +4,9 @@ import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 
 public interface TissueSampleAdaptor {
 
-	public int storeTissueSample(TissueSample tissue);
+	public void storeTissueSample(TissueSample tissue);
 	public TissueSample fetchTissueSampleById(int id);
-	public int deleteTissueSample(TissueSample tissue);
+	public void deleteTissueSample(TissueSample tissue);
 	
 	final static String TYPE = "TissueSampleAdaptor";
 	

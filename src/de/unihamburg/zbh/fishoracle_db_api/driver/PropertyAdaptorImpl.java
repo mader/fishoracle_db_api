@@ -264,6 +264,53 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	}
 	
 	@Override
+	public Property[] fetchPropertiesForTissueSampleId(int id) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		ArrayList<Property> propertyContainer = new ArrayList<Property>();
+		Property[] properties = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("property.property_id, property_label, property_type, property_activity")
+			.append(" FROM ").append(getPrimaryTableName())
+			.append(" RIGHT JOIN tissue_sample_property ON tissue_sample_property.property_id = property.property_id")
+			.append(" WHERE ").append("tissue_sample_property.tissue_sample_id = '" + id + "'")
+			.append(" ORDER BY property_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				propertyContainer.add(property);
+			}
+			
+			if(property == null){
+				
+				throw new AdaptorException("No properties are associated with tissue id: " + id);
+				
+			}
+			
+			properties = new Property[propertyContainer.size()];
+			
+			propertyContainer.toArray(properties);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return properties;
+	}
+	
+	@Override
 	public int storeProperty(Property property) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -326,5 +373,4 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 		}
 		return types;
 	}
-	
 }

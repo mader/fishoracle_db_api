@@ -7,4 +7,8 @@ public interface FODriver extends Driver {
 	OrganAdaptor getOrganAdaptor();
 	
 	PropertyAdaptor getPropertyAdaptor();
+	
+	TissueSampleAdaptor getTissueSampleAdaptor();
+	
+	ChipAdaptor getChipAdaptor();
 }

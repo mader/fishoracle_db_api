@@ -8,6 +8,7 @@ public interface PropertyAdaptor {
 	public Property[] fetchProperties(boolean enabled);
 	public Property fetchPropertyById(int id);
 	public Property[] fetchPropertiesByType(String type);
+	public Property[] fetchPropertiesForTissueSampleId(int id);
 	public String[] fetchAllTypes();
 	public int storeProperty(Property property);
 	public void deleteProperty(Property property);

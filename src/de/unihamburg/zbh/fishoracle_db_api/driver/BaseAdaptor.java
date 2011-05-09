@@ -54,6 +54,19 @@ public abstract class BaseAdaptor implements Adaptor{
 		return nor;
 	}
 	
+	public static ResultSet executeUpdateGetKeys(Connection conn, String sql){
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(sql);
+			rs = stmt.getGeneratedKeys();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.warning(e.getMessage());
+		}
+		return rs;
+	}
+	
 	public static int executeUpdate(PreparedStatement ps, String sql){
 		int nor = 0;
 		try {
