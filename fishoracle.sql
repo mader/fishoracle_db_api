@@ -46,12 +46,12 @@ INSERT INTO `chip` (`chip_name`, `chip_type`) VALUES
 CREATE TABLE `microarraystudy` (
   `microarraystudy_id` int UNSIGNED NOT NULL auto_increment,
   `microarraystudy_date_inserted` date NOT NULL,
-  `microarraystudy_labelling` varchar(255) NOT NULL,
+  `microarraystudy_name` varchar(255) NOT NULL,
   `microarraystudy_description` varchar(255) NOT NULL,
   `microarraystudy_user_id` int NOT NULL,
   `microarraystudy_sample_on_chip_id` int NOT NULL,
   PRIMARY KEY  (`microarraystudy_id`),
-  UNIQUE KEY `microarraystudy_labelling` (`microarraystudy_labelling`)
+  UNIQUE KEY `microarraystudy_name` (`microarraystudy_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -162,10 +162,9 @@ CREATE TABLE `cn_segment` (
 
 CREATE TABLE `sample_on_chip` (
   sample_on_chip_id int UNSIGNED NOT NULL auto_increment,
-  `sample_on_chip_chip_name` varchar(64) NOT NULL,
+  `sample_on_chip_chip_id` int NOT NULL,
   `sample_on_chip_tissue_sample_id` int NOT NULL,
-  `sample_on_chip_user_id` int NOT NULL,
-  `sample_on_chip_microarraystudy_id` int NOT NULL,
+  `sample_on_chip_microarraystudy_id` int NOT NULL DEFAULT 0,
   PRIMARY KEY  (`sample_on_chip_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

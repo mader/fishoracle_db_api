@@ -13,4 +13,6 @@ public interface FODriver extends Driver {
 	ChipAdaptor getChipAdaptor();
 	
 	CnSegmentAdaptor getCnSegmentAdaptor();
+	
+	MicroarraystudyAdaptor getMicroarraystudyAdaptor();
 }

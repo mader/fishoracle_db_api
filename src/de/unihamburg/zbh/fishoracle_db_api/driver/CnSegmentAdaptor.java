@@ -4,10 +4,12 @@ import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
 
 public interface CnSegmentAdaptor {
-	public int storeCnSegment(CnSegment segment);
+	public int storeCnSegment(CnSegment segment, int mstudyId);
+	public void storeCnSegments(CnSegment[] segments, int mstudyId);
 	public CnSegment fetchCnSegmentById(int id);
 	public Location fetchLocationForCnSegmentId(int id);
-	//public Location getMaxCNCRange(String chr, int start, int end, Double lowerTh, Double upperTh, String[] organFilter)
+	public Location fetchMaximalOverlappingCnSegmentRange(String chr, int start, int end, Double lowerTh, Double upperTh, String[] organFilter);
+	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int id);
 	//public CopyNumberChange[] fetchCNCData(String chr,
 	//		int start, 
 	//		int end, 
@@ -16,8 +18,8 @@ public interface CnSegmentAdaptor {
 	//		String[] organFilter)
 	
 	public void deleteCnSegment(CnSegment segment);
-	
-	
+	public void deleteCnSegment(int microarraystudyId);
+	public void deleteCnSegment(int[] microarraystudyIds);
 	
 	final static String TYPE = "CnSegmentAdaptor";
 }

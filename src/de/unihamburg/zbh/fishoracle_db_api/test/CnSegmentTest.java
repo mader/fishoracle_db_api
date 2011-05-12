@@ -1,6 +1,7 @@
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
+import de.unihamburg.zbh.fishoracle_db_api.data.Location;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
@@ -13,15 +14,21 @@ public class CnSegmentTest extends TestCase{
 	private CnSegmentAdaptor sa;
 	private CnSegment segment1, segment2, segment3, segment4;
 	private CnSegment[] testsegments = new CnSegment[4];
+	private Location loc1, loc2, maxOverlapLoc;
 	
 	protected void setUp() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 		sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 		
-		segment1 = new CnSegment(1, "1", 1, 5000, 0.5, 100, 1);
-		segment2 = new CnSegment(2, "1", 5001, 8000, 0.7, 300, 1);
-		segment3 = new CnSegment(3, "2", 1, 2000, 0.3, 600, 2);
-		segment4 = new CnSegment(4, "3", 1, 1000, 1.2, 250, 2);
+		segment1 = new CnSegment(1, "1", 1, 5000, 0.5, 100);
+		segment2 = new CnSegment(2, "1", 5001, 8000, 0.7, 300);
+		segment3 = new CnSegment(3, "2", 1, 2000, 0.3, 600);
+		segment4 = new CnSegment(4, "3", 1, 1000, 1.2, 250);
+		
+		maxOverlapLoc = new Location("1", 1, 8000);
+		
+		loc1 = new Location("1", 1, 5000);
+		loc2 = new Location("1", 5001, 8000);
 		
 		testsegments[0] = segment1;
 		testsegments[1] = segment2;
@@ -31,13 +38,13 @@ public class CnSegmentTest extends TestCase{
 	
 	public void testStoreCnSegment(){
 		
-		sa.storeCnSegment(segment1);
+		sa.storeCnSegment(segment1, 1);
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 1);
-		sa.storeCnSegment(segment2);
+		sa.storeCnSegment(segment2, 1);
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 2);
-		sa.storeCnSegment(segment3);
+		sa.storeCnSegment(segment3, 2);
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 3);
-		sa.storeCnSegment(segment4);
+		sa.storeCnSegment(segment4, 2);
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 4);
 	}
 	
@@ -53,7 +60,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s1.getEnd() == segment1.getEnd());
 		assertTrue(s1.getMean() == segment1.getMean());
 		assertTrue(s1.getNumberOfMarkers() == segment1.getNumberOfMarkers());
-		assertTrue(s1.getMicroarraystudyId() == segment1.getMicroarraystudyId());
+		assertTrue(s1.getMicroarraystudyId() == 1);
 		
 		assertTrue(s2.getId() == 2);
 		assertTrue(s2.getChromosome().equals(segment2.getChromosome()));
@@ -61,7 +68,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s2.getEnd() == segment2.getEnd());
 		assertTrue(s2.getMean() == segment2.getMean());
 		assertTrue(s2.getNumberOfMarkers() == segment2.getNumberOfMarkers());
-		assertTrue(s2.getMicroarraystudyId() == segment2.getMicroarraystudyId());
+		assertTrue(s2.getMicroarraystudyId() == 1);
 		
 		assertTrue(s3.getId() == 3);
 		assertTrue(s3.getChromosome().equals(segment3.getChromosome()));
@@ -69,7 +76,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s3.getEnd() == segment3.getEnd());
 		assertTrue(s3.getMean() == segment3.getMean());
 		assertTrue(s3.getNumberOfMarkers() == segment3.getNumberOfMarkers());
-		assertTrue(s3.getMicroarraystudyId() == segment3.getMicroarraystudyId());
+		assertTrue(s3.getMicroarraystudyId() == 2);
 		
 		assertTrue(s4.getId() == 4);
 		assertTrue(s4.getChromosome().equals(segment4.getChromosome()));
@@ -77,9 +84,48 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s4.getEnd() == segment4.getEnd());
 		assertTrue(s4.getMean() == segment4.getMean());
 		assertTrue(s4.getNumberOfMarkers() == segment4.getNumberOfMarkers());
-		assertTrue(s4.getMicroarraystudyId() == segment4.getMicroarraystudyId());
+		assertTrue(s4.getMicroarraystudyId() == 2);
 	}
 	
+	 public void testFetchLocationForCnSegmentId(){
+		 Location l1 = sa.fetchLocationForCnSegmentId(1);
+		 Location l2 = sa.fetchLocationForCnSegmentId(2);
+		 
+		 assertTrue(l1.getChrosmome().equals(loc1.getChrosmome()));
+		 assertTrue(l1.getStart() == loc1.getStart());
+		 assertTrue(l1.getEnd() == loc1.getEnd());
+		 
+		 assertTrue(l2.getChrosmome().equals(loc2.getChrosmome()));
+		 assertTrue(l2.getStart() == loc2.getStart());
+		 assertTrue(l2.getEnd() == loc2.getEnd());
+	 }
+	
+	public void testFetchCnSegmentsForMicroarraystudyId(){
+		CnSegment[] segments = sa.fetchCnSegmentsForMicroarraystudyId(1);
+		
+		assertTrue(segments[0].getId() == segment1.getId());
+		assertTrue(segments[0].getChromosome().equals(segment1.getChromosome()));
+		assertTrue(segments[0].getStart() == segment1.getStart());
+		assertTrue(segments[0].getEnd() == segment1.getEnd());
+		
+		assertTrue(segments[1].getId() == segment2.getId());
+		assertTrue(segments[1].getChromosome().equals(segment2.getChromosome()));
+		assertTrue(segments[1].getStart() == segment2.getStart());
+		assertTrue(segments[1].getEnd() == segment2.getEnd());
+	}
+	 
+	public void testFetchMaximalOverlappingCnSegmentRange(){
+		/** Comment in when MicroarraystudyAdaptor is finished.
+		*String[] organs = new String[]{"1","2"};
+		*
+		*Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 3000, 6000, 0.0, 1.0, organs);
+		*
+		* assertTrue(loc.getChrosmome().equals(maxOverlapLoc.getChrosmome()));
+		* assertTrue(loc.getStart() == maxOverlapLoc.getStart());
+		* assertTrue(loc.getEnd() == maxOverlapLoc.getEnd());
+		*/
+	}
+	 
 	public void testDeleteChip(){
 		CnSegment s1 = sa.fetchCnSegmentById(1);
 		CnSegment s2 = sa.fetchCnSegmentById(2);

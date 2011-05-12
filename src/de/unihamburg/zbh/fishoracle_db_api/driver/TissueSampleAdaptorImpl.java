@@ -113,9 +113,19 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 		}
 		return tissue;
 	}
-
+	
+	public int storeTissueSample(TissueSample tissue) {
+		
+		int[] propertyIds = new int[tissue.getProperties().length];
+		
+		for(int i = 0; i < tissue.getProperties().length; i++){
+			propertyIds[i] = tissue.getProperties()[i].getId();
+		}
+		return storeTissueSample(tissue.getOrgan().getId(), propertyIds);
+	}
+	
 	@Override
-	public void storeTissueSample(TissueSample tissue) {
+	public int storeTissueSample(int organ_id, int[] propertyIds) {
 		Connection conn = null;
 		StringBuffer tissueQuery = new StringBuffer();
 		StringBuffer tissuePropertyQuery = new StringBuffer();
@@ -129,7 +139,7 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			tissueQuery.append("INSERT INTO ").append(getPrimaryTableName())
 			.append(" (tissue_sample_organ_id)")
 			.append(" VALUES ")
-			.append("('" + tissue.getOrgan().getId() + "')");
+			.append("('" + organ_id + "')");
 			
 			rs = executeUpdateGetKeys(conn, tissueQuery.toString());
 			
@@ -138,11 +148,11 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			}
 			
 			int i;
-			for(i = 0; i < tissue.getProperties().length; i++){
+			for(i = 0; i < propertyIds.length; i++){
 			
 				tissuePropertyQuery.append("INSERT INTO ").append("tissue_sample_property")
 				.append(" (tissue_sample_id, property_id)").append(" VALUES ")
-				.append("( " + newTissueSampleId + ", " + tissue.getProperties()[i].getId() +  " )");
+				.append("( " + newTissueSampleId + ", " + propertyIds[i] +  " )");
 				
 				executeUpdate(conn, tissuePropertyQuery.toString());
 			
@@ -156,6 +166,7 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 				close(conn);
 			}
 		}
+		return newTissueSampleId;
 	}
 	
 		@Override

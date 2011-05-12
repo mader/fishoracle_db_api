@@ -4,13 +4,13 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 
 public interface MicroarraystudyAdaptor {
 
-	public Microarraystudy[] fetchAllMicroarraystudies(boolean childeren);
+	public Microarraystudy[] fetchAllMicroarraystudies();
 	
-	public Microarraystudy[] fetchAllMicroarraystudyById(boolean childeren);
+	public Microarraystudy fetchMicroarraystudyById(int id);
 	
-	public int storeMicroarraystudy(/*parameter*/);
+	public int storeMicroarraystudy(Microarraystudy mstudy);
 	
-	public int deleteMicroarraystudy();
+	public void deleteMicroarraystudy(Microarraystudy mstudy);
 	
 	final static String TYPE = "MicroarraystudyAdaptor";
 	
