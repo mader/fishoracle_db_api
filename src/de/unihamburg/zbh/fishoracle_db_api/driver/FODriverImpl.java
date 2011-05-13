@@ -16,6 +16,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new ChipAdaptorImpl(this));
 		addAdaptor(new CnSegmentAdaptorImpl(this));
 		addAdaptor(new MicroarraystudyAdaptorImpl(this));
+		addAdaptor(new GroupAdaptorImpl(this));
+		addAdaptor(new ProjectAdaptorImpl(this));
 	}
 
 	@Override
@@ -51,5 +53,15 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	@Override
 	public MicroarraystudyAdaptor getMicroarraystudyAdaptor() {
 		return (MicroarraystudyAdaptor) getAdaptor(MicroarraystudyAdaptor.TYPE);
+	}
+
+	@Override
+	public GroupAdaptor getGroupAdaptor() {
+		return (GroupAdaptor) getAdaptor(GroupAdaptor.TYPE);
+	}
+
+	@Override
+	public ProjectAdaptor getProjectAdaptor() {
+		return (ProjectAdaptor) getAdaptor(ProjectAdaptor.TYPE);
 	}
 }

@@ -1,9 +1,11 @@
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
+import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.UserAdaptor;
 import junit.framework.TestCase;
 
@@ -14,9 +16,19 @@ public class UserAdaptorTest extends TestCase {
 	private User user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12;
 	private User[] testusers = new User[12];
 	
+	private GroupAdaptor ga;
+	private Group group1, group2, group3;
+
 	protected void setUp() {
 
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
+		
+		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+		
+		group1 = new Group(1, "Staff", true);
+		group2 = new Group(2, "Students",  true);
+		group3 = new Group(3, "Extern", false);
+		
 		ua = (UserAdaptor) driver.getAdaptor("UserAdaptor");
 		
 		user1 = new User("Bugs", "Bunny", "bugs", "bugs@loony.tunes", "123secret", false, false);
@@ -73,6 +85,11 @@ public class UserAdaptorTest extends TestCase {
 			assertTrue(((BaseAdaptor) ua).fetchCount() == 11);
 			ua.storeUser(user12);
 			assertTrue(((BaseAdaptor) ua).fetchCount() == 12);
+			
+			ga.addUserToGroup(1, 1);
+			ga.addUserToGroup(2, 1);
+			ga.addUserToGroup(3, 1);
+			
 		}
 	}
 	
@@ -250,6 +267,20 @@ public class UserAdaptorTest extends TestCase {
 		assertTrue(u12.getId() == 12);
 	}
 	
+	public void testFetchUsersForGroup(){
+		User[] u1 = ua.fetchUsersForGroup(1);
+		
+		for(int i=0; i< u1.length; i++){
+			assertTrue(u1[i].getId() == (i+1));
+			assertTrue(u1[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(u1[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(u1[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(u1[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(u1[i].getPw().equals(""));
+		}
+		
+	}
+	
 	public void testDeleteUser() {
 		User u1 = ua.fetchUserByID(1);
 		User u2 = ua.fetchUserByID(2);
@@ -292,6 +323,7 @@ public class UserAdaptorTest extends TestCase {
 	
 	protected void tearDown() {
 		if(((BaseAdaptor) ua).fetchCount() == 0){
+			((BaseAdaptor) ua).truncateTable("user_in_group");
 			((BaseAdaptor) ua).truncateTable(((BaseAdaptor) ua).getPrimaryTableName());
 		}
 	}

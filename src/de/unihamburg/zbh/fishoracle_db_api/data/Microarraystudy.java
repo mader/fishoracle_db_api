@@ -8,7 +8,6 @@ public class Microarraystudy {
 	private CnSegment segments[];
 	private Chip chip;
 	private TissueSample tissue;
-	private Project[] Projects;
 	private Date date;
 	private String name;
 	private String Description;
@@ -31,14 +30,13 @@ public class Microarraystudy {
 	}
 
 	public Microarraystudy(int id, CnSegment[] segments, Chip chip,
-			TissueSample tissue, Project[] projects, Date date, String name,
+			TissueSample tissue, Date date, String name,
 			String description) {
 		super();
 		this.id = id;
 		this.segments = segments;
 		this.chip = chip;
 		this.tissue = tissue;
-		Projects = projects;
 		this.date = date;
 		this.name = name;
 		Description = description;
@@ -66,14 +64,6 @@ public class Microarraystudy {
 
 	public void setTissue(TissueSample tissue) {
 		this.tissue = tissue;
-	}
-
-	public Project[] getProjects() {
-		return Projects;
-	}
-
-	public void setProjects(Project[] projects) {
-		Projects = projects;
 	}
 
 	public int getUserId() {

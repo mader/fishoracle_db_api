@@ -61,8 +61,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 				segments = sa.fetchCnSegmentsForMicroarraystudyId(mstudyId);
 				
-				//TODO Project
-				mstudy = new Microarraystudy(mstudyId, segments, chip, tissue, null, date, mstudyName, mstudyDescription);
+				mstudy = new Microarraystudy(mstudyId, segments, chip, tissue, date, mstudyName, mstudyDescription);
 			}
 			
 		} catch (SQLException e) {
@@ -134,6 +133,57 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 	}
 
 	@Override
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Microarraystudy mstudy = null;
+		ArrayList<Microarraystudy> mstudyContainer = new ArrayList<Microarraystudy>();
+		Microarraystudy[] mstudies = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("microarraystudy.microarraystudy_id, " +
+					"microarraystudy.microarraystudy_date_inserted, " +
+					"microarraystudy.microarraystudy_name, " +
+					"microarraystudy.microarraystudy_description, " +
+					"sample_on_chip.sample_on_chip_chip_id, " +
+					"sample_on_chip.sample_on_chip_tissue_sample_id")
+					.append(" FROM ").append(getPrimaryTableName())
+					.append(" LEFT JOIN ").append("sample_on_chip ON microarraystudy.microarraystudy_id = sample_on_chip.sample_on_chip_microarraystudy_id")
+					.append(" LEFT JOIN ").append("microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
+					.append(" WHERE ").append("microarraystudy_in_project.project_id = " + projectId);
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				mstudy = (Microarraystudy) o;
+				mstudyContainer.add(mstudy);
+			}
+			
+			if(mstudy == null){
+
+					throw new AdaptorException("There are no microarraystudies available.");
+			}
+			
+			mstudies = new Microarraystudy[mstudyContainer.size()];
+			
+			mstudyContainer.toArray(mstudies);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return mstudies;
+	}
+	
+	@Override
 	public Microarraystudy fetchMicroarraystudyById(int id) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -180,9 +230,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 	}
 
 	@Override
-	public int storeMicroarraystudy(Microarraystudy mstudy) {
-		// TODO Project
-		// TODO Teste Segmente
+	public int storeMicroarraystudy(Microarraystudy mstudy, int projectId) {
 		Connection conn = null;
 		StringBuffer mstudyQuery = new StringBuffer();
 		StringBuffer socQuery = new StringBuffer();
@@ -241,6 +289,9 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 		 
 		 CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 		 sa.storeCnSegments(mstudy.getSegments(), newMstudyId);
+		 
+		 ProjectAdaptor pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
+		 pra.addMicroarraystudyToProject(newMstudyId, projectId);
 		 
 		} catch (Exception e){
 			e.printStackTrace();

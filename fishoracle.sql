@@ -218,11 +218,11 @@ CREATE TABLE `user` (
 -- Table structure for table `group`
 -- 
 
-CREATE TABLE `group` (
-  `group_id` int UNSIGNED NOT NULL auto_increment,
+CREATE TABLE `fo_group` (
+  `fo_group_id` int UNSIGNED NOT NULL auto_increment,
   `name` varchar(128),
   `isactive` int NOT NULL,
-  PRIMARY KEY  (`group_id`)
+  PRIMARY KEY  (`fo_group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -248,7 +248,6 @@ CREATE TABLE `project` (
   `project_id` int UNSIGNED NOT NULL auto_increment,
   `name` varchar(128),
   `description` varchar(1024),
-  `user_id` int NOT NULL,
   PRIMARY KEY  (`project_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

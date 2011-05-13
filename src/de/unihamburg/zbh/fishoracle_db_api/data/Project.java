@@ -5,13 +5,12 @@ public class Project {
 	private int id;
 	private String name;
 	private String description;
-	private int userId;
+	private Microarraystudy[] mstudies;
 	
-	public Project(int id, String name, String description, int userId) {
+	public Project(int id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.userId = userId;
 	}
 
 	public int getId() {
@@ -38,11 +37,11 @@ public class Project {
 		this.description = description;
 	}
 
-	public int getUserId() {
-		return userId;
+	public Microarraystudy[] getMstudies() {
+		return mstudies;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setMstudies(Microarraystudy[] mstudies) {
+		this.mstudies = mstudies;
 	}
 }

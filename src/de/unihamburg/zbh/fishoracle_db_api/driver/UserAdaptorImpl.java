@@ -2,6 +2,7 @@ package de.unihamburg.zbh.fishoracle_db_api.driver;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.util.SimpleSHA;
@@ -205,6 +206,66 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 	}
 
 	@Override
+	public User[] fetchUsersForGroup(int groupId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ArrayList<User> userContainer = new ArrayList<User>();
+		User[] users = null;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("SELECT ").append("user.user_id, user.first_name, user.last_name, user.username, user.email, user.isActive, user.isadmin")
+			.append(" FROM ").append(getPrimaryTableName())
+			.append(" LEFT JOIN user_in_group ON user.user_id = user_in_group.user_id")
+			.append(" WHERE user_in_group.group_id = " + groupId)
+			.append(" ORDER BY user_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			int id = 0;
+			String firstName = null;
+			String lastName = null;
+			String dbUserName = null;
+			String email = null;
+			Boolean isActive = null;
+			Boolean isAdmin = null;
+			
+			int i = 0;
+			
+			while(userRs.next()){
+				
+				id = userRs.getInt(1);
+				firstName = userRs.getString(2);
+				lastName = userRs.getString(3);
+				dbUserName = userRs.getString(4);
+				email = userRs.getString(5);
+				isActive = userRs.getBoolean(6);
+				isAdmin = userRs.getBoolean(7);
+				
+				User user = new User(id, firstName, lastName, dbUserName, email, isActive, isAdmin);
+				
+				userContainer.add(user);
+				
+				i++;
+			}
+			
+			users = new User[userContainer.size()];
+			userContainer.toArray(users);
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return users;
+	}
+	
+	@Override
 	public int toggleUserActiveStatus(User user) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -307,17 +368,24 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 	
 	public void deleteUser(User user) {
 		Connection conn = null;
-		StringBuffer query = new StringBuffer();
+		StringBuffer userInGroupQuery = new StringBuffer();
+		StringBuffer userQuery = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
 			
-			query.append("DELETE FROM ")
+			userInGroupQuery.append("DELETE FROM ")
+			.append("user_in_group")
+			.append(" WHERE ").append("user_id = " + user.getId());
+			
+			executeUpdate(conn, userInGroupQuery.toString());
+			
+			userQuery.append("DELETE FROM ")
 			.append(getPrimaryTableName())
 			.append(" WHERE ").append("user_id = " + user.getId());
 			
-			executeUpdate(conn, query.toString());
+			executeUpdate(conn, userQuery.toString());
 			
 		} catch (Exception e){
 			e.printStackTrace();

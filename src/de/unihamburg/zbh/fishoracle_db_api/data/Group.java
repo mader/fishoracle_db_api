@@ -5,6 +5,7 @@ public class Group {
 	private int id;
 	private String name;
 	private boolean isactive;
+	private User[] users;
 	
 	public Group(int id, String name, boolean isactive) {
 		this.id = id;
@@ -34,5 +35,17 @@ public class Group {
 
 	public void setIsactive(boolean isactive) {
 		this.isactive = isactive;
+	}
+	
+	public int getIsactiveAsInt() {
+		return (isactive) ? 1 : 0;
+	}
+
+	public User[] getUsers() {
+		return users;
+	}
+
+	public void setUsers(User[] users) {
+		this.users = users;
 	}
 }

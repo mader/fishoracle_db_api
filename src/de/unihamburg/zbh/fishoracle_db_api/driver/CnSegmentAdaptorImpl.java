@@ -257,31 +257,31 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	private String getMaxiamlOverlappingSQLWhereClause(int start, int end){
 		StringBuffer query = new StringBuffer();
 		
-		query.append(" AND ((cnc_segment_start <= " + start) 
-		.append(" AND cnc_segment_end >= " + end + ")")
+		query.append(" AND ((cn_segment_start <= " + start) 
+		.append(" AND cn_segment_end >= " + end + ")")
 		.append(" OR ")
-		.append("(cnc_segment_start >= " + start)
-		.append(" AND cnc_segment_end <= " + end + ")")
+		.append("(cn_segment_start >= " + start)
+		.append(" AND cn_segment_end <= " + end + ")")
 		.append(" OR ")
-	    .append("(cnc_segment_start >= " + start)
-	    .append(" AND cnc_segment_start <= " + end + ")")
+	    .append("(cn_segment_start >= " + start)
+	    .append(" AND cn_segment_start <= " + end + ")")
 	    .append(" OR ")
-	    .append("(cnc_segment_end >= " + start)
-	    .append(" AND cnc_segment_end <= " + end + "))");
+	    .append("(cn_segment_end >= " + start)
+	    .append(" AND cn_segment_end <= " + end + "))");
 		return query.toString();
 	}
 	
 	private String getThresholdSQLClause(Double lowerTh, Double upperTh){
-		String qrystr = null;
+		String qrystr = "";
 		if(lowerTh == null && upperTh != null){
-			qrystr = qrystr + " AND cnc_segment_mean > '" + upperTh + "'"; 
+			qrystr = qrystr + " AND cn_segment_mean > '" + upperTh + "'"; 
 		} 
 		if (lowerTh != null && upperTh == null){
-			qrystr = qrystr + " AND cnc_segment_mean < '" + lowerTh + "'";
+			qrystr = qrystr + " AND cn_segment_mean < '" + lowerTh + "'";
 		} 
 		if (lowerTh != null && upperTh != null){
-			qrystr = qrystr + " AND (cnc_segment_mean < '" + lowerTh + "' AND " +
-			"cnc_segment_mean > '" + upperTh + "')";
+			qrystr = qrystr + " AND (cn_segment_mean < '" + lowerTh + "' AND " +
+			"cn_segment_mean > '" + upperTh + "')";
 		}
 		return qrystr;
 	}
@@ -291,9 +291,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		if(organFilter.length > 0){
 			for(int i = 0; i < organFilter.length; i++){
 				if(i == 0){
-					organFilterStr = " organ_id = '" + (Integer.parseInt(organFilter[i]) + 1) + "'";
+					organFilterStr = " organ_id = '" + (Integer.parseInt(organFilter[i])) + "'";
 				} else {
-					organFilterStr = organFilterStr + " OR organ_id = '" + (Integer.parseInt(organFilter[i]) + 1) + "'";
+					organFilterStr = organFilterStr + " OR organ_id = '" + (Integer.parseInt(organFilter[i])) + "'";
 				}
 			}
 			organFilterStr = " AND (" + organFilterStr + ")";
@@ -311,18 +311,18 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		
 		StringBuffer query = new StringBuffer();
 		
-		query.append("SELECT ").append("MIN(cnc_segment_start) as minstart, MAX(cnc_segment_end) as maxend")
+		query.append("SELECT ").append("MIN(cn_segment_start) as minstart, MAX(cn_segment_end) as maxend")
 		.append(" FROM ").append(getPrimaryTableName())
-		.append("LEFT JOIN microarraystudy ON microarraystudy_id = cnc_segment_microarraystudy_id ")
-		.append("LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id ")
-		.append("LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id ")
-		.append("LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
-		.append("WHERE ") 
-		.append("cnc_segment_chromosome = '" + chr + "'");
+		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
+		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
+		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
+		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
+		.append(" WHERE ") 
+		.append("cn_segment_chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getThresholdSQLClause(lowerTh, upperTh));
 		query.append(getOrganSQLClause(organFilter));
-			
+		
 		try{
 			conn = getConnection();
 			ResultSet rangeRs = executeQuery(conn, query.toString());

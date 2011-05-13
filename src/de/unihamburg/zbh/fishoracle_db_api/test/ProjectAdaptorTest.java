@@ -2,6 +2,7 @@ package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
+import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
@@ -10,16 +11,21 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
+import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.MicroarraystudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
 import junit.framework.TestCase;
 
-public class MicroarraystudyAdaptorTest extends TestCase{
+public class ProjectAdaptorTest extends TestCase{
 
 	private FODriver driver;
 	private MicroarraystudyAdaptor ma;
+	
+	private GroupAdaptor ga;
+	private Group group1, group2;
+	
 	private CnSegment segment1, segment2, segment3, segment4;
 	private CnSegment[] testsegments1 = new CnSegment[2];
 	private CnSegment[] testsegments2 = new CnSegment[2];
@@ -40,12 +46,21 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	private Property[] testproperties = new Property[2]; 
 	
 	private ProjectAdaptor pra;
-	private Project project1;
+	private Project project1, project2;
 	
 	protected void setUp() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
-		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
 		
+		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+		
+		group1 = new Group(1, "Staff", true);
+		group2 = new Group(2, "Students", true);
+
+		ga.storeGroup(group1);
+		ga.storeGroup(group2);
+		
+		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+
 		segment1 = new CnSegment(1, "1", 1, 5000, 0.5, 100);
 		segment2 = new CnSegment(2, "1", 5001, 8000, 0.7, 300);
 		segment3 = new CnSegment(3, "2", 1, 2000, 0.3, 600);
@@ -94,12 +109,6 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 			propertyIds[i] = testproperties[i].getId();
 		}
 		
-		pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
-		
-		project1 = new Project(1, "Project1", "This is the description.");
-		
-		pra.storeProject(project1);
-		
 		String description1 = "This is a description.";
 		
 		mstudy1 = new Microarraystudy(testsegments1, "teststudy1", description1, 1, 1, propertyIds, 1);
@@ -108,88 +117,72 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 		teststudies[0] = mstudy1;
 		teststudies[1] = mstudy2;
 		
+		pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
+		
+		project1 = new Project(1, "Project1", "This is the description.");
+		project2 = new Project(2, "Project2", "This is the description.");
 	}
 	
-	public void testStoreMicroarraystudy(){
+	public void testStoreProject(){
+		pra.storeProject(project1);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 1);
+		pra.storeProject(project2);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 2);
 		
 		ma.storeMicroarraystudy(mstudy1, 1);
-		assertTrue(((BaseAdaptor) ma).fetchCount() == 1);
 		ma.storeMicroarraystudy(mstudy2, 1);
-		assertTrue(((BaseAdaptor) ma).fetchCount() == 2);
 		
+		pra.addMicroarraystudyToProject(1, 2);
 	}
 	
-	public void testFetchMicroarraystudyById() {
-		Microarraystudy m1 = ma.fetchMicroarraystudyById(1);
+	public void testFetchAllProjects(){
+		Project[] projects = pra.fetchAllProjects();
 		
-		//TODO extend this...
-		assertTrue(m1.getId() == 1);
-		assertTrue(m1.getName().equals(mstudy1.getName()));
-		assertTrue(m1.getDescription().equals(mstudy1.getDescription()));
-		assertTrue(m1.getChip().getName().equals(chip1.getName()));
-		assertTrue(m1.getTissue().getOrgan().getLabel().equals(organ1.getLabel()));
-		assertTrue(m1.getTissue().getOrgan().getType().equals(organ1.getType()));
-		assertTrue(m1.getTissue().getProperties()[0].getLabel().equals(property1.getLabel()));
-		assertTrue(m1.getTissue().getProperties()[0].getType().equals(property1.getType()));
-		assertTrue(m1.getSegments()[0].getId() == 1);
-		assertTrue(m1.getSegments()[0].getChromosome().equals(segment1.getChromosome()));
-		assertTrue(m1.getSegments()[0].getStart() == segment1.getStart());
-		assertTrue(m1.getSegments()[0].getEnd() == segment1.getEnd());
+		assertTrue(projects[0].getId() == 1);
+		assertTrue(projects[0].getName().equals(project1.getName()));
+		assertTrue(projects[0].getDescription().equals(project1.getDescription()));
+		
+		assertTrue(projects[1].getId() == 2);
+		assertTrue(projects[1].getName().equals(project2.getName()));
+		assertTrue(projects[1].getDescription().equals(project2.getDescription()));
 	}
 	
-	public void testFetchAllMicroarraystudies(){
-		Microarraystudy[] mstudies = ma.fetchAllMicroarraystudies();
+	public void testFetchAccessRightforGroup(){
+		pra.addGroupAccessToProject(1, 1, "r");
+		pra.addGroupAccessToProject(1, 2, "rw");
 		
-		//TODO extend this...
-		for(int i = 0; i < mstudies.length; i++) {
-			assertTrue(mstudies[i].getId() == (i+1));
-			assertTrue(mstudies[i].getName().equals(teststudies[i].getName()));
-			assertTrue(mstudies[i].getDescription().equals(teststudies[i].getDescription()));
-		}
+		String r1 = pra.fetchAccessRightforGroup(1, 1);
+		
+		assertTrue(r1.equals("r"));
+		
+		String r2 = pra.fetchAccessRightforGroup(2, 1);
+		assertTrue(r2.equals("rw"));
 	}
 	
-	public void testFetchMicroarraystudisForProject() {
+	public void testDeleteProject(){
+		Project p1 = pra.fetchProjectById(1);
+		Project p2 = pra.fetchProjectById(2);
 		
-		Microarraystudy[] mstudy = ma.fetchMicroarraystudiesForProject(1);
-		
-		assertTrue(mstudy[0].getId() == 1);
-		assertTrue(mstudy[0].getName().equals(mstudy1.getName()));
-		assertTrue(mstudy[0].getDescription().equals(mstudy1.getDescription()));
-		assertTrue(mstudy[0].getChip().getName().equals(chip1.getName()));
-		assertTrue(mstudy[0].getTissue().getOrgan().getLabel().equals(organ1.getLabel()));
-		assertTrue(mstudy[0].getTissue().getOrgan().getType().equals(organ1.getType()));
-		assertTrue(mstudy[0].getTissue().getProperties()[0].getLabel().equals(property1.getLabel()));
-		assertTrue(mstudy[0].getTissue().getProperties()[0].getType().equals(property1.getType()));
-		assertTrue(mstudy[0].getSegments()[0].getId() == 1);
-		assertTrue(mstudy[0].getSegments()[0].getChromosome().equals(segment1.getChromosome()));
-		assertTrue(mstudy[0].getSegments()[0].getStart() == segment1.getStart());
-		assertTrue(mstudy[0].getSegments()[0].getEnd() == segment1.getEnd());
-		
-	}
-	
-	public void testDeleteMicroarraystudy(){
-		Microarraystudy m1 = ma.fetchMicroarraystudyById(1);
-		Microarraystudy m2 = ma.fetchMicroarraystudyById(2);
-		
-		ma.deleteMicroarraystudy(m1);
-		assertTrue(((BaseAdaptor) ma).fetchCount() == 1);
-		ma.deleteMicroarraystudy(m2);
-		assertTrue(((BaseAdaptor) ma).fetchCount() == 0);
+		pra.deleteProject(p1);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 1);
+		pra.deleteProject(p2);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 0);
 	}
 	
 	protected void tearDown() {
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
 		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
 		((BaseAdaptor) pa).truncateTable(((BaseAdaptor) pa).getPrimaryTableName());
-		
-		if(((BaseAdaptor) ma).fetchCount() == 0){
-			((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
-			((BaseAdaptor) ma).truncateTable("sample_on_chip");
-			((BaseAdaptor) ma).truncateTable("tissue_sample");
-			((BaseAdaptor) ma).truncateTable("tissue_sample_property");
-			((BaseAdaptor) ma).truncateTable("cn_segment");
-			((BaseAdaptor) ma).truncateTable("microarraystudy_in_project");
-			((BaseAdaptor) ma).truncateTable("project");
+		((BaseAdaptor) ga).truncateTable(((BaseAdaptor) ga).getPrimaryTableName());
+		if(((BaseAdaptor) pra).fetchCount() == 0){
+			((BaseAdaptor) pra).truncateTable(((BaseAdaptor) pra).getPrimaryTableName());
+			((BaseAdaptor) pra).truncateTable("microarraystudy");
+			((BaseAdaptor) pra).truncateTable("microarraystudy_in_project");
+			((BaseAdaptor) pra).truncateTable("sample_on_chip");
+			((BaseAdaptor) pra).truncateTable("tissue_sample");
+			((BaseAdaptor) pra).truncateTable("tissue_sample_property");
+			((BaseAdaptor) pra).truncateTable("cn_segment");
 		}
 	}
+	
 }

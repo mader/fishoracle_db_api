@@ -1,11 +1,21 @@
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
+import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
+import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
+import de.unihamburg.zbh.fishoracle_db_api.data.Project;
+import de.unihamburg.zbh.fishoracle_db_api.data.Property;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
+import de.unihamburg.zbh.fishoracle_db_api.driver.MicroarraystudyAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
 import junit.framework.TestCase;
 
 public class CnSegmentTest extends TestCase{
@@ -15,6 +25,22 @@ public class CnSegmentTest extends TestCase{
 	private CnSegment segment1, segment2, segment3, segment4;
 	private CnSegment[] testsegments = new CnSegment[4];
 	private Location loc1, loc2, maxOverlapLoc;
+	
+	private ChipAdaptor ca;
+	private Chip chip1;
+	
+	private OrganAdaptor oa;
+	private Organ organ1, organ2;
+
+	private PropertyAdaptor pa;
+	private Property property1, property2;
+	private Property[] testproperties = new Property[2];
+	
+	private MicroarraystudyAdaptor ma;
+	private Microarraystudy mstudy1;
+	
+	private ProjectAdaptor pra;
+	private Project project1;
 	
 	protected void setUp() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -34,6 +60,48 @@ public class CnSegmentTest extends TestCase{
 		testsegments[1] = segment2;
 		testsegments[2] = segment3;
 		testsegments[3] = segment4;
+		
+		ca = (ChipAdaptor) driver.getAdaptor("ChipAdaptor");
+		
+		chip1 = new Chip(1, "mapping250k_sty", "snp");
+		
+		ca.storeChip(chip1);
+		
+		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
+		
+		organ1 = new Organ(1, "Prostate", "Tumor tissue", "enabled");
+		organ2 = new Organ(2, "Prostate", "Cell line", "enabled");
+
+		oa.storeOrgan(organ1);
+		oa.storeOrgan(organ2);
+		
+		pa = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
+		
+		property1 = new Property(1, "G0", "grade", "enabled");
+		property2 = new Property(2, "G1", "grade", "enabled");
+		
+		pa.storeProperty(property1);
+		pa.storeProperty(property2);
+		
+		testproperties[0] = property1;
+		testproperties[1] = property2;
+		
+		int[] propertyIds = new int[testproperties.length];
+		
+		for(int i = 0; i < testproperties.length; i++){
+			propertyIds[i] = testproperties[i].getId();
+		}
+		
+		pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
+		
+		project1 = new Project(1, "Project1", "This is the description.");
+		
+		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+		
+		CnSegment msegment = new CnSegment(1, "4", 1, 5000, 0.5, 100);
+		
+		mstudy1 = new Microarraystudy(new CnSegment[]{msegment}, "teststudy1", "D here.", 1, 1, propertyIds, 1);
+		
 	}
 	
 	public void testStoreCnSegment(){
@@ -46,6 +114,10 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 3);
 		sa.storeCnSegment(segment4, 2);
 		assertTrue(((BaseAdaptor) sa).fetchCount() == 4);
+		
+		pra.storeProject(project1);
+		
+		ma.storeMicroarraystudy(mstudy1, 1);
 	}
 	
 	public void testFetchCnSegmentById(){
@@ -115,37 +187,51 @@ public class CnSegmentTest extends TestCase{
 	}
 	 
 	public void testFetchMaximalOverlappingCnSegmentRange(){
-		/** Comment in when MicroarraystudyAdaptor is finished.
-		*String[] organs = new String[]{"1","2"};
-		*
-		*Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 3000, 6000, 0.0, 1.0, organs);
-		*
-		* assertTrue(loc.getChrosmome().equals(maxOverlapLoc.getChrosmome()));
-		* assertTrue(loc.getStart() == maxOverlapLoc.getStart());
-		* assertTrue(loc.getEnd() == maxOverlapLoc.getEnd());
-		*/
+		String[] organs = new String[]{"1","2"};
+		
+		Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 3000, 6000, null, 0.0, organs);
+		
+		 assertTrue(loc.getChrosmome().equals(maxOverlapLoc.getChrosmome()));
+		 assertTrue(loc.getStart() == maxOverlapLoc.getStart());
+		 assertTrue(loc.getEnd() == maxOverlapLoc.getEnd());
+		
 	}
 	 
 	public void testDeleteChip(){
+		
+		
 		CnSegment s1 = sa.fetchCnSegmentById(1);
 		CnSegment s2 = sa.fetchCnSegmentById(2);
 		CnSegment s3 = sa.fetchCnSegmentById(3);
 		CnSegment s4 = sa.fetchCnSegmentById(4);
 		
 		sa.deleteCnSegment(s1);
-		assertTrue(((BaseAdaptor) sa).fetchCount() == 3);
+		assertTrue(((BaseAdaptor) sa).fetchCount() == 4);
 		sa.deleteCnSegment(s2);
-		assertTrue(((BaseAdaptor) sa).fetchCount() == 2);
+		assertTrue(((BaseAdaptor) sa).fetchCount() == 3);
 		sa.deleteCnSegment(s3);
-		assertTrue(((BaseAdaptor) sa).fetchCount() == 1);
+		assertTrue(((BaseAdaptor) sa).fetchCount() == 2);
 		sa.deleteCnSegment(s4);
-		assertTrue(((BaseAdaptor) sa).fetchCount() == 0);
+		assertTrue(((BaseAdaptor) sa).fetchCount() == 1);
 		
+		Microarraystudy m1 = ma.fetchMicroarraystudyById(1);
+		
+		ma.deleteMicroarraystudy(m1);
+		
+		pra.deleteProject(project1);
 	}
 	
 	protected void tearDown() {
+		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
+		((BaseAdaptor) pa).truncateTable(((BaseAdaptor) pa).getPrimaryTableName());
+		
 		if(((BaseAdaptor) sa).fetchCount() == 0){
 			((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
+			((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
+			((BaseAdaptor) ma).truncateTable("sample_on_chip");
+			((BaseAdaptor) pra).truncateTable("microarraystudy_in_project");
+			((BaseAdaptor) pra).truncateTable(((BaseAdaptor) pra).getPrimaryTableName());
+			
 		}
 	}
 }

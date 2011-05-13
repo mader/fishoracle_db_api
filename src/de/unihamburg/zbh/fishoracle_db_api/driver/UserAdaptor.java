@@ -8,6 +8,8 @@ public interface UserAdaptor {
 	
 	public User fetchUserForLogin(String userName, String pw);
 
+	public User[] fetchUsersForGroup(int groupId);
+	
 	public int storeUser(User user);
 	
 	public void deleteUser(User user);
