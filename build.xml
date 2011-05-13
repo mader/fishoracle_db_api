@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project name="fishoracle_db_api" default="compile">
+
+  <description>
+
+      Available options are:
+
+      - compile
+      - test
+      - jar
+      - clean
+      - cleanup
+
+    </description>
+
+  <property name="SrcDir" value="src/"/>
+  <property name="LibDir" value="lib/"/>
+  <property name="TestDir" value="src/de/unihamburg/zbh/fishoracle_db_api/test/"/>
+  <property name="BinDir" value="bin/"/>
+
+  <target name="clean" description="remove intermediate files">
+    <delete dir="${BinDir}"/>
+  </target>
+
+  <target name="cleanup" depends="clean" description="remove all artifact files">
+    <delete file="fo_db_api.jar"/>
+  </target>
+
+  <target name="compile" description="compile the Java source code to class files">
+    <mkdir dir="${BinDir}"/>
+    <javac classpath="${classpath}:${LibDir}/mysql-connector-java-5.1.6.jar" srcdir="${SrcDir}/" destdir="${BinDir}" verbose="on"/>
+  </target>
+
+  <target name="compile_test" depends="compile" description="compile unit test classes">
+    <javac classpath="${classpath}:${LibDir}/mysql-connector-java-5.1.6.jar:${LibDir}/junit-4.8.2.jar" srcdir="${TestDir}/" destdir="${BinDir}" verbose="on"/>
+  </target>
+
+  <path id="test.classpath">
+    <pathelement location="${BinDir}" />
+    <pathelement location="${LibDir}/junit-4.8.2.jar" />
+    <fileset dir="${LibDir}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="test" depends="compile_test" description="run unit tests">
+    <junit fork="yes" haltonfailure="yes">
+      <batchtest fork="yes">
+        <fileset dir="${TestDir}">
+        </fileset>
+      </batchtest>
+      <formatter type="plain" usefile="false" />
+      <classpath refid="test.classpath" />
+    </junit>
+  </target>
+
+  <target name="jar" depends="compile" description="create a Jar file containing the library">
+    <jar destfile="fo_db_api.jar">
+      <fileset dir="${BinDir}" includes="**/*.class"/>
+    </jar>
+  </target>
+
+</project>
