@@ -12,6 +12,14 @@ public class TissueSample {
 		this.properties = properties;
 	}
 	
+	public int[] getPropertyIds(){
+		int[] ids = new int[properties.length];
+		for(int i=0; i< properties.length; i++){
+			ids[i] = properties[i].getId();
+		}
+		return ids;
+	}
+	
 	public int getId() {
 		return id;
 	}

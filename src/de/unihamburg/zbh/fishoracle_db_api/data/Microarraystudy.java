@@ -16,6 +16,16 @@ public class Microarraystudy {
 	private int[] propertyIds;
 	private int userId;
 	
+	public Microarraystudy(int id, Date date, String name, String description,
+			int userId) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.name = name;
+		Description = description;
+		this.userId = userId;
+	}
+
 	public Microarraystudy(CnSegment[] segments, String name,
 			String description, int chipId, int organId, int[] propertyIds,
 			int userId) {

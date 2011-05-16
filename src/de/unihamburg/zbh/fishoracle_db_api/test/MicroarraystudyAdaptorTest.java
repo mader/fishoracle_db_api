@@ -120,7 +120,7 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	}
 	
 	public void testFetchMicroarraystudyById() {
-		Microarraystudy m1 = ma.fetchMicroarraystudyById(1);
+		Microarraystudy m1 = ma.fetchMicroarraystudyById(1, true);
 		
 		//TODO extend this...
 		assertTrue(m1.getId() == 1);
@@ -138,7 +138,7 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	}
 	
 	public void testFetchAllMicroarraystudies(){
-		Microarraystudy[] mstudies = ma.fetchAllMicroarraystudies();
+		Microarraystudy[] mstudies = ma.fetchAllMicroarraystudies(true);
 		
 		//TODO extend this...
 		for(int i = 0; i < mstudies.length; i++) {
@@ -150,7 +150,7 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	
 	public void testFetchMicroarraystudisForProject() {
 		
-		Microarraystudy[] mstudy = ma.fetchMicroarraystudiesForProject(1);
+		Microarraystudy[] mstudy = ma.fetchMicroarraystudiesForProject(1, true);
 		
 		assertTrue(mstudy[0].getId() == 1);
 		assertTrue(mstudy[0].getName().equals(mstudy1.getName()));
@@ -168,8 +168,8 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	}
 	
 	public void testDeleteMicroarraystudy(){
-		Microarraystudy m1 = ma.fetchMicroarraystudyById(1);
-		Microarraystudy m2 = ma.fetchMicroarraystudyById(2);
+		Microarraystudy m1 = ma.fetchMicroarraystudyById(1, true);
+		Microarraystudy m2 = ma.fetchMicroarraystudyById(2, true);
 		
 		ma.deleteMicroarraystudy(m1);
 		assertTrue(((BaseAdaptor) ma).fetchCount() == 1);

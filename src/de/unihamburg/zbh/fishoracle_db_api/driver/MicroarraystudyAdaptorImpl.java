@@ -26,9 +26,13 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 							"microarraystudy_user_id",
 							"microarraystudy_sample_on_chip_id"};
 	}
-
+	
 	@Override
 	public Object createObject(ResultSet rs) {
+		return createObject(rs, true);
+	}
+	
+	public Object createObject(ResultSet rs, boolean withChildren) {
 		Microarraystudy mstudy = null;
 		CnSegment[] segments;
 		TissueSample tissue;
@@ -50,18 +54,36 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				chipId = rs.getInt(5);
 				tissueSampleId = rs.getInt(6);
 				
+				mstudy = new Microarraystudy(mstudyId, date, mstudyName, mstudyDescription, 0);
+				
 				FODriver driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 				TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
-				
 				tissue = ta.fetchTissueSampleById(tissueSampleId);
+				
+				if(withChildren){
+					mstudy.setTissue(tissue);
+				} else {
+					mstudy.setOrgan_id(tissue.getOrgan().getId());
+					mstudy.setPropertyIds(tissue.getPropertyIds());
+				}
 				
 				ChipAdaptor ca = (ChipAdaptor) driver.getAdaptor("ChipAdaptor");
 				chip = ca.fetchChipById(chipId);
 				
+				if(withChildren){
+					mstudy.setChip(chip);
+				} else {
+					mstudy.setChipId(chip.getId());
+				}
+				
 				CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 				segments = sa.fetchCnSegmentsForMicroarraystudyId(mstudyId);
 				
-				mstudy = new Microarraystudy(mstudyId, segments, chip, tissue, date, mstudyName, mstudyDescription);
+				if(withChildren){
+					mstudy.setSegments(segments);
+				} else {
+					mstudy.setChipId(chip.getId());
+				}
 			}
 			
 		} catch (SQLException e) {
@@ -81,8 +103,12 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 							"organ"};
 	}
 	
-	@Override
 	public Microarraystudy[] fetchAllMicroarraystudies() {
+		return fetchAllMicroarraystudies(false);
+	}
+	
+	@Override
+	public Microarraystudy[] fetchAllMicroarraystudies(boolean withChildren) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Microarraystudy mstudy = null;
@@ -108,7 +134,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			
 			Object o;
 			
-			while ((o = createObject(rs)) != null) {
+			while ((o = createObject(rs, withChildren)) != null) {
 				mstudy = (Microarraystudy) o;
 				mstudyContainer.add(mstudy);
 			}
@@ -132,8 +158,12 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 		return mstudies;
 	}
 
-	@Override
 	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId) {
+		return fetchMicroarraystudiesForProject(projectId, false);
+	}
+	
+	@Override
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId, boolean withChrildren) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Microarraystudy mstudy = null;
@@ -159,7 +189,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			
 			Object o;
 			
-			while ((o = createObject(rs)) != null) {
+			while ((o = createObject(rs, withChrildren)) != null) {
 				mstudy = (Microarraystudy) o;
 				mstudyContainer.add(mstudy);
 			}
@@ -183,8 +213,12 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 		return mstudies;
 	}
 	
+	public Microarraystudy fetchMicroarraystudyById(int id){
+		 return fetchMicroarraystudyById(id, false);
+	}
+	
 	@Override
-	public Microarraystudy fetchMicroarraystudyById(int id) {
+	public Microarraystudy fetchMicroarraystudyById(int id, boolean withChilden) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Microarraystudy mstudy = null;
@@ -208,7 +242,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			
 			Object o;
 			
-			while ((o = createObject(rs)) != null) {
+			while ((o = createObject(rs, withChilden)) != null) {
 				mstudy = (Microarraystudy) o;
 				
 			}
