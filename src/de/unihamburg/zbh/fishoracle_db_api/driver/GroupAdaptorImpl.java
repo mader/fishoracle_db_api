@@ -91,7 +91,7 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 	}
 
 	@Override
-	public Group[] fetchAllGroups() {
+	public Group[] fetchAllGroups() throws Exception {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Group group = null;
@@ -104,7 +104,6 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 			
 			query.append("SELECT ").append("fo_group.fo_group_id, fo_group.name, fo_group.isactive")
 			.append(" FROM ").append(getPrimaryTableName())
-			.append(" LEFT JOIN user_in_group ON user_in_group.group_id = fo_group.fo_group_id")
 			.append(" ORDER BY fo_group_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -126,7 +125,7 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 			groupContainer.toArray(groups);
 			
 		} catch (Exception e){
-			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		} finally {
 			if(conn != null){
 				close(conn);
@@ -175,11 +174,16 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 		return group;
 	}
 
+	public int storeGroup(Group group){
+		
+		return storeGroup(group.getName(), group.getIsactiveAsInt()); 
+	}
+	
 	@Override
-	public int storeGroup(Group group) {
+	public int storeGroup(String name, int isactive) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int nor = 0;
+		int newGroupId = 0;
 		
 		try{
 			
@@ -188,9 +192,13 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 			query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append(" (name, isactive)")
 			.append(" VALUES ")
-			.append("('" + group.getName() + "', '" + group.getIsactiveAsInt() + "')");
+			.append("('" + name + "', '" + isactive + "')");
 			
-			nor = executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newGroupId = rs.getInt(1);
+			}
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -199,7 +207,7 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				close(conn);
 			}
 		}
-		return nor;
+		return newGroupId;
 	}
 
 	public Group[] fetchGroupsForUser(int userId){

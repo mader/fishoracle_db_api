@@ -21,7 +21,11 @@ public class Example {
 		
 		UserAdaptor ua = (UserAdaptor) exampleDriver.getAdaptor("UserAdaptor");
 		
-		i = ua.storeUser(user1);
+		try {
+			i = ua.storeUser(user1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		//System.out.println(i);
 

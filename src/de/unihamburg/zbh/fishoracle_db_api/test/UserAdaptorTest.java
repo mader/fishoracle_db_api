@@ -61,34 +61,44 @@ public class UserAdaptorTest extends TestCase {
 	
 	public void testStoreUser() {
 		if(((BaseAdaptor) ua).fetchCount() == 0){
-			ua.storeUser(user1);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 1);
-			ua.storeUser(user2);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 2);
-			ua.storeUser(user3);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 3);
-			ua.storeUser(user4);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 4);
-			ua.storeUser(user5);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 5);
-			ua.storeUser(user6);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 6);
-			ua.storeUser(user7);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 7);
-			ua.storeUser(user8);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 8);
-			ua.storeUser(user9);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 9);
-			ua.storeUser(user10);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 10);
-			ua.storeUser(user11);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 11);
-			ua.storeUser(user12);
-			assertTrue(((BaseAdaptor) ua).fetchCount() == 12);
-			
+			try {
+				ua.storeUser(user1);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 1);
+				ua.storeUser(user2);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 2);
+				ua.storeUser(user3);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 3);
+				ua.storeUser(user4);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 4);
+				ua.storeUser(user5);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 5);
+				ua.storeUser(user6);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 6);
+				ua.storeUser(user7);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 7);
+				ua.storeUser(user8);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 8);
+				ua.storeUser(user9);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 9);
+				ua.storeUser(user10);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 10);
+				ua.storeUser(user11);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 11);
+				ua.storeUser(user12);
+				assertTrue(((BaseAdaptor) ua).fetchCount() == 12);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			ga.addUserToGroup(1, 1);
 			ga.addUserToGroup(2, 1);
 			ga.addUserToGroup(3, 1);
+			ga.addUserToGroup(4, 1);
+			ga.addUserToGroup(5, 1);
+			ga.addUserToGroup(6, 1);
+			ga.addUserToGroup(7, 1);
+			ga.addUserToGroup(8, 1);
+			ga.addUserToGroup(9, 1);
+			ga.addUserToGroup(10, 1);
 			
 		}
 	}
@@ -211,13 +221,20 @@ public class UserAdaptorTest extends TestCase {
 		User u;
 		
 		for(int i = 0; i < testusers.length; i++) {
-			u = ua.fetchUserForLogin(testusers[i].getUserName(), testusers[i].getPw());
-			assertTrue(u.getId() == testusers[i].getId());
-			assertTrue(u.getFirstName().equals(testusers[i].getFirstName()));
-			assertTrue(u.getLastName().equals(testusers[i].getLastName()));
-			assertTrue(u.getUserName().equals(testusers[i].getUserName()));
-			assertTrue(u.getEmail().equals(testusers[i].getEmail()));
-			assertTrue(u.getPw().equals(""));
+			
+			try {
+				u = ua.fetchUserForLogin(testusers[i].getUserName(), testusers[i].getPw());
+				
+				assertTrue(u.getId() == testusers[i].getId());
+				assertTrue(u.getFirstName().equals(testusers[i].getFirstName()));
+				assertTrue(u.getLastName().equals(testusers[i].getLastName()));
+				assertTrue(u.getUserName().equals(testusers[i].getUserName()));
+				assertTrue(u.getEmail().equals(testusers[i].getEmail()));
+				assertTrue(u.getPw().equals(""));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	
@@ -265,6 +282,20 @@ public class UserAdaptorTest extends TestCase {
 		assertTrue(u10.getId() == 10);
 		assertTrue(u11.getId() == 11);
 		assertTrue(u12.getId() == 12);
+	}
+	
+	public void testFetchAllUsersNotInGroup(){
+		User[] u1 = ua.fetchAllUsersNotInGroup(1);
+		
+		for(int i=0; i< u1.length; i++){
+			assertTrue(u1[i].getId() == (i+11));
+			assertTrue(u1[i].getFirstName().equals(testusers[(i+10)].getFirstName()));
+			assertTrue(u1[i].getLastName().equals(testusers[(i+10)].getLastName()));
+			assertTrue(u1[i].getUserName().equals(testusers[(i+10)].getUserName()));
+			assertTrue(u1[i].getEmail().equals(testusers[(i+10)].getEmail()));
+			assertTrue(u1[i].getPw().equals(""));
+		}
+		
 	}
 	
 	public void testFetchUsersForGroup(){

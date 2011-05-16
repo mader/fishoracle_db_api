@@ -25,7 +25,11 @@ public class GroupAdaptorTest extends TestCase{
 		
 		user1 = new User("Bugs", "Bunny", "bugs", "bugs@loony.tunes", "123secret", false, false);
 		
-		ua.storeUser(user1);
+		try {
+			ua.storeUser(user1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
 		
@@ -66,14 +70,19 @@ public class GroupAdaptorTest extends TestCase{
 	}
 	
 	public void testFetchAllGroups() {
-		Group[] groups = ga.fetchAllGroups();
-		
-		for (int i=0; i < groups.length; i++) {
+		Group[] groups;
+		try {
+			groups = ga.fetchAllGroups();
+			
+			for (int i=0; i < groups.length; i++) {
 			assertTrue(groups[i].getId() == (i+1));
 			assertTrue(groups[i].getName().equals(testgroups[i].getName()));
 			assertTrue(groups[i].isIsactive() == testgroups[i].isIsactive());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 	}
 	
 	public void testFetchGroupsForUser(){
