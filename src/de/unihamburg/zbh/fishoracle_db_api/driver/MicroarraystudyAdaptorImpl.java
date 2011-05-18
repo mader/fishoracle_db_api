@@ -56,7 +56,6 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				
 				mstudy = new Microarraystudy(mstudyId, date, mstudyName, mstudyDescription, 0);
 				
-				FODriver driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 				TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 				tissue = ta.fetchTissueSampleById(tissueSampleId);
 				
@@ -269,7 +268,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 		StringBuffer mstudyQuery = new StringBuffer();
 		StringBuffer socQuery = new StringBuffer();
 		StringBuffer socUpdateQuery = new StringBuffer();
-		int nor = 0;
+		int newMstudyId = 0;
 		
 		try{
 			
@@ -310,14 +309,13 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			
 			ResultSet mstudyRs = executeUpdateGetKeys(conn, mstudyQuery.toString());
 			
-			int newMstudyId = 0;
 			if(mstudyRs.next()){
 				newMstudyId = mstudyRs.getInt(1);
 			}
 			
 		socUpdateQuery.append("UPDATE ").append("sample_on_chip")
 		.append(" SET sample_on_chip_microarraystudy_id = " + newMstudyId)
-		.append(" WHERE ").append("sample_on_chip_chip_id = " + newSampleOnChipId);
+		.append(" WHERE ").append("sample_on_chip_id = " + newSampleOnChipId);
 			
 		 executeUpdate(conn, socUpdateQuery.toString());
 		 
@@ -334,7 +332,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				close(conn);
 			}
 		}
-		return nor;
+		return newMstudyId;
 	}
 
 	@Override

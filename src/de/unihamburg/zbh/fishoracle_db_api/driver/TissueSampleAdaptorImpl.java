@@ -47,7 +47,6 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 				organActivity = rs.getString(5);
 				Organ organ = new Organ(organId, organLabel, organType, organActivity);
 				
-				FODriver driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 				PropertyAdaptor pa = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 				
 				properties = pa.fetchPropertiesForTissueSampleId(tissueId);

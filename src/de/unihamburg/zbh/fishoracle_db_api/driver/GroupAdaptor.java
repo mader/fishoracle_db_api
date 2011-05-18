@@ -9,6 +9,7 @@ public interface GroupAdaptor {
 	public void addUserToGroup(int userId, int groupId);
 	public void removeUserFromGroup(int userId, int groupId);
 	public Group[] fetchGroupsForUser(int userId);
+	public Group[] fetchGroupsNotInProject(int projectId);
 	public int storeGroup(Group group);
 	public int storeGroup(String name, int isactive);
 	public void deleteGroup(Group group);

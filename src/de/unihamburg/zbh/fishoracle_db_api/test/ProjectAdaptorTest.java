@@ -136,15 +136,20 @@ public class ProjectAdaptorTest extends TestCase{
 	}
 	
 	public void testFetchAllProjects(){
-		Project[] projects = pra.fetchAllProjects();
-		
-		assertTrue(projects[0].getId() == 1);
-		assertTrue(projects[0].getName().equals(project1.getName()));
-		assertTrue(projects[0].getDescription().equals(project1.getDescription()));
-		
-		assertTrue(projects[1].getId() == 2);
-		assertTrue(projects[1].getName().equals(project2.getName()));
-		assertTrue(projects[1].getDescription().equals(project2.getDescription()));
+		Project[] projects;
+		try {
+			projects = pra.fetchAllProjects();
+			
+			assertTrue(projects[0].getId() == 1);
+			assertTrue(projects[0].getName().equals(project1.getName()));
+			assertTrue(projects[0].getDescription().equals(project1.getDescription()));
+			
+			assertTrue(projects[1].getId() == 2);
+			assertTrue(projects[1].getName().equals(project2.getName()));
+			assertTrue(projects[1].getDescription().equals(project2.getDescription()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void testFetchAccessRightforGroup(){

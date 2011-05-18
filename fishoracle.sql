@@ -133,9 +133,7 @@ INSERT INTO `property` (`property_id`, `property_label`, `property_type`, `prope
 (10, 'Primary N0', 'meta status', 'enabled'),
 (11, 'Primary N+', 'meta status', 'enabled'),
 (12, 'LN Metastasis', 'meta status', 'enabled'),
-(13, 'Distant Metastasis', 'meta status', 'enabled'),
-(14, 'unknown', 'any', 'enabled'),
-(15, 'zest', 'any', 'disabled');
+(13, 'Distant Metastasis', 'meta status', 'enabled');
 
 -- --------------------------------------------------------
 

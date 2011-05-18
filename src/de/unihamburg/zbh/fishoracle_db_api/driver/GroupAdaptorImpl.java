@@ -255,6 +255,79 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 		return groups;
 	}
 	
+	//TODO test
+	@Override
+	public Group[] fetchGroupsNotInProject(int projectId) {
+		Connection conn = null;
+		StringBuffer query1 = new StringBuffer();
+		StringBuffer query2 = new StringBuffer();
+		Group group = null;
+		ArrayList<Group> groupContainer = new ArrayList<Group>();
+		Group[] groups = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query1.append("SELECT ").append("fo_group.fo_group_id")
+			.append(" FROM ").append(getPrimaryTableName())
+			.append(" LEFT JOIN group_project_access ON fo_group.fo_group_id = group_project_access.group_id")
+			.append(" WHERE ").append("group_project_access.project_id = " + projectId)
+			.append(" ORDER BY fo_group.fo_group_id ASC");
+			
+			ResultSet rs1 = executeQuery(conn, query1.toString());
+			
+			int groupId = 0;
+			ArrayList<Integer> groupIdContainer = new ArrayList<Integer>();
+			
+			while(rs1.next()){
+				
+				groupId = rs1.getInt(1);
+				
+				groupIdContainer.add(groupId);
+			}
+			
+			query2.append("SELECT ").append("fo_group.fo_group_id, fo_group.name, fo_group.isactive")
+			.append(" FROM ").append(getPrimaryTableName());
+			
+			String whereClause = " ";
+			boolean where = true;
+			if(groupIdContainer.size() > 0){
+				for(int i=0; i < groupIdContainer.size(); i++){
+					
+					if(where){
+						whereClause += " WHERE fo_group.fo_group_id != " + groupIdContainer.get(i);	
+						where = false;
+					} else {
+						whereClause += " AND fo_group.fo_group_id != " + groupIdContainer.get(i);
+					}
+				}
+			}
+			query2.append(whereClause).append(" ORDER BY fo_group.fo_group_id ASC");
+			
+			ResultSet rs2 = executeQuery(conn, query2.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs2)) != null) {
+				group = (Group) o;
+				groupContainer.add(group);
+			}
+			
+			groups = new Group[groupContainer.size()];
+			
+			groupContainer.toArray(groups);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return groups;
+	}
+	
 	@Override
 	public void addUserToGroup(int userId, int groupId) {
 		Connection conn = null;
@@ -303,5 +376,4 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 			}
 		}
 	}
-
 }

@@ -57,6 +57,7 @@
   <target name="jar" depends="compile" description="create a Jar file containing the library">
     <jar destfile="fo_db_api.jar">
       <fileset dir="${BinDir}" includes="**/*.class"/>
+      <fileset dir="${SrcDir}" includes="**/*.java"/>
     </jar>
   </target>
 

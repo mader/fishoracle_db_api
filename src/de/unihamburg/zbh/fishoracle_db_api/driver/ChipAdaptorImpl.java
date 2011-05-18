@@ -3,6 +3,7 @@ package de.unihamburg.zbh.fishoracle_db_api.driver;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 
@@ -108,6 +109,50 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			}
 		}
 		return chip;
+	}
+	
+	//TODO test
+	@Override
+	public Chip[] fetchAllChips() {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Chip chip = null;
+		ArrayList<Chip> chipContainer = new ArrayList<Chip>();
+		Chip[] chips = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("chip_id, chip_name, chip_type")
+			.append(" FROM ").append(getPrimaryTableName());
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				chip = (Chip) o;
+				chipContainer.add(chip);
+			}
+			
+			if(chip == null){
+
+					throw new AdaptorException("There are no organs available.");
+			}
+			
+			chips = new Chip[chipContainer.size()];
+			
+			chipContainer.toArray(chips);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return chips;
 	}
 
 	@Override

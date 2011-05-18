@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
+import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 
 public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 
@@ -42,6 +44,10 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				mstudies = ma.fetchMicroarraystudiesForProject(projectId);
 				
 				project.setMstudies(mstudies);
+				
+				ProjectAccess[] access = this.fetchProjectAccessForProject(projectId);
+				
+				project.setProjectAccess(access);
 			}
 			
 		} catch (SQLException e) {
@@ -96,9 +102,62 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		}
 		
 	}
-
+	
+	//TODO test
 	@Override
-	public Project[] fetchAllProjects() {
+	public ProjectAccess[] fetchProjectAccessForProject(int id) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ProjectAccess projectAccess = null;
+		ArrayList<ProjectAccess> projectAccessContainer = new ArrayList<ProjectAccess>();
+		ProjectAccess[] projectAccesses = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("group_project_access_id, group_id, access_type")
+			.append(" FROM ").append("group_project_access")
+			.append(" WHERE project_id = " + id)
+			.append(" ORDER BY project_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			int projectAccessId;
+			int groupId;
+			String accessType;
+			
+			while (rs.next()) {
+				projectAccessId = rs.getInt(1);
+				groupId = rs.getInt(2);
+				accessType = rs.getString(3);
+				
+				GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+				
+				Group group = ga.fetchGroupById(groupId);
+				
+				projectAccess = new ProjectAccess(projectAccessId, group, accessType);
+				
+				projectAccessContainer.add(projectAccess);
+				
+			}
+			
+			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
+			
+			projectAccessContainer.toArray(projectAccesses);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return projectAccesses;
+	}
+	
+	@Override
+	public Project[] fetchAllProjects() throws Exception {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Project project = null;
@@ -132,7 +191,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			projectContainer.toArray(projects);
 			
 		} catch (Exception e){
-			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		} finally {
 			if(conn != null){
 				close(conn);
@@ -187,11 +246,16 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		return null;
 	}
 
+	public int storeProject(Project project){
+		
+		return storeProject(project.getName(), project.getDescription());
+	}
+	
 	@Override
-	public int storeProject(Project project) {
+	public int storeProject(String name, String description) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int nor = 0;
+		int newProjectId = 0;
 		
 		try{
 			
@@ -200,9 +264,13 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append(" (name, description)")
 			.append(" VALUES ")
-			.append("('" + project.getName() + "', '" + project.getDescription() + "')");
+			.append("('" + name + "', '" + description + "')");
 			
-			nor = executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newProjectId = rs.getInt(1);
+			}
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -211,7 +279,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				close(conn);
 			}
 		}
-		return nor;
+		return newProjectId;
 	}
 
 	@Override
@@ -271,10 +339,12 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public void addGroupAccessToProject(int groupId, int projectId,
+	public ProjectAccess addGroupAccessToProject(int groupId, int projectId,
 			String accessRights) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
+		int newProjectAccessId = 0;
+		ProjectAccess projectAccess = null;
 		
 		try{
 			
@@ -285,7 +355,17 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			.append(" VALUES ")
 			.append("('" + projectId + "', '" + groupId + "', '" + accessRights + "')");
 			
-			executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			while(rs.next()){
+				newProjectAccessId = rs.getInt(1);
+			}
+			
+			GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+			
+			Group group = ga.fetchGroupById(groupId);
+			
+			projectAccess = new ProjectAccess(newProjectAccessId, group, accessRights);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -294,6 +374,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				close(conn);
 			}
 		}
+		//TODO test return
+		return projectAccess;
 	}
 
 	@Override
