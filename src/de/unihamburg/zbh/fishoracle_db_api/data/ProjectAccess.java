@@ -5,6 +5,7 @@ public class ProjectAccess {
 	private int id;
 	private Group group;
 	private int groupId;
+	private int projectId;
 	private String access;
 	
 	public ProjectAccess(int id, int groupId, String access) {
@@ -49,6 +50,14 @@ public class ProjectAccess {
 
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
 	}
 	
 }
