@@ -138,11 +138,6 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				mstudyContainer.add(mstudy);
 			}
 			
-			if(mstudy == null){
-
-					throw new AdaptorException("There are no microarraystudies available.");
-			}
-			
 			mstudies = new Microarraystudy[mstudyContainer.size()];
 			
 			mstudyContainer.toArray(mstudies);
@@ -191,11 +186,6 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			while ((o = createObject(rs, withChrildren)) != null) {
 				mstudy = (Microarraystudy) o;
 				mstudyContainer.add(mstudy);
-			}
-			
-			if(mstudy == null){
-
-					throw new AdaptorException("There are no microarraystudies available.");
 			}
 			
 			mstudies = new Microarraystudy[mstudyContainer.size()];

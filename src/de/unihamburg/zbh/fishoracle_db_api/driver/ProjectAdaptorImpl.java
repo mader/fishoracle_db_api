@@ -451,8 +451,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			conn = getConnection();
 			
 			query.append("DELETE FROM ")
-			.append("groupp_project_access")
-			.append(" WHERE ").append("group_id = " + groupId + " AND projec_id = " + projectId);
+			.append("group_project_access")
+			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
 			
 			executeUpdate(conn, query.toString());
 			
@@ -464,4 +464,29 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			}
 		}
 	}
+	
+	@Override
+	public void removeGroupAccessFromProject(int projectAccessId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append("group_project_access")
+			.append(" WHERE ").append("group_project_access_id = " + projectAccessId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+	
 }

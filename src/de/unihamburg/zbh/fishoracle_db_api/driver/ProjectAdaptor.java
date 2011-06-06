@@ -7,6 +7,7 @@ public interface ProjectAdaptor {
 
 	public ProjectAccess addGroupAccessToProject(int groupId, int projectId, String accessRights);
 	public void removeGroupAccessFromProject(int groupId, int projectId, String accessRights);
+	public void removeGroupAccessFromProject(int projectAccessId);
 	public void modifyGroupAccessForProject(int groupId, int projectId, String accessRights);
 	
 	public String fetchAccessRightforGroup(int projectId, int groupId);
