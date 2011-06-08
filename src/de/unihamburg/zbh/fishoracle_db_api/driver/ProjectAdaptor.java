@@ -25,6 +25,7 @@ public interface ProjectAdaptor {
 	public int storeProject(Project project);
 	public int storeProject(String name, String description);
 	public void deleteProject(Project project);
+	public void deleteProject(int projectId);
 	
 	final static String TYPE = "ProjectAdaptor";
 	

@@ -66,6 +66,12 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 
 	@Override
 	public void deleteProject(Project project) {
+	
+		deleteProject(project.getId());
+	}
+	
+	@Override
+	public void deleteProject(int projectId) {
 		Connection conn = null;
 		StringBuffer projectQuery = new StringBuffer();
 		StringBuffer groupProjectAccessQuery = new StringBuffer();
@@ -77,19 +83,19 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			groupProjectAccessQuery.append("DELETE FROM ")
 			.append("group_project_access")
-			.append(" WHERE ").append("project_id = " + project.getId());
+			.append(" WHERE ").append("project_id = " + projectId);
 			
 			executeUpdate(conn, groupProjectAccessQuery.toString());
 			
 			microarraystudyInProjectQuery.append("DELETE FROM ")
 			.append("microarraystudy_in_project")
-			.append(" WHERE ").append("project_id = " + project.getId());
+			.append(" WHERE ").append("project_id = " + projectId);
 			
 			executeUpdate(conn, microarraystudyInProjectQuery.toString());
 			
 			projectQuery.append("DELETE FROM ")
 			.append(getPrimaryTableName())
-			.append(" WHERE ").append("project_id = " + project.getId());
+			.append(" WHERE ").append("project_id = " + projectId);
 			
 			executeUpdate(conn, projectQuery.toString());
 			
