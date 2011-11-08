@@ -156,11 +156,11 @@ public class ProjectAdaptorTest extends TestCase{
 		pra.addGroupAccessToProject(1, 1, "r");
 		pra.addGroupAccessToProject(1, 2, "rw");
 		
-		String r1 = pra.fetchAccessRightforGroup(1, 1);
+		String r1 = pra.fetchAccessRightForGroup(1, 1);
 		
 		assertTrue(r1.equals("r"));
 		
-		String r2 = pra.fetchAccessRightforGroup(2, 1);
+		String r2 = pra.fetchAccessRightForGroup(2, 1);
 		assertTrue(r2.equals("rw"));
 	}
 	

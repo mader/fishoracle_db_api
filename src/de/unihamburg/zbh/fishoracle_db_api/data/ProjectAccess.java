@@ -20,6 +20,13 @@ public class ProjectAccess {
 		this.access = access;
 	}
 
+	public ProjectAccess(int id, int projectId, Group group, String access){
+		this.id = id;
+		this.projectId = projectId;
+		this.group = group;
+		this.access = access;
+	}
+	
 	public int getId() {
 		return id;
 	}

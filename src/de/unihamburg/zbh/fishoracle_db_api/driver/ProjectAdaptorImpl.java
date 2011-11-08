@@ -110,6 +110,71 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 	
 	//TODO test
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups){
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ProjectAccess projectAccess = null;
+		ArrayList<ProjectAccess> projectAccessContainer = new ArrayList<ProjectAccess>();
+		ProjectAccess[] projectAccesses = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			String whereClause = "";
+			for(int i=0; i < groups.length; i++){
+				if(i == groups.length -1){
+					whereClause += "group_id = " + groups[i].getId();
+				} else {
+					whereClause += "group_id = " + groups[i].getId() + " OR ";
+				}
+			}
+			
+			query.append("SELECT DISTINCT ").append("group_project_access_id, project_id, group_id, access_type")
+			.append(" FROM ").append("group_project_access")
+			.append(" WHERE ").append(whereClause)
+			.append(" ORDER BY project_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			int projectAccessId;
+			int projectId;
+			int groupId;
+			String accessType;
+			
+			while (rs.next()) {
+				projectAccessId = rs.getInt(1);
+				projectId = rs.getInt(2);
+				groupId = rs.getInt(3);
+				accessType = rs.getString(4);
+				
+				GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+				
+				Group group = ga.fetchGroupById(groupId);
+				
+				projectAccess = new ProjectAccess(projectAccessId, projectId, group, accessType);
+				
+				projectAccessContainer.add(projectAccess);
+				
+			}
+			
+			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
+			
+			projectAccessContainer.toArray(projectAccesses);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		
+		return projectAccesses;
+	}
+	
+	//TODO test
 	@Override
 	public ProjectAccess[] fetchProjectAccessForProject(int id) {
 		Connection conn = null;
@@ -160,6 +225,60 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			}
 		}
 		return projectAccesses;
+	}
+	
+	//TODO test
+	public Project[] fetchProjectsForProjectAccess(ProjectAccess[] pAccess){
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Project project = null;
+		ArrayList<Project> projectContainer = new ArrayList<Project>();
+		Project[] projects = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			String whereClause = "";
+			for(int i=0; i < pAccess.length; i++){
+				if(i == pAccess.length -1){
+					whereClause += "project_id = " + pAccess[i].getProjectId();
+				} else {
+					whereClause += "project_id = " + pAccess[i].getProjectId() + " OR ";
+				}
+			}
+			
+			query.append("SELECT ").append("project.project_id, project.name, project.description")
+			.append(" FROM ").append(getPrimaryTableName())
+			.append(" WHERE ").append(whereClause)
+			.append(" ORDER BY project_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				project = (Project) o;
+				projectContainer.add(project);
+			}
+			
+			if(project == null){
+
+					throw new AdaptorException("There are no projects available.");
+			}
+				
+			projects = new Project[projectContainer.size()];
+			
+			projectContainer.toArray(projects);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return projects;
 	}
 	
 	@Override
@@ -385,7 +504,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public String fetchAccessRightforGroup(int projectId, int groupId) {
+	public String fetchAccessRightForGroup(int projectId, int groupId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		String right = null;
@@ -494,5 +613,4 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			}
 		}
 	}
-	
 }
