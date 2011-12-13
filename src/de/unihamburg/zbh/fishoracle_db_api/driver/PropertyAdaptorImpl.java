@@ -314,7 +314,7 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	public int storeProperty(Property property) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int nor = 0;
+		int newPropertyId = 0;
 		
 		try{
 			
@@ -325,7 +325,11 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			.append(" VALUES ")
 			.append("('" + property.getLabel() + "', '" + property.getType() + "', '" + property.getActivty() + "')");
 			
-			nor = executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newPropertyId = rs.getInt(1);
+			}
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -334,7 +338,7 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 				close(conn);
 			}
 		}
-		return nor;
+		return newPropertyId;
 	}
 
 	@Override
