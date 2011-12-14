@@ -267,7 +267,7 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 	public int storeOrgan(Organ organ) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int nor = 0;
+		int newOrganId = 0;
 		
 		try{
 			
@@ -278,7 +278,11 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 			.append(" VALUES ")
 			.append("('" + organ.getLabel() + "', '" + organ.getType() + "', '" + organ.getActivty() + "')");
 			
-			nor = executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newOrganId = rs.getInt(1);
+			}
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -287,7 +291,7 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 				close(conn);
 			}
 		}
-		return nor;
+		return newOrganId;
 	}
 
 	@Override
