@@ -7,6 +7,7 @@ public interface ChipAdaptor {
 	public int storeChip(Chip chip);
 	public Chip fetchChipById(int id);
 	public Chip[] fetchAllChips();
+	public String[] fetchAllTypes();
 	public void deleteChip(Chip chip);
 	
 	final static String TYPE = "ChipAdaptor";

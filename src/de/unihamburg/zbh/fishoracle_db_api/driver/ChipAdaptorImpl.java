@@ -159,7 +159,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 	public int storeChip(Chip chip) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int nor = 0;
+		int newChipId = 0;
 		
 		try{
 			
@@ -170,7 +170,11 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			.append(" VALUES ")
 			.append("('" + chip.getName() + "', '" + chip.getType()  + "')");
 			
-			nor = executeUpdate(conn, query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newChipId = rs.getInt(1);
+			}
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -179,7 +183,45 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 				close(conn);
 			}
 		}
-		return nor;
+		return newChipId;
 		
+	}
+	
+	//TODO test
+	@Override
+	public String[] fetchAllTypes() {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		String[] types = null;
+		ArrayList<String> typeList = new ArrayList<String>();
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("DISTINCT (chip_type)")
+			.append(" FROM ").append(getPrimaryTableName());
+			
+			ResultSet typeRs = executeQuery(conn, query.toString());
+			
+			while(typeRs.next()){
+				
+				typeList.add(typeRs.getString(1));
+
+			}
+			
+			types = new String[typeList.size()];
+			
+			typeList.toArray(types);
+			
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return types;
 	}
 }
