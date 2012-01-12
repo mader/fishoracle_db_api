@@ -14,6 +14,7 @@ public interface MicroarraystudyAdaptor {
 	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId, boolean withChrildren);
 	
 	public int storeMicroarraystudy(Microarraystudy mstudy,int projectId);
+	public void deleteMicroarraystudy(int mstudyId);
 	public void deleteMicroarraystudy(Microarraystudy mstudy);
 	
 	final static String TYPE = "MicroarraystudyAdaptor";

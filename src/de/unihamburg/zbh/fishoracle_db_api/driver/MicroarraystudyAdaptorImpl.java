@@ -325,6 +325,12 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 		return newMstudyId;
 	}
 
+	public void deleteMicroarraystudy(int mstudyId) {
+		
+		Microarraystudy m = fetchMicroarraystudyById(mstudyId, true);
+		deleteMicroarraystudy(m);	
+	}
+	
 	@Override
 	public void deleteMicroarraystudy(Microarraystudy mstudy) {
 		Connection conn = null;
