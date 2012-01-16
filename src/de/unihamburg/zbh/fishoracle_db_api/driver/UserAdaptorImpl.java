@@ -437,6 +437,102 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 		return admin;
 	}
 
+	@Override
+	public void updateUserFistName(int userId, String firstName) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try {
+			
+			conn = getConnection();	
+			
+			query.append("UPDATE ").append(getPrimaryTableName()).append(" SET first_name = '").append(firstName)
+			.append("' WHERE user_id = ").append(userId);
+
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+
+	@Override
+	public void updateUserLastName(int userId, String lastName) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try {
+			
+			conn = getConnection();	
+			
+			query.append("UPDATE ").append(getPrimaryTableName()).append(" SET last_name = '").append(lastName)
+			.append("' WHERE user_id = ").append(userId);
+
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+
+	@Override
+	public void updateUserEmail(int userId, String email) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try {
+			
+			conn = getConnection();	
+			
+			query.append("UPDATE ").append(getPrimaryTableName()).append(" SET email = '").append(email)
+			.append("' WHERE user_id = ").append(userId);
+
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+	
+	@Override
+	public void updateUserPassword(int userId, String pw) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try {
+			
+			conn = getConnection();	
+			
+			query.append("UPDATE ").append(getPrimaryTableName()).append(" SET password = '").append(SimpleSHA.SHA1(pw))
+			.append("' WHERE user_id = ").append(userId);
+
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+	
 	public int storeUser(User user) throws Exception{
 		return storeUser(user.getFirstName(), user.getLastName(), user.getUserName(), user.getEmail(), user.getPw(), user.getIsActiveAsInt(), user.getIsAdminAsInt());
 	}

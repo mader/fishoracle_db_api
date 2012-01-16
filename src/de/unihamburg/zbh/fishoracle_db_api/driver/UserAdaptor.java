@@ -14,6 +14,11 @@ public interface UserAdaptor {
 	public int storeUser(User user) throws Exception;
 	public int storeUser(String firstName, String lastName, String userName, String email, String pw, int isactive, int isadmin) throws Exception;
 	
+	public void updateUserFistName(int userId, String firstName);
+	public void updateUserLastName(int userId, String lastName);
+	public void updateUserEmail(int userId, String email);
+	public void updateUserPassword(int userId, String pw);
+	
 	public void deleteUser(User user);
 	
 	public int toggleUserActiveStatus(User user);
