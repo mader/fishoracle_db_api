@@ -109,8 +109,12 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		
 	}
 	
-	//TODO test
 	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups){
+		return fetchProjectAccessForGroups(groups, false);
+	}
+	
+	//TODO test
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite){
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -129,6 +133,10 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				} else {
 					whereClause += "group_id = " + groups[i].getId() + " OR ";
 				}
+			}
+			
+			if(ReadWrite){
+				whereClause += " AND access_type = 'rw'";
 			}
 			
 			query.append("SELECT DISTINCT ").append("group_project_access_id, project_id, group_id, access_type")

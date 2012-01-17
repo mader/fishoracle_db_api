@@ -14,6 +14,7 @@ public interface ProjectAdaptor {
 	public String fetchAccessRightForGroup(int projectId, int groupId);
 	ProjectAccess[] fetchProjectAccessForProject(int id);
 	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups);
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean write);
 	//public ProjectAccess fetchProjectAccess(int projectId, int groupId);
 	
 	public void addMicroarraystudyToProject(int microarraystudyId, int projectId);
