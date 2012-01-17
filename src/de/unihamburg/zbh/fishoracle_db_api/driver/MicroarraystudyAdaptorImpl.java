@@ -75,14 +75,15 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 					mstudy.setChipId(chip.getId());
 				}
 				
-				CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
-				segments = sa.fetchCnSegmentsForMicroarraystudyId(mstudyId);
-				
+				/* Takes too long when a lot of microarraystudies will be loaded.
+				 * Should maybe removed completely.
 				if(withChildren){
+
+					CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+					segments = sa.fetchCnSegmentsForMicroarraystudyId(mstudyId);
 					mstudy.setSegments(segments);
-				} else {
-					mstudy.setChipId(chip.getId());
 				}
+				*/
 			}
 			
 		} catch (SQLException e) {
