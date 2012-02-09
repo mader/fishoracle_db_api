@@ -12,6 +12,8 @@ public interface MicroarraystudyAdaptor {
 	
 	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId);
 	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId, boolean withChrildren);
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int[] projectIds);
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int[] projectIds, boolean withChrildren);
 	
 	public int storeMicroarraystudy(Microarraystudy mstudy,int projectId);
 	public void deleteMicroarraystudy(int mstudyId);

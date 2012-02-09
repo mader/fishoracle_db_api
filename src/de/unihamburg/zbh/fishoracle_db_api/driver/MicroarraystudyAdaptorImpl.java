@@ -154,11 +154,21 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 	}
 
 	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId) {
-		return fetchMicroarraystudiesForProject(projectId, false);
+		int[] p = {projectId};
+		return fetchMicroarraystudiesForProject(p, false);
+	}
+	
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId, boolean withChrildren) {
+		int[] p = {projectId};
+		return fetchMicroarraystudiesForProject(p, withChrildren);
+	}
+	
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int[] projectIds){
+		return fetchMicroarraystudiesForProject(projectIds, false);
 	}
 	
 	@Override
-	public Microarraystudy[] fetchMicroarraystudiesForProject(int projectId, boolean withChrildren) {
+	public Microarraystudy[] fetchMicroarraystudiesForProject(int[] projectIds, boolean withChrildren) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Microarraystudy mstudy = null;
@@ -178,7 +188,21 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 					.append(" FROM ").append(getPrimaryTableName())
 					.append(" LEFT JOIN ").append("sample_on_chip ON microarraystudy.microarraystudy_id = sample_on_chip.sample_on_chip_microarraystudy_id")
 					.append(" LEFT JOIN ").append("microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
-					.append(" WHERE ").append("microarraystudy_in_project.project_id = " + projectId);
+					.append(" WHERE ");
+			
+			String whereClause = "";
+			
+			for(int i = 0; i < projectIds.length; i++){
+				
+				if(i + 1 != projectIds.length){
+					whereClause += "microarraystudy_in_project.project_id = " + projectIds[i] + " OR ";
+				} else {
+					whereClause += "microarraystudy_in_project.project_id = " + projectIds[i];
+					
+				}
+			}
+			
+			query.append(whereClause);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
