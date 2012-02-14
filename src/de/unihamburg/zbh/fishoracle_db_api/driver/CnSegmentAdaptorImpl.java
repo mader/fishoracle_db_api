@@ -286,14 +286,30 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		return qrystr;
 	}
 	
-	private String getOrganSQLClause(String[] organFilter){
-		String organFilterStr = "";;
-		if(organFilter.length > 0){
+	private String getProjectSQLClause(int[] projectFilter){
+		
+		String projectFilterStr = "";
+		if(projectFilter.length > 0 && projectFilter != null){
+			for(int i = 0; i < projectFilter.length; i++){
+				if(i == 0){
+					projectFilterStr = " project_id = '" + (projectFilter[i]) + "'";
+				} else {
+					projectFilterStr = projectFilterStr + " OR project_id = '" + (projectFilter[i]) + "'";
+				}
+			}
+			projectFilterStr = " AND (" + projectFilterStr + ")";
+		}
+		return projectFilterStr;
+	}
+	
+	private String getOrganSQLClause(int[] organFilter){
+		String organFilterStr = "";
+		if(organFilter.length > 0 && organFilter != null){
 			for(int i = 0; i < organFilter.length; i++){
 				if(i == 0){
-					organFilterStr = " organ_id = '" + (Integer.parseInt(organFilter[i])) + "'";
+					organFilterStr = " organ_id = '" + (organFilter[i]) + "'";
 				} else {
-					organFilterStr = organFilterStr + " OR organ_id = '" + (Integer.parseInt(organFilter[i])) + "'";
+					organFilterStr = organFilterStr + " OR organ_id = '" + (organFilter[i]) + "'";
 				}
 			}
 			organFilterStr = " AND (" + organFilterStr + ")";
@@ -301,10 +317,31 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		return organFilterStr;
 	}
 	
+	private String getExperimentSQLClause(int[] experimentFilter){
+		
+		String experimentFilterStr = "";
+		if(experimentFilter.length > 0 && experimentFilter!= null){
+			for(int i = 0; i < experimentFilter.length; i++){
+				if(i == 0){
+					experimentFilterStr = " microarraystudy_id = '" + (experimentFilter[i]) + "'";
+				} else {
+					experimentFilterStr = experimentFilterStr + " OR microarraystudy_id = '" + (experimentFilter[i]) + "'";
+				}
+			}
+			experimentFilterStr = " AND (" + experimentFilterStr + ")";
+		}
+		return experimentFilterStr;
+	}
+	
 	@Override
 	public Location fetchMaximalOverlappingCnSegmentRange(String chr,
-			int start, int end, Double lowerTh, Double upperTh,
-			String[] organFilter) {
+															int start,
+															int end,
+															Double lowerTh,
+															Double upperTh,
+															int[] projectFilter,
+															int[] organFilter,
+															int[] experimentFilter) {
 
 		Location loc = null;
 		Connection conn = null;
@@ -314,6 +351,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append("SELECT ").append("MIN(cn_segment_start) as minstart, MAX(cn_segment_end) as maxend")
 		.append(" FROM ").append(getPrimaryTableName())
 		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
+		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
 		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
 		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
@@ -321,7 +359,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		.append("cn_segment_chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getThresholdSQLClause(lowerTh, upperTh));
+		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
+		query.append(getExperimentSQLClause(experimentFilter));
 		
 		try{
 			conn = getConnection();
@@ -352,6 +392,64 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		return loc;
 	}
 
+	@Override
+	public CnSegment[] fetchCnSegments(String chr,
+										int start,
+										int end,
+										Double lowerTh,
+										Double upperTh,
+										int[] projectFilter,
+										int[] organFilter,
+										int[] experimentFilter) {
+		
+		Connection conn = null;
+		CnSegment  segment = null;
+		ArrayList<CnSegment> segmentContainer = new ArrayList<CnSegment>();
+		CnSegment[] segments = null;
+		
+		StringBuffer query = new StringBuffer();
+		
+		query.append("SELECT ").append("cn_segment_start, cn_segment_start, cn_segment_end")
+		.append(" FROM ").append(getPrimaryTableName())
+		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
+		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
+		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
+		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
+		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
+		.append(" WHERE ") 
+		.append("cn_segment_chromosome = '" + chr + "'");
+		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
+		query.append(getThresholdSQLClause(lowerTh, upperTh));
+		query.append(getProjectSQLClause(projectFilter));
+		query.append(getOrganSQLClause(organFilter));
+		query.append(getExperimentSQLClause(experimentFilter));
+		
+		try{
+			conn = getConnection();
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				segment = (CnSegment) o;
+				segmentContainer.add(segment);
+			}
+			
+			segments = new CnSegment[segmentContainer.size()];
+			
+			segmentContainer.toArray(segments);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		
+		return segments;
+	}
+	
 	@Override
 	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int id) {
 		Connection conn = null;

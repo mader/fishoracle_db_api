@@ -6,8 +6,10 @@ public class Location {
 	private int start;
 	private int end;
 	
+	public Location() {
+	}
+
 	public Location(String chrosmome, int start, int end) {
-		super();
 		this.chrosmome = chrosmome;
 		this.start = start;
 		this.end = end;
@@ -35,5 +37,33 @@ public class Location {
 
 	public void setEnd(int end) {
 		this.end = end;
+	}
+	
+	public Location maximize(Location loc) throws Exception{
+		
+		Location maxLoc;
+		
+		if(this.chrosmome.equals(loc.getChrosmome())){
+		
+			maxLoc = new Location();
+		
+			if(this.start < loc.getStart()){
+				maxLoc.setStart(this.start);
+			} else {
+				maxLoc.setStart(loc.getStart());
+			}
+		
+			if(this.end > loc.getEnd()){
+				maxLoc.setEnd(this.end);
+			} else {
+				maxLoc.setEnd(loc.getEnd());
+			}
+			
+			} else {
+				throw new Exception("Chromosomes not equal!");
+			} 
+		
+		return maxLoc;
+		
 	}
 }

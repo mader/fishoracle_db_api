@@ -187,9 +187,9 @@ public class CnSegmentTest extends TestCase{
 	}
 	 
 	public void testFetchMaximalOverlappingCnSegmentRange(){
-		String[] organs = new String[]{"1","2"};
+		int[] organs = new int[]{1,2};
 		
-		Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 3000, 6000, null, 0.0, organs);
+		Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 3000, 6000, null, 0.0, organs, null, null);
 		
 		 assertTrue(loc.getChrosmome().equals(maxOverlapLoc.getChrosmome()));
 		 assertTrue(loc.getStart() == maxOverlapLoc.getStart());
