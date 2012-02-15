@@ -28,7 +28,7 @@
 
   <target name="compile" description="compile the Java source code to class files">
     <mkdir dir="${BinDir}"/>
-    <javac classpath="${classpath}:${LibDir}/mysql-connector-java-5.1.6.jar:${LibDir}/junit-4.8.2.jar" srcdir="${SrcDir}/" destdir="${BinDir}" verbose="on"/>
+    <javac classpath="${classpath}:${LibDir}/mysql-connector-java-5.1.6.jar:${LibDir}/junit-4.8.2.jar" srcdir="${SrcDir}/" destdir="${BinDir}" debug="on" verbose="on"/>
   </target>
 
   <target name="compile_test" depends="compile" description="compile unit test classes">

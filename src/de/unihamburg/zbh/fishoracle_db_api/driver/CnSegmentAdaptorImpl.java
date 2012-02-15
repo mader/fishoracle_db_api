@@ -289,7 +289,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	private String getProjectSQLClause(int[] projectFilter){
 		
 		String projectFilterStr = "";
-		if(projectFilter.length > 0 && projectFilter != null){
+		if(projectFilter != null && projectFilter.length > 0){
 			for(int i = 0; i < projectFilter.length; i++){
 				if(i == 0){
 					projectFilterStr = " project_id = '" + (projectFilter[i]) + "'";
@@ -304,7 +304,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	
 	private String getOrganSQLClause(int[] organFilter){
 		String organFilterStr = "";
-		if(organFilter.length > 0 && organFilter != null){
+		if(organFilter != null && organFilter.length > 0){
 			for(int i = 0; i < organFilter.length; i++){
 				if(i == 0){
 					organFilterStr = " organ_id = '" + (organFilter[i]) + "'";
@@ -320,7 +320,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	private String getExperimentSQLClause(int[] experimentFilter){
 		
 		String experimentFilterStr = "";
-		if(experimentFilter.length > 0 && experimentFilter!= null){
+		if(experimentFilter!= null && experimentFilter.length > 0){
 			for(int i = 0; i < experimentFilter.length; i++){
 				if(i == 0){
 					experimentFilterStr = " microarraystudy_id = '" + (experimentFilter[i]) + "'";
@@ -351,7 +351,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append("SELECT ").append("MIN(cn_segment_start) as minstart, MAX(cn_segment_end) as maxend")
 		.append(" FROM ").append(getPrimaryTableName())
 		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
-		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
+		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
 		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
 		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
@@ -409,10 +409,16 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		
 		StringBuffer query = new StringBuffer();
 		
-		query.append("SELECT ").append("cn_segment_start, cn_segment_start, cn_segment_end")
+		query.append("SELECT ").append("cn_segment_id, " +
+										"cn_segment_chromosome," +
+										" cn_segment_start," +
+										" cn_segment_end," +
+										" cn_segment_mean," +
+										" cn_segment_markers," +
+										" cn_segment_microarraystudy_id ")
 		.append(" FROM ").append(getPrimaryTableName())
 		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
-		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
+		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
 		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
 		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
