@@ -46,6 +46,8 @@ public class Location {
 		if(this.chrosmome.equals(loc.getChrosmome())){
 		
 			maxLoc = new Location();
+			
+			maxLoc.setChrosmome(this.chrosmome);
 		
 			if(this.start < loc.getStart()){
 				maxLoc.setStart(this.start);
