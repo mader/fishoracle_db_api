@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
+import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 
 public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdaptor {
 
@@ -122,6 +123,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		CnSegment segment = null;
+		MicroarraystudyAdaptor ma = driver.getMicroarraystudyAdaptor();
+		Microarraystudy m;
 		
 		try{
 			
@@ -144,6 +147,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			while ((o = createObject(userRs)) != null) {
 				segment = (CnSegment) o;
+				m = ma.fetchMicroarraystudyById(segment.getMicroarraystudyId());
+				segment.setMicroarraystudyName(m.getName());
 				
 			}
 			
@@ -323,9 +328,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		if(experimentFilter!= null && experimentFilter.length > 0){
 			for(int i = 0; i < experimentFilter.length; i++){
 				if(i == 0){
-					experimentFilterStr = " microarraystudy_id = '" + (experimentFilter[i]) + "'";
+					experimentFilterStr = " microarraystudy.microarraystudy_id = '" + (experimentFilter[i]) + "'";
 				} else {
-					experimentFilterStr = experimentFilterStr + " OR microarraystudy_id = '" + (experimentFilter[i]) + "'";
+					experimentFilterStr = experimentFilterStr + " OR microarraystudy.microarraystudy_id = '" + (experimentFilter[i]) + "'";
 				}
 			}
 			experimentFilterStr = " AND (" + experimentFilterStr + ")";
@@ -406,6 +411,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		CnSegment  segment = null;
 		ArrayList<CnSegment> segmentContainer = new ArrayList<CnSegment>();
 		CnSegment[] segments = null;
+		MicroarraystudyAdaptor ma = driver.getMicroarraystudyAdaptor();
+		Microarraystudy m;
 		
 		StringBuffer query = new StringBuffer();
 		
@@ -438,6 +445,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			while ((o = createObject(rs)) != null) {
 				segment = (CnSegment) o;
+				m = ma.fetchMicroarraystudyById(segment.getMicroarraystudyId());
+				segment.setMicroarraystudyName(m.getName());
 				segmentContainer.add(segment);
 			}
 			

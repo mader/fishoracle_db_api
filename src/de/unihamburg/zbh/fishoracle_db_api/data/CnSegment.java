@@ -9,6 +9,7 @@ public class CnSegment {
 	private double mean;
 	private int numberOfMarkers;
 	private int microarraystudyId;
+	private String microarraystudyName;
 	
 	public CnSegment(int id, String chromosome, int start, int end,
 			double mean, int numberOfMarkers) {
@@ -85,5 +86,13 @@ public class CnSegment {
 
 	public void setMicroarraystudyId(int microarraystudyId) {
 		this.microarraystudyId = microarraystudyId;
+	}
+
+	public String getMicroarraystudyName() {
+		return microarraystudyName;
+	}
+
+	public void setMicroarraystudyName(String microarraystudyName) {
+		this.microarraystudyName = microarraystudyName;
 	}
 }
