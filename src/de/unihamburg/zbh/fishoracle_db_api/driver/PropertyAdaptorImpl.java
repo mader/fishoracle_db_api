@@ -291,12 +291,10 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			}
 			
 			if(property == null){
-				
-				throw new AdaptorException("No properties are associated with tissue id: " + id);
-				
+				properties = new Property[0];
+			} else {
+				properties = new Property[propertyContainer.size()];
 			}
-			
-			properties = new Property[propertyContainer.size()];
 			
 			propertyContainer.toArray(properties);
 			
