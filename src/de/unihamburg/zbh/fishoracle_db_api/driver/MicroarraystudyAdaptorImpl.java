@@ -359,6 +359,7 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 	@Override
 	public void deleteMicroarraystudy(Microarraystudy mstudy) {
 		Connection conn = null;
+		StringBuffer microarraystudyInProjectQuery = new StringBuffer();
 		StringBuffer socQuery = new StringBuffer();
 		StringBuffer mstudyQuery = new StringBuffer();
 		
@@ -372,11 +373,15 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 			ta.deleteTissueSample(mstudy.getTissue());
 			
+			microarraystudyInProjectQuery.append("DELETE FROM ")
+			.append("microarraystudy_in_project")
+			.append(" WHERE ").append("microarraystudy_id = " + mstudy.getId());
+			
 			socQuery.append("DELETE FROM ").append("sample_on_chip")
 			.append(" WHERE ").append("sample_on_chip_microarraystudy_id = " + mstudy.getId());
 
 			executeUpdate(conn, socQuery.toString());
-				
+			
 			mstudyQuery.append("DELETE FROM ")
 			.append(getPrimaryTableName())
 			.append(" WHERE ").append("microarraystudy_id = " + mstudy.getId());
