@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2009-2011 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2009-2011 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2009-2012 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2009-2012 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -17,6 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.data;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class User {
 
 	private int id;
@@ -29,7 +33,6 @@ public class User {
 	private Boolean isAdmin;
 	
 	public User() {
-		
 	}
 
 	public User(int id, String firstName, String lastName, String userName,
@@ -135,5 +138,4 @@ public class User {
 				"Last Name: " + lastName + ", Username: " + userName + ", " +
 				"E-Mail: " + email + ", Active?: " + isActive + ", Admin?: " + isAdmin;
 	}
-	
 }

@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 public class ChipAdaptorTest extends TestCase {
 	private TestData td;
 	private ChipAdaptor ca;
-	private Chip[] testChips = new Chip[3];
+	private Chip[] testChips;
 	
 	protected void setUp() {
 		

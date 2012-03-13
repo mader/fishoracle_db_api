@@ -56,7 +56,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			
 			conn = getConnection();
 			
-			query.append("INSERT INTO ").append(getPrimaryTableName())
+			query.append("INSERT INTO ").append(super.getPrimaryTableName())
 			.append(" (chip_name, chip_type)")
 			.append(" VALUES ")
 			.append("('" + chip.getName() + "', '" + chip.getType()  + "')");
@@ -111,8 +111,8 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			conn = getConnection();	
 			
 			query.append("SELECT ").append("chip_id, chip_name, chip_type")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" ORDER BY chip_id");
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY chip_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
@@ -149,8 +149,8 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			conn = getConnection();	
 			
 			query.append("SELECT ").append("DISTINCT (chip_type)")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" ORDER BY chip_type");
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY chip_type ASC");
 			
 			ResultSet typeRs = executeQuery(conn, query.toString());
 			
@@ -185,7 +185,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			conn = getConnection();
 			
 			query.append("SELECT ").append("chip_id, chip_name, chip_type")
-			.append(" FROM ").append(getPrimaryTableName())
+			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("chip_id = " + id);
 			
 			ResultSet userRs = executeQuery(conn, query.toString());
@@ -221,7 +221,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			conn = getConnection();
 			
 			query.append("DELETE FROM ")
-			.append(getPrimaryTableName())
+			.append(super.getPrimaryTableName())
 			.append(" WHERE ").append("chip_id = " + chipId);
 			
 			executeUpdate(conn, query.toString());

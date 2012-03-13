@@ -30,7 +30,8 @@ public interface ChipAdaptor {
 
 	/**
 	 * Stores a new chip in the database.
-	 * @param chip The Chip object.
+	 * @param chip The Chip object. The chip ID of the object will not
+	 *         will not be used.
 	 * @return Returns the database ID of the newly added chip.
 	 */
 	public int storeChip(Chip chip);
@@ -53,8 +54,9 @@ public interface ChipAdaptor {
 	
 	/**
 	 * Fetches chip data for a given chip ID
-	 * @param id The ID for which the database will be queried.
-	 * @return Returns a Chip object. If the ID does not exist null is returned.
+	 * @param id The chip ID for which the database will be queried.
+	 * @return Returns a Chip object. If the ID does not exist null
+	 *          is returned.
 	 */
 	public Chip fetchChipById(int id);
 	

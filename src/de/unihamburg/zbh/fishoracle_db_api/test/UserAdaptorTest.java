@@ -1,105 +1,223 @@
+/*
+  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+
+  Permission to use, copy, modify, and distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
+
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
-import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.UserAdaptor;
 import junit.framework.TestCase;
 
 public class UserAdaptorTest extends TestCase {
 
-	private FODriver driver;
+	private TestData td;
 	private UserAdaptor ua;
-	private User user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12;
-	private User[] testusers = new User[12];
-	
+	private User[] testusers;
 	private GroupAdaptor ga;
-	private Group group1, group2, group3;
 
 	protected void setUp() {
-
-		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 		
-		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+		td = new TestData();
 		
-		group1 = new Group(1, "Staff", true);
-		group2 = new Group(2, "Students",  true);
-		group3 = new Group(3, "Extern", false);
+		ua = td.getUa();
 		
-		ua = (UserAdaptor) driver.getAdaptor("UserAdaptor");
+		testusers = td.createUserData();
 		
-		user1 = new User("Bugs", "Bunny", "bugs", "bugs@loony.tunes", "123secret", false, false);
-		user2 = new User("Daffy", "Duck", "daffy", "daffy@loony.tunes", "123secret", false, false);
-		user3 = new User("Porky", "Pig", "porky", "porky@loony.tunes", "123secret", false, false);
-		user4 = new User("Elmer", "Fudd", "elmer", "elmer@loony.tunes", "123secret", false, false);
-		user5 = new User("Yosemite", "Sam", "yosemite", "yosemite@loony.tunes", "123secret", false, false);
-		user6 = new User("Sylvester", "Cat", "sylvester", "sylvester@loony.tunes", "123secret", false, false);
-		user7 = new User("Tweety", "Bird", "tweety", "tweety@loony.tunes", "123secret", true, true);
-		user8 = new User("Speedy", "Gonzales", "speedy", "speedy@loony.tunes", "123secret", true, true);
-		user9 = new User("Wile", "Coyote", "wile", "wile@loony.tunes", "123secret", true, true);
-		user10 = new User("Road", "Runner", "road", "road@loony.tunes", "123secret", true, true);
-		user11 = new User("Foghorn", "Leghorn", "foghorn", "foghorn@loony.tunes", "123secret", true, true);
-		user12 = new User("Tasmanian", "Devil", "tasmanian", "tasmanian@loony.tunes", "123secret", true, true);
-		
-		testusers[0] = user1;
-		testusers[1] = user2;
-		testusers[2] = user3;
-		testusers[3] = user4;
-		testusers[4] = user5;
-		testusers[5] = user6;
-		testusers[6] = user7;
-		testusers[7] = user8;
-		testusers[8] = user9;
-		testusers[9] = user10;
-		testusers[10] = user11;
-		testusers[11] = user12;
-		
+		ga = td.getGa();
 	}
 	
 	public void testStoreUser() {
 		if(((BaseAdaptor) ua).fetchCount() == 0){
 			try {
-				ua.storeUser(user1);
+				ua.storeUser(testusers[0]);
 				assertTrue(((BaseAdaptor) ua).fetchCount() == 1);
-				ua.storeUser(user2);
+				ua.storeUser(testusers[1]);
 				assertTrue(((BaseAdaptor) ua).fetchCount() == 2);
-				ua.storeUser(user3);
+				ua.storeUser(testusers[2]);
 				assertTrue(((BaseAdaptor) ua).fetchCount() == 3);
-				ua.storeUser(user4);
+				ua.storeUser(testusers[3]);
 				assertTrue(((BaseAdaptor) ua).fetchCount() == 4);
-				ua.storeUser(user5);
+				ua.storeUser(testusers[4]);
 				assertTrue(((BaseAdaptor) ua).fetchCount() == 5);
-				ua.storeUser(user6);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 6);
-				ua.storeUser(user7);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 7);
-				ua.storeUser(user8);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 8);
-				ua.storeUser(user9);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 9);
-				ua.storeUser(user10);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 10);
-				ua.storeUser(user11);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 11);
-				ua.storeUser(user12);
-				assertTrue(((BaseAdaptor) ua).fetchCount() == 12);
+				ua.storeUser(testusers[5]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			ga.addUserToGroup(1, 1);
 			ga.addUserToGroup(2, 1);
-			ga.addUserToGroup(3, 1);
-			ga.addUserToGroup(4, 1);
-			ga.addUserToGroup(5, 1);
-			ga.addUserToGroup(6, 1);
-			ga.addUserToGroup(7, 1);
-			ga.addUserToGroup(8, 1);
-			ga.addUserToGroup(9, 1);
-			ga.addUserToGroup(10, 1);
+			ga.addUserToGroup(3, 2);
+			ga.addUserToGroup(4, 2);
+			ga.addUserToGroup(5, 3);
+			ga.addUserToGroup(6, 3);
+		}
+	}
+	
+	public void testFetchAllUsers() {
+		
+		User[] users = ua.fetchAllUsers();
+		
+		for(int i = 0; i < users.length; i++) {
+			assertTrue(users[i].getId() == (i+1));
+			assertTrue(users[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(users[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(users[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(users[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(users[i].getPw().equals(""));
+			assertTrue(users[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(users[i].getIsAdmin() == testusers[i].getIsAdmin());	
+		}
+	}
+	
+	public void testFetchUsersForGroup(){
+		User[] u1 = ua.fetchUsersForGroup(1);
+		
+		for(int i=0; i < u1.length; i++){
+			assertTrue(u1[i].getId() == (i+1));
+			assertTrue(u1[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(u1[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(u1[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(u1[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(u1[i].getPw().equals(""));
+			assertTrue(u1[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(u1[i].getIsAdmin() == testusers[i].getIsAdmin());
+		}
+		
+		User[] u2 = ua.fetchUsersForGroup(2);
+		
+		for(int i=0; i < u2.length; i++){
+			assertTrue(u2[i].getId() == (i+2+1));
+			assertTrue(u2[i].getFirstName().equals(testusers[i + 2].getFirstName()));
+			assertTrue(u2[i].getLastName().equals(testusers[i + 2].getLastName()));
+			assertTrue(u2[i].getUserName().equals(testusers[i + 2].getUserName()));
+			assertTrue(u2[i].getEmail().equals(testusers[i + 2].getEmail()));
+			assertTrue(u2[i].getPw().equals(""));
+			assertTrue(u2[i].getIsActive() == testusers[i + 2].getIsActive());
+			assertTrue(u2[i].getIsAdmin() == testusers[i + 2].getIsAdmin());
+		}
+		
+		User[] u3 = ua.fetchUsersForGroup(3);
+		
+		for(int i=0; i < u3.length; i++){
+			assertTrue(u3[i].getId() == (i+4+1));
+			assertTrue(u3[i].getFirstName().equals(testusers[i + 4].getFirstName()));
+			assertTrue(u3[i].getLastName().equals(testusers[i + 4].getLastName()));
+			assertTrue(u3[i].getUserName().equals(testusers[i + 4].getUserName()));
+			assertTrue(u3[i].getEmail().equals(testusers[i + 4].getEmail()));
+			assertTrue(u3[i].getPw().equals(""));
+			assertTrue(u3[i].getIsActive() == testusers[i + 4].getIsActive());
+			assertTrue(u3[i].getIsAdmin() == testusers[i + 4].getIsAdmin());
+		}
+	}
+	
+	public void testFetchAllUsersNotInGroup(){
+		User[] u1 = ua.fetchAllUsersNotInGroup(1);
+		
+		for(int i=0; i < u1.length; i++){
+			assertTrue(u1[i].getId() == (i+2+1));
+			assertTrue(u1[i].getFirstName().equals(testusers[i + 2].getFirstName()));
+			assertTrue(u1[i].getLastName().equals(testusers[i + 2].getLastName()));
+			assertTrue(u1[i].getUserName().equals(testusers[i + 2].getUserName()));
+			assertTrue(u1[i].getEmail().equals(testusers[i + 2].getEmail()));
+			assertTrue(u1[i].getPw().equals(""));
+			assertTrue(u1[i].getIsActive() == testusers[i + 2].getIsActive());
+			assertTrue(u1[i].getIsAdmin() == testusers[i + 2].getIsAdmin());
+		}
+		
+		User[] u2 = ua.fetchAllUsersNotInGroup(2);
+		
+		for(int i=0; i < u2.length - 4; i++){
+			assertTrue(u2[i].getId() == (i+1));
+			assertTrue(u2[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(u2[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(u2[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(u2[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(u2[i].getPw().equals(""));
+			assertTrue(u2[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(u2[i].getIsAdmin() == testusers[i].getIsAdmin());
+		}
+		
+		for(int i=4; i < u2.length; i++){
+			assertTrue(u2[i].getId() == (i+1));
+			assertTrue(u2[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(u2[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(u2[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(u2[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(u2[i].getPw().equals(""));
+			assertTrue(u2[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(u2[i].getIsAdmin() == testusers[i].getIsAdmin());
+		}
+		
+		User[] u3 = ua.fetchAllUsersNotInGroup(3);
+		
+		for(int i=0; i < u1.length - 2; i++){
+			assertTrue(u3[i].getId() == (i+1));
+			assertTrue(u3[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(u3[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(u3[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(u3[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(u3[i].getPw().equals(""));
+			assertTrue(u3[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(u3[i].getIsAdmin() == testusers[i].getIsAdmin());
+		}
+	}
+	
+	public void fetchUserForLogin(){
+		User u;
+		
+		for(int i = 0; i < testusers.length; i++) {
 			
+			try {
+				u = ua.fetchUserForLogin(testusers[i].getUserName(), testusers[i].getPw());
+				
+				assertTrue(u.getId() == testusers[i].getId());
+				assertTrue(u.getFirstName().equals(testusers[i].getFirstName()));
+				assertTrue(u.getLastName().equals(testusers[i].getLastName()));
+				assertTrue(u.getUserName().equals(testusers[i].getUserName()));
+				assertTrue(u.getEmail().equals(testusers[i].getEmail()));
+				assertTrue(u.getPw().equals(""));
+				assertTrue(u.getIsActive() == testusers[i].getIsActive());
+				assertTrue(u.getIsAdmin() == testusers[i].getIsAdmin());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public void testFetchUserByID() {
+		User u1 = ua.fetchUserByID(1);
+		User u2 = ua.fetchUserByID(2);
+		User u3 = ua.fetchUserByID(3);
+		User u4 = ua.fetchUserByID(4);
+		User u5 = ua.fetchUserByID(5);
+		User u6 = ua.fetchUserByID(6);
+		
+		User[] users = new User[]{u1, u2, u3, u4, u5, u6};
+		
+		for(int i = 0; i < users.length; i++) {
+			assertTrue(users[i].getId() == (i+1));
+			assertTrue(users[i].getFirstName().equals(testusers[i].getFirstName()));
+			assertTrue(users[i].getLastName().equals(testusers[i].getLastName()));
+			assertTrue(users[i].getUserName().equals(testusers[i].getUserName()));
+			assertTrue(users[i].getEmail().equals(testusers[i].getEmail()));
+			assertTrue(users[i].getPw().equals(""));
+			assertTrue(users[i].getIsActive() == testusers[i].getIsActive());
+			assertTrue(users[i].getIsAdmin() == testusers[i].getIsAdmin());	
 		}
 	}
 	
@@ -111,7 +229,6 @@ public class UserAdaptorTest extends TestCase {
 		u1 = ua.fetchUserByID(1);
 		assertTrue(u1.getIsActive() == true);
 		
-		
 		User u2 = ua.fetchUserByID(2);
 		assertTrue(u2.getIsActive() == false);
 		ua.toggleUserActiveStatus(u2);
@@ -119,28 +236,28 @@ public class UserAdaptorTest extends TestCase {
 		assertTrue(u2.getIsActive() == true);
 		
 		User u3 = ua.fetchUserByID(3);
-		assertTrue(u3.getIsActive() == false);
+		assertTrue(u3.getIsActive() == true);
 		ua.toggleUserActiveStatus(u3);
 		u3 = ua.fetchUserByID(3);
-		assertTrue(u3.getIsActive() == true);
+		assertTrue(u3.getIsActive() == false);
 		
-		User u7 = ua.fetchUserByID(7);
-		assertTrue(u7.getIsActive() == true);
-		ua.toggleUserActiveStatus(u7);
-		u7 = ua.fetchUserByID(7);
-		assertTrue(u7.getIsActive() == false);
+		User u4 = ua.fetchUserByID(4);
+		assertTrue(u4.getIsActive() == false);
+		ua.toggleUserActiveStatus(u4);
+		u4 = ua.fetchUserByID(4);
+		assertTrue(u4.getIsActive() == true);
 		
-		User u8 = ua.fetchUserByID(8);
-		assertTrue(u8.getIsActive() == true);
-		ua.toggleUserActiveStatus(u8);
-		u8 = ua.fetchUserByID(8);
-		assertTrue(u8.getIsActive() == false);
+		User u5 = ua.fetchUserByID(5);
+		assertTrue(u5.getIsActive() == true);
+		ua.toggleUserActiveStatus(u5);
+		u5 = ua.fetchUserByID(5);
+		assertTrue(u5.getIsActive() == false);
 		
-		User u9 = ua.fetchUserByID(9);
-		assertTrue(u9.getIsActive() == true);
-		ua.toggleUserActiveStatus(u9);
-		u9 = ua.fetchUserByID(9);
-		assertTrue(u9.getIsActive() == false);
+		User u6 = ua.fetchUserByID(6);
+		assertTrue(u6.getIsActive() == true);
+		ua.toggleUserActiveStatus(u6);
+		u6 = ua.fetchUserByID(6);
+		assertTrue(u6.getIsActive() == false);
 		
 	}
 	
@@ -164,152 +281,110 @@ public class UserAdaptorTest extends TestCase {
 		u3 = ua.fetchUserByID(3);
 		assertTrue(u3.getIsAdmin() == true);
 		
-		User u7 = ua.fetchUserByID(7);
-		assertTrue(u7.getIsAdmin() == true);
-		ua.toggleUserAdminStatus(u7);
-		u7 = ua.fetchUserByID(7);
-		assertTrue(u7.getIsAdmin() == false);
-		
-		User u8 = ua.fetchUserByID(8);
-		assertTrue(u8.getIsAdmin() == true);
-		ua.toggleUserAdminStatus(u8);
-		u8 = ua.fetchUserByID(8);
-		assertTrue(u8.getIsAdmin() == false);
-		
-		User u9 = ua.fetchUserByID(9);
-		assertTrue(u9.getIsAdmin() == true);
-		ua.toggleUserAdminStatus(u9);
-		u9 = ua.fetchUserByID(9);
-		assertTrue(u9.getIsAdmin() == false);
-		
-	}
-	
-	public void testFetchAllUsers() {
-		
-		User[] users = ua.fetchAllUsers();
-		
-		for(int i = 0; i < users.length; i++) {
-			assertTrue(users[i].getId() == (i+1));
-			assertTrue(users[i].getLastName().equals(testusers[i].getLastName()));
-			assertTrue(users[i].getFirstName().equals(testusers[i].getFirstName()));
-			assertTrue(users[i].getUserName().equals(testusers[i].getUserName()));
-			assertTrue(users[i].getEmail().endsWith(testusers[i].getEmail()));
-			assertTrue(users[i].getPw().equals(""));
-		}
-		
-		assertTrue(users[3].getIsActive() == false);
-		assertTrue(users[3].getIsAdmin() == false);
-		
-		assertTrue(users[4].getIsActive() == false);
-		assertTrue(users[4].getIsAdmin() == false);
-		
-		assertTrue(users[5].getIsActive() == false);
-		assertTrue(users[5].getIsAdmin() == false);
-		
-		assertTrue(users[9].getIsActive() == true);
-		assertTrue(users[9].getIsAdmin() == true);
-		
-		assertTrue(users[10].getIsActive() == true);
-		assertTrue(users[10].getIsAdmin() == true);
-		
-		assertTrue(users[11].getIsActive() == true);
-		assertTrue(users[11].getIsAdmin() == true);
-		
-	}
-	
-	public void fetchUserForLogin(){
-		User u;
-		
-		for(int i = 0; i < testusers.length; i++) {
-			
-			try {
-				u = ua.fetchUserForLogin(testusers[i].getUserName(), testusers[i].getPw());
-				
-				assertTrue(u.getId() == testusers[i].getId());
-				assertTrue(u.getFirstName().equals(testusers[i].getFirstName()));
-				assertTrue(u.getLastName().equals(testusers[i].getLastName()));
-				assertTrue(u.getUserName().equals(testusers[i].getUserName()));
-				assertTrue(u.getEmail().equals(testusers[i].getEmail()));
-				assertTrue(u.getPw().equals(""));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-	}
-	
-	public void testFetchUserByID() {
-		User u1 = ua.fetchUserByID(1);
-		User u2 = ua.fetchUserByID(2);
-		User u3 = ua.fetchUserByID(3);
 		User u4 = ua.fetchUserByID(4);
+		assertTrue(u4.getIsAdmin() == true);
+		ua.toggleUserAdminStatus(u4);
+		u4 = ua.fetchUserByID(4);
+		assertTrue(u4.getIsAdmin() == false);
+		
 		User u5 = ua.fetchUserByID(5);
+		assertTrue(u5.getIsAdmin() == true);
+		ua.toggleUserAdminStatus(u5);
+		u5 = ua.fetchUserByID(5);
+		assertTrue(u5.getIsAdmin() == false);
+		
 		User u6 = ua.fetchUserByID(6);
-		User u7 = ua.fetchUserByID(7);
-		User u8 = ua.fetchUserByID(8);
-		User u9 = ua.fetchUserByID(9);
-		User u10 = ua.fetchUserByID(10);
-		User u11 = ua.fetchUserByID(11);
-		User u12 = ua.fetchUserByID(12);
-		
-		assertTrue(u1.getId() == 1);
-		assertTrue(u1.getFirstName().equals(user1.getFirstName()));
-		assertTrue(u1.getLastName().equals(user1.getLastName()));
-		assertTrue(u1.getUserName().equals(user1.getUserName()));
-		assertTrue(u1.getEmail().equals(user1.getEmail()));
-		assertTrue(u1.getPw().equals(""));
-		
-		assertTrue(u2.getId() == 2);
-		assertTrue(u2.getFirstName().equals(user2.getFirstName()));
-		assertTrue(u2.getLastName().equals(user2.getLastName()));
-		assertTrue(u2.getUserName().equals(user2.getUserName()));
-		assertTrue(u2.getEmail().equals(user2.getEmail()));
-		assertTrue(u2.getPw().equals(""));
-		
-		assertTrue(u3.getId() == 3);
-		assertTrue(u3.getFirstName().equals(user3.getFirstName()));
-		assertTrue(u3.getLastName().equals(user3.getLastName()));
-		assertTrue(u3.getUserName().equals(user3.getUserName()));
-		assertTrue(u3.getEmail().equals(user3.getEmail()));
-		assertTrue(u3.getPw().equals(""));
-		
-		assertTrue(u4.getId() == 4);
-		assertTrue(u5.getId() == 5);
-		assertTrue(u6.getId() == 6);
-		assertTrue(u7.getId() == 7);
-		assertTrue(u8.getId() == 8);
-		assertTrue(u9.getId() == 9);
-		assertTrue(u10.getId() == 10);
-		assertTrue(u11.getId() == 11);
-		assertTrue(u12.getId() == 12);
-	}
-	
-	public void testFetchAllUsersNotInGroup(){
-		User[] u1 = ua.fetchAllUsersNotInGroup(1);
-		
-		for(int i=0; i< u1.length; i++){
-			assertTrue(u1[i].getId() == (i+11));
-			assertTrue(u1[i].getFirstName().equals(testusers[(i+10)].getFirstName()));
-			assertTrue(u1[i].getLastName().equals(testusers[(i+10)].getLastName()));
-			assertTrue(u1[i].getUserName().equals(testusers[(i+10)].getUserName()));
-			assertTrue(u1[i].getEmail().equals(testusers[(i+10)].getEmail()));
-			assertTrue(u1[i].getPw().equals(""));
-		}
+		assertTrue(u6.getIsAdmin() == true);
+		ua.toggleUserAdminStatus(u6);
+		u6 = ua.fetchUserByID(6);
+		assertTrue(u6.getIsAdmin() == false);
 		
 	}
 	
-	public void testFetchUsersForGroup(){
-		User[] u1 = ua.fetchUsersForGroup(1);
+	public void testUpdateUserFirstName() {
 		
-		for(int i=0; i< u1.length; i++){
-			assertTrue(u1[i].getId() == (i+1));
-			assertTrue(u1[i].getFirstName().equals(testusers[i].getFirstName()));
-			assertTrue(u1[i].getLastName().equals(testusers[i].getLastName()));
-			assertTrue(u1[i].getUserName().equals(testusers[i].getUserName()));
-			assertTrue(u1[i].getEmail().equals(testusers[i].getEmail()));
-			assertTrue(u1[i].getPw().equals(""));
+		User u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getFirstName().equals(testusers[0].getFirstName()));
+		ua.updateUserFistName(u1.getId(), "Thunder");
+		u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getFirstName().equals("Thunder"));
+		
+		User u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getFirstName().equals(testusers[1].getFirstName()));
+		ua.updateUserFistName(u2.getId(), "Tiny");
+		u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getFirstName().equals("Tiny"));
+		
+		User u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getFirstName().equals(testusers[2].getFirstName()));
+		ua.updateUserFistName(u3.getId(), "Big");
+		u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getFirstName().equals("Big"));
+		
+	}
+	
+	public void testUpdateUserLastName() {
+		
+		User u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getLastName().equals(testusers[0].getLastName()));
+		ua.updateUserLastName(u1.getId(), "Rabbit");
+		u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getLastName().equals("Rabbit"));
+		
+		User u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getLastName().equals(testusers[1].getLastName()));
+		ua.updateUserLastName(u2.getId(), "Bird");
+		u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getLastName().equals("Bird"));
+		
+		User u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getLastName().equals(testusers[2].getLastName()));
+		ua.updateUserLastName(u3.getId(), "Whatever");
+		u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getLastName().equals("Whatever"));
+	}
+	
+	public void testUpdateUserEmailNameUser() {
+		
+		User u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getEmail().equals(testusers[0].getEmail()));
+		ua.updateUserEmail(u1.getId(), "bunny@loony.tunes");
+		u1 = ua.fetchUserByID(1);
+		assertTrue(u1.getEmail().equals("bunny@loony.tunes"));
+		
+		User u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getEmail().equals(testusers[1].getEmail()));
+		ua.updateUserEmail(u2.getId(), "duck@loony.tunes");
+		u2 = ua.fetchUserByID(2);
+		assertTrue(u2.getEmail().equals("duck@loony.tunes"));
+		
+		User u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getEmail().equals(testusers[2].getEmail()));
+		ua.updateUserEmail(u3.getId(), "pig@loony.tunes");
+		u3 = ua.fetchUserByID(3);
+		assertTrue(u3.getEmail().equals("pig@loony.tunes"));
+		
+	}
+	
+	public void testUpdateUserPassword() {
+
+		try {
+			
+			User u1 = ua.fetchUserForLogin(testusers[0].getUserName(), "123secret");
+			assertTrue(u1.getId() == 1);
+			ua.updateUserPassword(u1.getId(), "secret123");
+			u1 = ua.fetchUserForLogin(u1.getUserName(), "secret123");
+			assertTrue(u1.getId() == 1);
+			
+			User u2 = ua.fetchUserForLogin(testusers[1].getUserName(), "123secret");
+			assertTrue(u2.getId() == 2);
+			ua.updateUserPassword(u2.getId(), "somethingnew");
+			u2 = ua.fetchUserForLogin(u2.getUserName(), "somethingnew");
+			assertTrue(u2.getId() == 2);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 	}
 	
 	public void testDeleteUser() {
@@ -319,43 +394,25 @@ public class UserAdaptorTest extends TestCase {
 		User u4 = ua.fetchUserByID(4);
 		User u5 = ua.fetchUserByID(5);
 		User u6 = ua.fetchUserByID(6);
-		User u7 = ua.fetchUserByID(7);
-		User u8 = ua.fetchUserByID(8);
-		User u9 = ua.fetchUserByID(9);
-		User u10 = ua.fetchUserByID(10);
-		User u11 = ua.fetchUserByID(11);
-		User u12 = ua.fetchUserByID(12);
 		
 		ua.deleteUser(u1);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 11);
-		ua.deleteUser(u2);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 10);
-		ua.deleteUser(u3);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 9);
-		ua.deleteUser(u4);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 8);
-		ua.deleteUser(u5);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 7);
-		ua.deleteUser(u6);
-		assertTrue(((BaseAdaptor) ua).fetchCount() == 6);
-		ua.deleteUser(u7);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 5);
-		ua.deleteUser(u8);
+		ua.deleteUser(u2);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 4);
-		ua.deleteUser(u9);
+		ua.deleteUser(u3);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 3);
-		ua.deleteUser(u10);
+		ua.deleteUser(u4);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 2);
-		ua.deleteUser(u11);
+		ua.deleteUser(u5);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 1);
-		ua.deleteUser(u12);
+		ua.deleteUser(u6);
 		assertTrue(((BaseAdaptor) ua).fetchCount() == 0);
 	}
 	
 	protected void tearDown() {
 		if(((BaseAdaptor) ua).fetchCount() == 0){
-			((BaseAdaptor) ua).truncateTable("user_in_group");
-			((BaseAdaptor) ua).truncateTable(((BaseAdaptor) ua).getPrimaryTableName());
+			td.emptyUserInGroupTable();
+			td.emptyUserTable();
 		}
 	}
 }
