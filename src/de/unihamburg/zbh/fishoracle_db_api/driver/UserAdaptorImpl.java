@@ -327,7 +327,7 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			if ((o = createObject(userRs)) != null) {
 				user = (User) o;
 			}
 			

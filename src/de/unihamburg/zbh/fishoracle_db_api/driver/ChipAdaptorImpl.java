@@ -192,7 +192,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			if((o = createObject(userRs)) != null) {
 				chip = (Chip) o;
 			}
 			

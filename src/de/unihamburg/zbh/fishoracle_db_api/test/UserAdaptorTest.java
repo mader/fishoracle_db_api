@@ -59,11 +59,11 @@ public class UserAdaptorTest extends TestCase {
 				e.printStackTrace();
 			}
 			ga.addUserToGroup(1, 1);
-			ga.addUserToGroup(2, 1);
-			ga.addUserToGroup(3, 2);
-			ga.addUserToGroup(4, 2);
-			ga.addUserToGroup(5, 3);
-			ga.addUserToGroup(6, 3);
+			ga.addUserToGroup(1, 2);
+			ga.addUserToGroup(2, 3);
+			ga.addUserToGroup(2, 4);
+			ga.addUserToGroup(3, 5);
+			ga.addUserToGroup(3, 6);
 		}
 	}
 	

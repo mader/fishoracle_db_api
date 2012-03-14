@@ -79,7 +79,7 @@ public interface UserAdaptor {
 	 * Fetches user data for a given user ID
 	 * 
 	 * @param id The user ID for which the database will be queried.
-	 * @return Returns a Chip object. If the ID does not exist null
+	 * @return Returns a User object. If the ID does not exist null
 	 *          is returned.
 	 */
 	public User fetchUserByID(int id);
@@ -157,7 +157,7 @@ public interface UserAdaptor {
 	public void updateUserPassword(int userId, String pw);
 	
 	/**
-	 * Removes a chip from the database.
+	 * Removes a user from the database.
 	 * 
 	 * @param user The User object for that data that should be removed.
 	 */
