@@ -74,7 +74,7 @@ public interface ChipAdaptor {
 	/**
 	 * Removes a chip from the database.
 	 * 
-	 * @param chip The Chip object for that data should be removed.
+	 * @param chip The Chip object for the data that should be removed.
 	 */
 	public void deleteChip(Chip chip);
 	

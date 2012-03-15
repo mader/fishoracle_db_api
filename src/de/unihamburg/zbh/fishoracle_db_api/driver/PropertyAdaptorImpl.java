@@ -1,3 +1,20 @@
+/*
+  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+
+  Permission to use, copy, modify, and distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
+
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
 import java.sql.Connection;
@@ -14,6 +31,11 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	}
 
 	@Override
+	protected String[] tables() {
+		return new String[]{"property"};
+	}
+
+	@Override
 	protected String[] columns() {
 		return new String[]{"property_id",
 							"property_label",
@@ -21,293 +43,6 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 							"property_activity"};
 	}
 
-	@Override
-	public Object createObject(ResultSet rs) {
-		
-		Property property = null;
-		int id = 0;
-		String label = null;
-		String type = null;
-		String activity = null;
-		
-		try {
-			if(rs.next()){
-				id = rs.getInt(1);
-				label = rs.getString(2);
-				type = rs.getString(3);
-				activity = rs.getString(4);
-				property = new Property(id, label, type, activity);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return property;
-	}
-
-	@Override
-	protected String[] tables() {
-		return new String[]{"property"};
-	}
-
-	@Override
-	public void deleteProperty(Property property) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("DELETE FROM ")
-			.append(getPrimaryTableName())
-			.append(" WHERE ").append("property_id = " + property.getId());
-			
-			executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-	}
-
-	@Override
-	public Property[] fetchAllProperties() {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Property property = null;
-		ArrayList<Property> propertyContainer = new ArrayList<Property>();
-		Property[] properties = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("property_id, property_label, property_type, property_activity")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" ORDER BY property_id ASC");
-			
-			ResultSet userRs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(userRs)) != null) {
-				property = (Property) o;
-				propertyContainer.add(property);
-			}
-			
-			if(property == null){
-
-					throw new AdaptorException("There are no properties available.");
-			}
-			
-			properties = new Property[propertyContainer.size()];
-			
-			propertyContainer.toArray(properties);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return properties;
-	}
-
-	@Override
-	public Property fetchPropertyById(int id) {
-		
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Property property = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("property_id, property_label, property_type, property_activity")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ").append("property_id = " + id);
-			
-			ResultSet userRs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(userRs)) != null) {
-				property = (Property) o;
-				
-			}
-			
-			if(property == null){
-				
-				throw new AdaptorException("A property with ID: " + id + " does not exist.");
-				
-			}
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return property;
-	}
-
-	@Override
-	public Property[] fetchPropertiesByType(String type) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Property property = null;
-		ArrayList<Property> propertyContainer = new ArrayList<Property>();
-		Property[] properties = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("property_id, property_label, property_type, property_activity")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ").append("property_type = '" + type + "'")
-			.append(" ORDER BY property_id ASC");
-			
-			ResultSet userRs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(userRs)) != null) {
-				property = (Property) o;
-				propertyContainer.add(property);
-			}
-			
-			if(property == null){
-				
-				throw new AdaptorException("A property with type: " + type + " does not exist.");
-				
-			}
-			
-			properties = new Property[propertyContainer.size()];
-			
-			propertyContainer.toArray(properties);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return properties;
-	}
-
-	@Override
-	public Property[] fetchProperties(boolean enabled) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Property property = null;
-		ArrayList<Property> propertyContainer = new ArrayList<Property>();
-		Property[] properties = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("property_id, property_label, property_type, property_activity")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ");
-			
-			if(enabled){
-				query.append("property_activity = 'enabled'");
-				
-			} else {
-				query.append("property_activity = 'disabled'");
-				
-			}
-			
-			query.append(" ORDER BY property_id ASC");
-			
-			ResultSet userRs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(userRs)) != null) {
-				property = (Property) o;
-				propertyContainer.add(property);
-			}
-			
-			if(property == null){
-				
-				if(enabled){
-					throw new AdaptorException("There are no enabled properties available.");
-				} else {
-					throw new AdaptorException("There are no disabled properties available.");
-				}
-			}
-			
-			properties = new Property[propertyContainer.size()];
-			
-			propertyContainer.toArray(properties);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return properties;
-	}
-	
-	@Override
-	public Property[] fetchPropertiesForTissueSampleId(int id) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Property property = null;
-		ArrayList<Property> propertyContainer = new ArrayList<Property>();
-		Property[] properties = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("property.property_id, property_label, property_type, property_activity")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" RIGHT JOIN tissue_sample_property ON tissue_sample_property.property_id = property.property_id")
-			.append(" WHERE ").append("tissue_sample_property.tissue_sample_id = '" + id + "'")
-			.append(" ORDER BY property_id ASC");
-			
-			ResultSet userRs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(userRs)) != null) {
-				property = (Property) o;
-				propertyContainer.add(property);
-			}
-			
-			if(property == null){
-				properties = new Property[0];
-			} else {
-				properties = new Property[propertyContainer.size()];
-			}
-			
-			propertyContainer.toArray(properties);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return properties;
-	}
-	
 	@Override
 	public int storeProperty(Property property) {
 		Connection conn = null;
@@ -340,6 +75,153 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	}
 
 	@Override
+	public Object createObject(ResultSet rs) {
+		
+		Property property = null;
+		int id = 0;
+		String label = null;
+		String type = null;
+		String activity = null;
+		
+		try {
+			if(rs.next()){
+				id = rs.getInt(1);
+				label = rs.getString(2);
+				type = rs.getString(3);
+				activity = rs.getString(4);
+				property = new Property(id, label, type, activity);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return property;
+	}
+
+	@Override
+	public Property[] fetchAllProperties() {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		ArrayList<Property> propertyContainer = new ArrayList<Property>();
+		Property[] properties = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY property_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				propertyContainer.add(property);
+			}
+			
+			properties = new Property[propertyContainer.size()];
+			
+			propertyContainer.toArray(properties);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return properties;
+	}
+
+	@Override
+	public Property[] fetchProperties(boolean enabled) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		ArrayList<Property> propertyContainer = new ArrayList<Property>();
+		Property[] properties = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ");
+			
+			if(enabled){
+				query.append("property_activity = 'enabled'");
+				
+			} else {
+				query.append("property_activity = 'disabled'");
+				
+			}
+			
+			query.append(" ORDER BY property_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				propertyContainer.add(property);
+			}
+			
+			properties = new Property[propertyContainer.size()];
+			
+			propertyContainer.toArray(properties);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return properties;
+	}
+
+	@Override
+	public Property fetchPropertyById(int propertyId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("property_id = " + propertyId);
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return property;
+	}
+
+	@Override
 	public String[] fetchAllTypes() {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -351,14 +233,15 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			conn = getConnection();	
 			
 			query.append("SELECT ").append("DISTINCT (property_type)")
-			.append(" FROM ").append(getPrimaryTableName());
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY property_type ASC");
 			
 			ResultSet typeRs = executeQuery(conn, query.toString());
 			
 			while(typeRs.next()){
 				
 				typeList.add(typeRs.getString(1));
-
+	
 			}
 			
 			types = new String[typeList.size()];
@@ -374,5 +257,110 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			}
 		}
 		return types;
+	}
+
+	@Override
+	public Property[] fetchPropertiesByType(String type) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		ArrayList<Property> propertyContainer = new ArrayList<Property>();
+		Property[] properties = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("property_type = '" + type + "'")
+			.append(" ORDER BY property_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				propertyContainer.add(property);
+			}
+			
+			properties = new Property[propertyContainer.size()];
+			
+			propertyContainer.toArray(properties);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return properties;
+	}
+
+	@Override
+	public Property[] fetchPropertiesForTissueSampleId(int tissueSampleId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Property property = null;
+		ArrayList<Property> propertyContainer = new ArrayList<Property>();
+		Property[] properties = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" RIGHT JOIN tissue_sample_property ON tissue_sample_property.property_id = property.property_id")
+			.append(" WHERE ").append("tissue_sample_property.tissue_sample_id = '" + tissueSampleId + "'")
+			.append(" ORDER BY property_id ASC");
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(userRs)) != null) {
+				property = (Property) o;
+				propertyContainer.add(property);
+			}
+			
+			properties = new Property[propertyContainer.size()];
+						
+			propertyContainer.toArray(properties);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return properties;
+	}
+	
+	@Override
+	public void deleteProperty(Property property) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append(getPrimaryTableName())
+			.append(" WHERE ").append("property_id = " + property.getId());
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
 	}
 }

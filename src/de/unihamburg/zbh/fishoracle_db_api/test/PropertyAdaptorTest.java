@@ -1,132 +1,137 @@
+/*
+  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+
+  Permission to use, copy, modify, and distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
+
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import junit.framework.TestCase;
-import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Property;
-import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
-import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
-import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.TissueSampleAdaptor;
 
 public class PropertyAdaptorTest  extends TestCase {
-
-	private FODriver driver;
-	private PropertyAdaptor pa;
-	private Property property1, property2, property3, property4, property5, property6;
-	private Property[] testproperties = new Property[6];
 	
-	private OrganAdaptor oa;
-	private Organ organ1, organ2;
-	
-	private TissueSampleAdaptor ta;
-	private TissueSample tissue1, tissue2;
+	private TestData td;
+	private PropertyAdaptor pra;
+	private Property[] testproperties;
 	
 	protected void setUp() {
 		
-		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
-		pa = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
+		td = new TestData();
 		
-		property1 = new Property(1, "G0", "grade", "enabled");
-		property2 = new Property(2, "G1", "grade", "enabled");
-		property3 = new Property(3, "G2", "grade", "enabled");
-		property4 = new Property(4, "pT1", "stage", "disabled");
-		property5 = new Property(5, "pT2", "stage", "disabled");
-		property6 = new Property(6, "pT3", "stage", "disabled");
+		testproperties = td.createPropertyData();
 		
-		testproperties[0] = property1;
-		testproperties[1] = property2;
-		testproperties[2] = property3;
-		testproperties[3] = property4;
-		testproperties[4] = property5;
-		testproperties[5] = property6;
+		pra = td.getPra();
 		
-		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
-		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
+		td.createOrganAndStoreData();
 		
+		td.createAndStoreTissueSampleData();
 	}
 	
 	public void testStoreProperty() {
-			pa.storeProperty(property1);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 1);
-			pa.storeProperty(property2);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 2);
-			pa.storeProperty(property3);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 3);
-			pa.storeProperty(property4);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 4);
-			pa.storeProperty(property5);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 5);
-			pa.storeProperty(property6);
-			assertTrue(((BaseAdaptor) pa).fetchCount() == 6);
+			pra.storeProperty(testproperties[0]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 1);
+			pra.storeProperty(testproperties[1]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 2);
+			pra.storeProperty(testproperties[2]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 3);
+			pra.storeProperty(testproperties[3]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 4);
+			pra.storeProperty(testproperties[4]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 5);
+			pra.storeProperty(testproperties[5]);
+			assertTrue(((BaseAdaptor) pra).fetchCount() == 6);
+	}
+	
+	public void testFetchAllProperties() {
+		
+		Property[] properties = pra.fetchAllProperties();
+		
+		for (int i=0; i < properties.length; i++) {
+			assertTrue(properties[i].getId() == (i+1));
+			assertTrue(properties[i].getLabel().equals(testproperties[i].getLabel()));
+			assertTrue(properties[i].getType().equals(testproperties[i].getType()));
+			assertTrue(properties[i].getActivty().equals(testproperties[i].getActivty()));
+		}
 	}
 	
 	public void testFetchPropertyById() {
-		Property p1 = pa.fetchPropertyById(1);
-		Property p2 = pa.fetchPropertyById(2);
-		Property p3 = pa.fetchPropertyById(3);
-		Property p4 = pa.fetchPropertyById(4);
-		Property p5 = pa.fetchPropertyById(5);
-		Property p6 = pa.fetchPropertyById(6);
+		Property p1 = pra.fetchPropertyById(1);
+		Property p2 = pra.fetchPropertyById(2);
+		Property p3 = pra.fetchPropertyById(3);
+		Property p4 = pra.fetchPropertyById(4);
+		Property p5 = pra.fetchPropertyById(5);
+		Property p6 = pra.fetchPropertyById(6);
 		
 		assertTrue(p1.getId() == 1);
-		assertTrue(p1.getLabel().equals(property1.getLabel()));
-		assertTrue(p1.getType().equals(property1.getType()));
-		assertTrue(p1.getActivty().equals(property1.getActivty()));
+		assertTrue(p1.getLabel().equals(testproperties[0].getLabel()));
+		assertTrue(p1.getType().equals(testproperties[0].getType()));
+		assertTrue(p1.getActivty().equals(testproperties[0].getActivty()));
 		
 		assertTrue(p2.getId() == 2);
-		assertTrue(p2.getLabel().equals(property2.getLabel()));
-		assertTrue(p2.getType().equals(property2.getType()));
-		assertTrue(p2.getActivty().equals(property2.getActivty()));
+		assertTrue(p2.getLabel().equals(testproperties[1].getLabel()));
+		assertTrue(p2.getType().equals(testproperties[1].getType()));
+		assertTrue(p2.getActivty().equals(testproperties[1].getActivty()));
 		
 		assertTrue(p3.getId() == 3);
-		assertTrue(p3.getLabel().equals(property3.getLabel()));
-		assertTrue(p3.getType().equals(property3.getType()));
-		assertTrue(p3.getActivty().equals(property3.getActivty()));
+		assertTrue(p3.getLabel().equals(testproperties[2].getLabel()));
+		assertTrue(p3.getType().equals(testproperties[2].getType()));
+		assertTrue(p3.getActivty().equals(testproperties[2].getActivty()));
 		
 		assertTrue(p4.getId() == 4);
-		assertTrue(p4.getLabel().equals(property4.getLabel()));
-		assertTrue(p4.getType().equals(property4.getType()));
-		assertTrue(p4.getActivty().equals(property4.getActivty()));
+		assertTrue(p4.getLabel().equals(testproperties[3].getLabel()));
+		assertTrue(p4.getType().equals(testproperties[3].getType()));
+		assertTrue(p4.getActivty().equals(testproperties[3].getActivty()));
 		
 		assertTrue(p5.getId() == 5);
-		assertTrue(p5.getLabel().equals(property5.getLabel()));
-		assertTrue(p5.getType().equals(property5.getType()));
-		assertTrue(p5.getActivty().equals(property5.getActivty()));
+		assertTrue(p5.getLabel().equals(testproperties[4].getLabel()));
+		assertTrue(p5.getType().equals(testproperties[4].getType()));
+		assertTrue(p5.getActivty().equals(testproperties[4].getActivty()));
 		
 		assertTrue(p6.getId() == 6);
-		assertTrue(p6.getLabel().equals(property6.getLabel()));
-		assertTrue(p6.getType().equals(property6.getType()));
-		assertTrue(p6.getActivty().equals(property6.getActivty()));
-	}
-	
-	public void testFetchPropertyByType(){
-		Property[] p1 = pa.fetchPropertiesByType("grade");
-		Property[] p2 = pa.fetchPropertiesByType("stage");
-		
-		assertTrue(p1[0].getId() == 1);
-		assertTrue(p1[1].getId() == 2);
-		assertTrue(p1[2].getId() == 3);
-		
-		assertTrue(p2[0].getId() == 4);
-		assertTrue(p2[1].getId() == 5);
-		assertTrue(p2[2].getId() == 6);
-		
+		assertTrue(p6.getLabel().equals(testproperties[5].getLabel()));
+		assertTrue(p6.getType().equals(testproperties[5].getType()));
+		assertTrue(p6.getActivty().equals(testproperties[5].getActivty()));
 	}
 	
 	public void testFetchAllTypes() {
-		String[] types = pa.fetchAllTypes();
+		String[] types = pra.fetchAllTypes();
 		
 		types[0].equals("grade");
 		types[1].equals("stage");
 		
 	}
 	
+	public void testFetchPropertyByType(){
+		Property[] p1 = pra.fetchPropertiesByType("grade");
+		Property[] p2 = pra.fetchPropertiesByType("stage");
+		
+		assertTrue(p1[0].getId() == 1);
+		assertTrue(p1[1].getId() == 2);
+		assertTrue(p1[2].getId() == 3);
+		
+		assertTrue(p2[0].getId() == 4);
+		assertTrue(p2[1].getId() == 5);
+		assertTrue(p2[2].getId() == 6);
+		
+	}
+	
 	public void testFetchProperties() {
-		Property[] p1 = pa.fetchProperties(true);
-		Property[] p2 = pa.fetchProperties(false);
+		Property[] p1 = pra.fetchProperties(true);
+		Property[] p2 = pra.fetchProperties(false);
 		
 		assertTrue(p1[0].getId() == 1);
 		assertTrue(p1[1].getId() == 2);
@@ -137,33 +142,11 @@ public class PropertyAdaptorTest  extends TestCase {
 		assertTrue(p2[2].getId() == 6);
 	}
 	
-	public void fetchAllPropertys() {
-		Property[] properties = pa.fetchAllProperties();
-		
-		for (int i=0; i < properties.length; i++) {
-			assertTrue(properties[i].getId() == 1);
-			assertTrue(properties[i].getLabel().equals(testproperties[i].getLabel()));
-			assertTrue(properties[i].getType().equals(testproperties[i].getType()));
-			assertTrue(properties[i].getActivty().equals(testproperties[i].getActivty()));
-		}
-		
-	}
-	
 	public void fetchPropertiesForTissueSampleId(){
-		organ1 = new Organ(1, "Prostate", "Tumor tissue", "enabled");
-		organ2 = new Organ(2, "Prostate", "Cell line", "enabled");
-
-		oa.storeOrgan(organ1);
-		oa.storeOrgan(organ2);
 		
-		tissue1 = new TissueSample(1, oa.fetchOrganById(1), pa.fetchAllProperties());
-		tissue2 = new TissueSample(2, oa.fetchOrganById(2), pa.fetchAllProperties());
-		
-		ta.storeTissueSample(tissue1);
-		ta.storeTissueSample(tissue2);
-		
-		Property[] properties1 = pa.fetchPropertiesForTissueSampleId(1);
-		Property[] properties2 = pa.fetchPropertiesForTissueSampleId(2);
+		Property[] properties1 = pra.fetchPropertiesForTissueSampleId(1);
+		Property[] properties2 = pra.fetchPropertiesForTissueSampleId(2);
+		Property[] properties3 = pra.fetchPropertiesForTissueSampleId(3);
 		
 		for(int i=0; i < properties1.length; i++){
 			assertTrue(properties1[i].getLabel().equals(testproperties[i].getLabel()));
@@ -176,38 +159,43 @@ public class PropertyAdaptorTest  extends TestCase {
 			assertTrue(properties2[i].getType().equals(testproperties[i].getType()));
 			assertTrue(properties2[i].getActivty().equals(testproperties[i].getActivty()));
 		}
+		
+		for(int i=0; i < properties3.length; i++){
+			assertTrue(properties2[i].getLabel().equals(testproperties[i + 3].getLabel()));
+			assertTrue(properties2[i].getType().equals(testproperties[i + 3].getType()));
+			assertTrue(properties2[i].getActivty().equals(testproperties[i + 3].getActivty()));
+		}
 	}
 	
 	public void testDeleteProperty() {
-		Property p1 = pa.fetchPropertyById(1);
-		Property p2 = pa.fetchPropertyById(2);
-		Property p3 = pa.fetchPropertyById(3);
-		Property p4 = pa.fetchPropertyById(4);
-		Property p5 = pa.fetchPropertyById(5);
-		Property p6 = pa.fetchPropertyById(6);
+		Property p1 = pra.fetchPropertyById(1);
+		Property p2 = pra.fetchPropertyById(2);
+		Property p3 = pra.fetchPropertyById(3);
+		Property p4 = pra.fetchPropertyById(4);
+		Property p5 = pra.fetchPropertyById(5);
+		Property p6 = pra.fetchPropertyById(6);
 		
-		pa.deleteProperty(p1);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 5);
-		pa.deleteProperty(p2);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 4);
-		pa.deleteProperty(p3);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 3);
-		pa.deleteProperty(p4);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 2);
-		pa.deleteProperty(p5);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 1);
-		pa.deleteProperty(p6);
-		assertTrue(((BaseAdaptor) pa).fetchCount() == 0);
+		pra.deleteProperty(p1);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 5);
+		pra.deleteProperty(p2);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 4);
+		pra.deleteProperty(p3);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 3);
+		pra.deleteProperty(p4);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 2);
+		pra.deleteProperty(p5);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 1);
+		pra.deleteProperty(p6);
+		assertTrue(((BaseAdaptor) pra).fetchCount() == 0);
 		
 	}
 	
 	protected void tearDown() {
-		((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
-		((BaseAdaptor) ta).truncateTable("tissue_sample_property");
-		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
-		if(((BaseAdaptor) pa).fetchCount() == 0){
-			((BaseAdaptor) pa).truncateTable(((BaseAdaptor) pa).getPrimaryTableName());
+		td.emptyTissueSampleTable();
+		td.emptyTissueSamplePropertyTable();
+		td.emptyOrganTable();
+		if(((BaseAdaptor) pra).fetchCount() == 0){
+			td.emptyPropertyTable();
 		}
-	}
-	
+	}	
 }

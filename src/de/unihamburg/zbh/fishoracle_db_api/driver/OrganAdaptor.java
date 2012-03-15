@@ -84,7 +84,7 @@ public interface OrganAdaptor {
 	/**
 	 * Removes an organ from the database.
 	 * 
-	 * @param organ The Organ object for that data should be removed.
+	 * @param organ The Organ object for the data that should be removed.
 	 */
 	public void deleteOrgan(Organ organ);
 	

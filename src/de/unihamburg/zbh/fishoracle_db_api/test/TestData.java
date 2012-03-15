@@ -22,6 +22,8 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
+import de.unihamburg.zbh.fishoracle_db_api.data.Property;
+import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
@@ -30,6 +32,8 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.TissueSampleAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.UserAdaptor;
 
 /**
@@ -44,6 +48,8 @@ public class TestData {
 	private ProjectAdaptor pa;
 	private ChipAdaptor ca;
 	private OrganAdaptor oa;
+	private PropertyAdaptor pra;
+	private TissueSampleAdaptor ta;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -52,6 +58,8 @@ public class TestData {
 		pa = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
 		ca = (ChipAdaptor) driver.getAdaptor("ChipAdaptor");
 		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
+		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
+		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -61,7 +69,6 @@ public class TestData {
 		for(int i = 0; i < users.length; i++){
 			ua.storeUser(users[i]);
 		}
-		
 		return users;
 	}
 	
@@ -97,7 +104,6 @@ public class TestData {
 		for(int i = 0; i < groups.length; i++){
 			ga.storeGroup(groups[i]);
 		}
-		
 	}
 	
 	public Group[] createGroupData(){
@@ -121,7 +127,6 @@ public class TestData {
 		for(int i = 0; i < pas.length; i++){
 			pa.addGroupAccessToProject(pas[i].getGroupId(), pas[i].getProjectId(), pas[i].getAccess());
 		}
-		
 	}
 	
 	public ProjectAccess[] createProjectAccessData(){
@@ -147,8 +152,7 @@ public class TestData {
 		
 		for(int i = 0; i < projects.length; i++){
 			pa.storeProject(projects[i]);
-		}
-		
+		}	
 	}
 	
 	public Project[] createProjectData(){
@@ -186,6 +190,15 @@ public class TestData {
 		return chips;
 	}
 	
+	public void createOrganAndStoreData(){
+		
+		Organ[] organs = createOrganData();
+		
+		for(int i = 0; i < organs.length; i++){
+			oa.storeOrgan(organs[i]);
+		}
+	}
+	
 	public Organ[] createOrganData(){
 		
 		Organ organ1, organ2, organ3, organ4, organ5, organ6;
@@ -202,12 +215,72 @@ public class TestData {
 		return organs;
 	}
 	
+	public void createAndStorePropertyData(){
+		
+		Property[] properties = createPropertyData();
+		
+		for(int i = 0; i < properties.length; i++){
+			pra.storeProperty(properties[i]);
+		}
+	}
+	
+	public Property[] createPropertyData(){
+		
+		Property property1, property2, property3, property4, property5, property6;
+		
+		property1 = new Property(1, "G0", "grade", "enabled");
+		property2 = new Property(2, "G1", "grade", "enabled");
+		property3 = new Property(3, "G2", "grade", "enabled");
+		property4 = new Property(4, "pT1", "stage", "disabled");
+		property5 = new Property(5, "pT2", "stage", "disabled");
+		property6 = new Property(6, "pT3", "stage", "disabled");
+		
+		Property[] properties = new Property[]{property1, property2, property3, property4, property5, property6};
+		
+		return properties;
+		
+	}
+	
+	public void createAndStoreTissueSampleData(){
+		
+		TissueSample[] tissues = createTissueSampleData();
+		
+		for(int i = 0; i < tissues.length; i++){
+			ta.storeTissueSample(tissues[i]);
+		}
+	}
+	
+	public TissueSample[] createTissueSampleData(){
+		
+		TissueSample tissue1, tissue2, tissue3;
+		
+		tissue1 = new TissueSample(1, oa.fetchOrganById(1), pra.fetchAllProperties());
+		tissue2 = new TissueSample(2, oa.fetchOrganById(2), pra.fetchProperties(true));
+		tissue3 = new TissueSample(3, oa.fetchOrganById(2), pra.fetchPropertiesByType("stage"));
+		
+		TissueSample[] tissues = new TissueSample[]{tissue1, tissue2, tissue3};
+		
+		return tissues;
+	}
+	
 	public void emptyChipTable(){
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
 	}
 	
 	public void emptyOrganTable(){
 		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
+	}
+	
+	public void emptyPropertyTable(){
+		((BaseAdaptor) pra).truncateTable(((BaseAdaptor) pra).getPrimaryTableName());
+	}
+	
+	public void emptyTissueSampleTable(){
+		((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
+	}
+	
+	public void emptyTissueSamplePropertyTable(){
+		((BaseAdaptor) ta).truncateTable("tissue_sample_property");
 	}
 	
 	public void emptyUserTable(){
@@ -276,5 +349,21 @@ public class TestData {
 
 	public void setOa(OrganAdaptor oa) {
 		this.oa = oa;
+	}
+
+	public PropertyAdaptor getPra() {
+		return pra;
+	}
+
+	public void setPra(PropertyAdaptor pra) {
+		this.pra = pra;
+	}
+
+	public TissueSampleAdaptor getTa() {
+		return ta;
+	}
+
+	public void setTa(TissueSampleAdaptor ta) {
+		this.ta = ta;
 	}
 }
