@@ -30,6 +30,7 @@ public interface ChipAdaptor {
 
 	/**
 	 * Stores a new chip in the database.
+	 * 
 	 * @param chip The Chip object. The chip ID of the object will not
 	 *         will not be used.
 	 * @return Returns the database ID of the newly added chip.
@@ -38,6 +39,7 @@ public interface ChipAdaptor {
 	
 	/**
 	 * Fetches all chips that are stored in the database.
+	 * 
 	 * @return Returns an array of Chip objects. The Chip objects are
 	 *          ordered by the chip ID. If there are no chips stored in
 	 *          the database an array of length 0 is returned.
@@ -46,6 +48,7 @@ public interface ChipAdaptor {
 	
 	/**
 	 * Fetches all different chip types that are stored in the database.
+	 * 
 	 * @return Returns an array of Strings. The Strings are lexically
 	 *          ordered. If there are no chips stored in the database
 	 *          an array of length 0 is returned.
@@ -53,7 +56,8 @@ public interface ChipAdaptor {
 	public String[] fetchAllTypes();
 	
 	/**
-	 * Fetches chip data for a given chip ID
+	 * Fetches chip data for a given chip ID.
+	 * 
 	 * @param id The chip ID for which the database will be queried.
 	 * @return Returns a Chip object. If the ID does not exist null
 	 *          is returned.
@@ -62,13 +66,15 @@ public interface ChipAdaptor {
 	
 	/**
 	 * Removes a chip from the database.
+	 * 
 	 * @param chipId The chip ID for the data that should be removed.
 	 */
 	public void deleteChip(int chipId);
 	
 	/**
 	 * Removes a chip from the database.
-	 * @param chip The Chip object for that data that should be removed.
+	 * 
+	 * @param chip The Chip object for that data should be removed.
 	 */
 	public void deleteChip(Chip chip);
 	

@@ -50,7 +50,6 @@ public interface GroupAdaptor {
 	 * @return Returns an array of Group objects. The Group objects are
 	 *          ordered by the group ID. If there are no groups stored in
 	 *          the database an array of length 0 is returned.
-	 * @throws Exception
 	 */
 	public Group[] fetchAllGroups();
 	

@@ -19,6 +19,7 @@ package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
+import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
@@ -27,6 +28,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.UserAdaptor;
 
@@ -41,6 +43,7 @@ public class TestData {
 	private GroupAdaptor ga;
 	private ProjectAdaptor pa;
 	private ChipAdaptor ca;
+	private OrganAdaptor oa;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -48,6 +51,7 @@ public class TestData {
 		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
 		pa = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
 		ca = (ChipAdaptor) driver.getAdaptor("ChipAdaptor");
+		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -170,6 +174,7 @@ public class TestData {
 	}
 	
 	public Chip[] createChipData(){
+		
 		Chip chip1, chip2, chip3;
 		
 		chip1 = new Chip(1, "mapping250k_sty", "snp");
@@ -181,8 +186,28 @@ public class TestData {
 		return chips;
 	}
 	
+	public Organ[] createOrganData(){
+		
+		Organ organ1, organ2, organ3, organ4, organ5, organ6;
+		
+		organ1 = new Organ(1, "Prostate", "Tumor tissue", "enabled");
+		organ2 = new Organ(2, "Prostate", "Cell line", "enabled");
+		organ3 = new Organ(3, "Kidney", "Tumor tissue", "enabled");
+		organ4 = new Organ(4, "Kidney", "Cell line", "disabled");
+		organ5 = new Organ(5, "Lung", "Tumor tissue", "disabled");
+		organ6 = new Organ(6, "Lung", "Cell line", "disabled");
+		
+		Organ[] organs = new Organ[]{organ1, organ2, organ3,organ4, organ5, organ6};
+		
+		return organs;
+	}
+	
 	public void emptyChipTable(){
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
+	}
+	
+	public void emptyOrganTable(){
+		((BaseAdaptor) oa).truncateTable(((BaseAdaptor) oa).getPrimaryTableName());
 	}
 	
 	public void emptyUserTable(){
@@ -243,5 +268,13 @@ public class TestData {
 
 	public void setCa(ChipAdaptor ca) {
 		this.ca = ca;
+	}
+
+	public OrganAdaptor getOa() {
+		return oa;
+	}
+
+	public void setOa(OrganAdaptor oa) {
+		this.oa = oa;
 	}
 }
