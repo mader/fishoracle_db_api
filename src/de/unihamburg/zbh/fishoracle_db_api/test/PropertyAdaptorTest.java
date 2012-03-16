@@ -36,7 +36,7 @@ public class PropertyAdaptorTest  extends TestCase {
 		
 		pra = td.getPra();
 		
-		td.createOrganAndStoreData();
+		td.createAndStoreOrganData();
 		
 		td.createAndStoreTissueSampleData();
 	}

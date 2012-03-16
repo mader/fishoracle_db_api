@@ -190,13 +190,14 @@ public class TestData {
 		return chips;
 	}
 	
-	public void createOrganAndStoreData(){
+	public Organ[] createAndStoreOrganData(){
 		
 		Organ[] organs = createOrganData();
 		
 		for(int i = 0; i < organs.length; i++){
 			oa.storeOrgan(organs[i]);
 		}
+		return organs;
 	}
 	
 	public Organ[] createOrganData(){
@@ -215,13 +216,14 @@ public class TestData {
 		return organs;
 	}
 	
-	public void createAndStorePropertyData(){
+	public Property[] createAndStorePropertyData(){
 		
 		Property[] properties = createPropertyData();
 		
 		for(int i = 0; i < properties.length; i++){
 			pra.storeProperty(properties[i]);
 		}
+		return properties;
 	}
 	
 	public Property[] createPropertyData(){
