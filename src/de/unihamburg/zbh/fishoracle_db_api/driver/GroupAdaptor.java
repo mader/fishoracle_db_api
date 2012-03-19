@@ -28,7 +28,7 @@ public interface GroupAdaptor {
 	/**
 	 * Stores a new user group in the database.
 	 * 
-	 * @param group The Group Object. The group ID of the object will not
+	 * @param group The Group object. The group ID of the object will not
 	 *         be used.
 	 * @return Returns the database ID of the newly added group.
 	 */
@@ -146,7 +146,7 @@ public interface GroupAdaptor {
 	public Group fetchGroupById(int groupId);
 	
 	/**
-	 * Fetches group data for a given group ID
+	 * Fetches group data for a given group ID.
 	 * 
 	 * @param groupId The group ID for which the database will be queried.
 	 * @param withChildren If true all assigned users of a group will also

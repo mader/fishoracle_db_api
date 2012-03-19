@@ -260,12 +260,13 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 				mstudy = (Microarraystudy) o;
 				
 			}
-			
+			/*
 			if(mstudy == null){
 				
 				throw new AdaptorException("A microarraystudy with ID: " + id + " does not exist.");
 				
 			}
+			*/
 			
 		} catch (Exception e){
 			e.printStackTrace();

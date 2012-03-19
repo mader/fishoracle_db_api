@@ -18,6 +18,7 @@
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
+import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
@@ -27,6 +28,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
@@ -50,6 +52,7 @@ public class TestData {
 	private OrganAdaptor oa;
 	private PropertyAdaptor pra;
 	private TissueSampleAdaptor ta;
+	private CnSegmentAdaptor sa;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -60,6 +63,7 @@ public class TestData {
 		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
 		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
+		sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -265,6 +269,57 @@ public class TestData {
 		return tissues;
 	}
 	
+	public void createAndStoreCnSegmentData(){
+		
+		CnSegment[] segments = createCnSegmentData();
+		
+		sa.storeCnSegment(segments[0], 1);
+		sa.storeCnSegment(segments[1], 1);
+		sa.storeCnSegment(segments[2], 1);
+		sa.storeCnSegment(segments[3], 1);
+		
+		sa.storeCnSegment(segments[4], 2);
+		sa.storeCnSegment(segments[5], 2);
+		sa.storeCnSegment(segments[6], 2);
+		sa.storeCnSegment(segments[7], 2);
+		
+		sa.storeCnSegment(segments[8], 3);
+		sa.storeCnSegment(segments[9], 3);
+		sa.storeCnSegment(segments[10], 3);
+		sa.storeCnSegment(segments[11], 3);
+		
+	}
+	
+	public CnSegment[] createCnSegmentData(){
+		
+		CnSegment segment1, segment2, segment3, segment4,
+					segment5, segment6, segment7, segment8,
+					segment9, segment10, segment11, segment12;
+		
+		segment1 = new CnSegment(1, "1", 1, 3000, 0.5, 100, 1);
+		segment2 = new CnSegment(2, "1", 3001, 5000, 0.7, 300, 1);
+		segment3 = new CnSegment(3, "2", 5000, 7000, 0.3, 600, 1);
+		segment4 = new CnSegment(4, "3", 2000, 3000, -1.2, 250, 1);
+		
+		segment5 = new CnSegment(5, "1", 2000, 4000, 0.2, 2300, 2);
+		segment6 = new CnSegment(6, "2", 1000, 4000, 0.55, 400, 2);
+		segment7 = new CnSegment(7, "3", 2500, 3500, -0.52, 630, 2);
+		segment8 = new CnSegment(8, "4", 1, 1111, 1.32, 280, 2);
+		
+		segment9 = new CnSegment(9, "1", 1000, 2000, 0.3, 2300, 3);
+		segment10 = new CnSegment(10, "2", 5000, 10000, 0.55, 400, 3);
+		segment11 = new CnSegment(11, "3", 1, 2222, 0.-32, 630, 3);
+		segment12 = new CnSegment(12, "4", 2222, 3333, 1.32, 280, 3);
+		
+		CnSegment[] segments = new CnSegment[]{segment1, segment2,
+												segment3, segment4,
+												segment5, segment6,
+												segment7, segment8,
+												segment9, segment10,
+												segment11, segment12};
+		return segments;
+	}
+	
 	public void emptyChipTable(){
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
 	}
@@ -303,6 +358,10 @@ public class TestData {
 	
 	public void emptyProjectAccessTable(){
 		((BaseAdaptor) pa).truncateTable("group_project_access");
+	}
+	
+	public void emptyCnSegmentTable(){
+		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
 	}
 	
 	public FODriver getDriver() {
@@ -367,5 +426,13 @@ public class TestData {
 
 	public void setTa(TissueSampleAdaptor ta) {
 		this.ta = ta;
+	}
+
+	public CnSegmentAdaptor getSa() {
+		return sa;
+	}
+
+	public void setSa(CnSegmentAdaptor sa) {
+		this.sa = sa;
 	}
 }

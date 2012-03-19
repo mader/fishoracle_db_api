@@ -1,3 +1,20 @@
+/*
+  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+
+  Permission to use, copy, modify, and distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*/
+
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
 import java.sql.Connection;
@@ -9,10 +26,19 @@ import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
 import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdaptor {
 
 	protected CnSegmentAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
+	}
+
+	@Override
+	protected String[] tables() {
+		return new String[]{"cn_segment"};
 	}
 
 	@Override
@@ -24,6 +50,54 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 							"cn_segment_mean",
 							"cn_segment_markers",
 							"cn_segment_microarraystudy_id"};
+	}
+
+	@Override
+	public int storeCnSegment(CnSegment segment, int mstudyId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int newSegmentId = 0;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("INSERT INTO ").append(getPrimaryTableName())
+			.append(" (cn_segment_chromosome, " +
+					"cn_segment_start, " +
+					"cn_segment_end, " +
+					"cn_segment_mean, " +
+					"cn_segment_markers, " +
+					"cn_segment_microarraystudy_id)")
+			.append(" VALUES ")
+			.append("('" + segment.getChromosome() + 
+					"', '" + segment.getStart() + 
+					"', '" + segment.getEnd() +
+					"', '" + segment.getMean() +
+					"', '" + segment.getNumberOfMarkers() + 
+					"', '" + mstudyId + "')");
+			
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newSegmentId = rs.getInt(1);
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return newSegmentId;
+	}
+
+	@Override
+	public void storeCnSegments(CnSegment[] segments, int mstudyId) {
+		for(int i = 0; i < segments.length; i++){
+			storeCnSegment(segments[i], mstudyId);
+		}
 	}
 
 	@Override
@@ -58,68 +132,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	}
 
 	@Override
-	protected String[] tables() {
-		return new String[]{"cn_segment"};
-	}
-
-	//TODO testen
-	public void deleteCnSegment(int[] microarraystudyIds ){
-		for(int i= 0; i < microarraystudyIds.length; i++) {
-			deleteCnSegment(microarraystudyIds[i]);
-		}
-		
-	}
-	
-	//TODO testen
-	public void deleteCnSegment(int microarraystudyId) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("DELETE FROM ")
-			.append(getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_microarraystudy_id = " + microarraystudyId);
-			
-			executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-	}
-	
-	@Override
-	public void deleteCnSegment(CnSegment segment) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("DELETE FROM ")
-			.append(getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_id = " + segment.getId());
-			
-			executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-	}
-
-	@Override
-	public CnSegment fetchCnSegmentById(int id) {
+	public CnSegment fetchCnSegmentById(int segmentId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		CnSegment segment = null;
@@ -131,15 +144,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			conn = getConnection();	
 			
 			query.append("SELECT ")
-			.append("cn_segment_id, " +
-					"cn_segment_chromosome, " +
-					"cn_segment_start, " +
-					"cn_segment_end, " +
-					"cn_segment_mean, " +
-					"cn_segment_markers, " +
-					"cn_segment_microarraystudy_id")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_id = " + id);
+			.append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("cn_segment_id = " + segmentId);
 			
 			ResultSet userRs = executeQuery(conn, query.toString());
 			
@@ -148,13 +155,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			while ((o = createObject(userRs)) != null) {
 				segment = (CnSegment) o;
 				m = ma.fetchMicroarraystudyById(segment.getMicroarraystudyId());
-				segment.setMicroarraystudyName(m.getName());
-				
-			}
-			
-			if(segment == null){
-				
-				throw new AdaptorException("A segment with ID: " + id + " does not exist.");
+				if(m != null){
+					segment.setMicroarraystudyName(m.getName());
+				}
 				
 			}
 			
@@ -168,53 +171,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		return segment;
 	}
 
-	//TODO Test
 	@Override
-	public void storeCnSegments(CnSegment[] segments, int mstudyId) {
-		for(int i = 0; i < segments.length; i++){
-			storeCnSegment(segments[i], mstudyId);
-		}
-	}
-	
-	@Override
-	public int storeCnSegment(CnSegment segment, int mstudyId) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		int nor = 0;
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("INSERT INTO ").append(getPrimaryTableName())
-			.append(" (cn_segment_chromosome, " +
-					"cn_segment_start, " +
-					"cn_segment_end, " +
-					"cn_segment_mean, " +
-					"cn_segment_markers, " +
-					"cn_segment_microarraystudy_id)")
-			.append(" VALUES ")
-			.append("('" + segment.getChromosome() + 
-					"', '" + segment.getStart() + 
-					"', '" + segment.getEnd() +
-					"', '" + segment.getMean() +
-					"', '" + segment.getNumberOfMarkers() + 
-					"', '" + mstudyId + "')");
-			
-			nor = executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return nor;
-	}
-
-	@Override
-	public Location fetchLocationForCnSegmentId(int id) {
+	public Location fetchLocationForCnSegmentId(int segmentId) {
 		Connection conn = null;
 		Location loc = null;
 		StringBuffer query = new StringBuffer();
@@ -224,7 +182,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			query.append("SELECT ").append("cn_segment_chromosome, cn_segment_start, cn_segment_end")
 			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_id = " + id);
+			.append(" WHERE ").append("cn_segment_id = " + segmentId);
 				
 			ResultSet rs = executeQuery(conn, query.toString());
 			
@@ -238,24 +196,14 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 				
 				loc = new Location(chr, start, end);
 			}
-				
-			if(loc == null){
-					
-				AdaptorException e = new AdaptorException("Couldn't find the segment with the ID " + id);
-				throw e;
-			}
-				
-		} catch (AdaptorException e){
-			System.out.println(e.getMessage());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if(conn != null){
-					close(conn);
-			
+				close(conn);
 			}
 		}
-			
 		return loc;
 	}
 
@@ -393,8 +341,47 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 				close(conn);
 			}
 		}
-		
 		return loc;
+	}
+	
+	@Override
+	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int mstudyId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		CnSegment  segment = null;
+		ArrayList<CnSegment> segmentContainer = new ArrayList<CnSegment>();
+		CnSegment[] segments = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("cn_segment_microarraystudy_id = '" + mstudyId + "'")
+			.append(" ORDER BY cn_segment_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				segment = (CnSegment) o;
+				segmentContainer.add(segment);
+			}
+			
+			segments = new CnSegment[segmentContainer.size()];
+			
+			segmentContainer.toArray(segments);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return segments;
 	}
 
 	@Override
@@ -416,14 +403,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		
 		StringBuffer query = new StringBuffer();
 		
-		query.append("SELECT ").append("cn_segment_id, " +
-										"cn_segment_chromosome," +
-										" cn_segment_start," +
-										" cn_segment_end," +
-										" cn_segment_mean," +
-										" cn_segment_markers," +
-										" cn_segment_microarraystudy_id ")
-		.append(" FROM ").append(getPrimaryTableName())
+		query.append("SELECT ").append(super.columnsToString(columns()))
+		.append(" FROM ").append(super.getPrimaryTableName())
 		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
 		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
 		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
@@ -461,51 +442,23 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 				close(conn);
 			}
 		}
-		
 		return segments;
 	}
 	
 	@Override
-	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int id) {
+	public void deleteCnSegment(CnSegment segment) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		CnSegment  segment = null;
-		ArrayList<CnSegment> segmentContainer = new ArrayList<CnSegment>();
-		CnSegment[] segments = null;
 		
 		try{
 			
-			conn = getConnection();	
+			conn = getConnection();
 			
-			query.append("SELECT ").append("cn_segment_id, " +
-											"cn_segment_chromosome, " +
-											"cn_segment_start, " +
-											"cn_segment_end, " +
-											"cn_segment_mean, " +
-											"cn_segment_markers, " +
-											"cn_segment_microarraystudy_id")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_microarraystudy_id = '" + id + "'")
-			.append(" ORDER BY cn_segment_id ASC");
+			query.append("DELETE FROM ")
+			.append(super.getPrimaryTableName())
+			.append(" WHERE ").append("cn_segment_id = " + segment.getId());
 			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(rs)) != null) {
-				segment = (CnSegment) o;
-				segmentContainer.add(segment);
-			}
-			
-			if(segment == null){
-				
-				throw new AdaptorException("A segment with microarraystudy ID: " + id + " does not exist.");
-				
-			}
-			
-			segments = new CnSegment[segmentContainer.size()];
-			
-			segmentContainer.toArray(segments);
+			executeUpdate(conn, query.toString());
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -514,6 +467,34 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 				close(conn);
 			}
 		}
-		return segments;
+	}
+
+	public void deleteCnSegment(int microarraystudyId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append(super.getPrimaryTableName())
+			.append(" WHERE ").append("cn_segment_microarraystudy_id = " + microarraystudyId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+
+	public void deleteCnSegment(int[] microarraystudyIds ){
+		for(int i= 0; i < microarraystudyIds.length; i++) {
+			deleteCnSegment(microarraystudyIds[i]);
+		}
 	}
 }
