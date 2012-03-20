@@ -54,7 +54,7 @@ public class MicroarraystudyAdaptorTest extends TestCase{
 	
 	private PropertyAdaptor pa;
 	private Property property1, property2;
-	private Property[] testproperties = new Property[2]; 
+	private Property[] testproperties = new Property[2];
 	
 	private ProjectAdaptor pra;
 	private Project project1;

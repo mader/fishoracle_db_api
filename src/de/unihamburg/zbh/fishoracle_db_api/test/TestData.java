@@ -20,6 +20,7 @@ package de.unihamburg.zbh.fishoracle_db_api.test;
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
+import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
@@ -32,6 +33,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.MicroarraystudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
@@ -53,6 +55,7 @@ public class TestData {
 	private PropertyAdaptor pra;
 	private TissueSampleAdaptor ta;
 	private CnSegmentAdaptor sa;
+	private MicroarraystudyAdaptor ma;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -64,6 +67,7 @@ public class TestData {
 		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 		sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -320,6 +324,48 @@ public class TestData {
 		return segments;
 	}
 	
+	public Microarraystudy[] createMicroarraystudyData(){
+		
+		Microarraystudy mstudy1, mstudy2, mstudy3;
+		
+		CnSegment[] segments = createCnSegmentData();
+		
+		CnSegment[] segments1 = new CnSegment[4];
+		CnSegment[] segments2 = new CnSegment[4];
+		CnSegment[] segments3 = new CnSegment[4];
+		
+		for(int i=0; i < 4; i++){
+			segments1[i] = segments[i];
+		}
+		
+		for(int i=5; i < 8; i++){
+			segments2[i - 5] = segments[i];
+		}
+		
+		for(int i=8; i < 12; i++){
+			segments3[i - 8] = segments[i];
+		}
+		
+		Property[] properties =  createPropertyData();
+		int[] pids = new int[properties.length];
+		
+		for(int i=0; i < properties.length; i++){
+			
+			pids[i] = properties[i].getId();
+			
+		}
+		
+		mstudy1 = new Microarraystudy(segments1, "teststudy1", "This is a test.", 1, 1, pids, 1);
+		
+		mstudy2 = new Microarraystudy(segments2, "teststudy2", "This is a test.", 2, 2, pids, 1);
+		
+		mstudy3 = new Microarraystudy(segments3, "teststudy3", "This is a test.", 3, 3, pids, 1);
+		
+		Microarraystudy[] mstudies = new Microarraystudy[]{mstudy1, mstudy2, mstudy3};
+		
+		return mstudies; 
+	}
+	
 	public void emptyChipTable(){
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
 	}
@@ -434,5 +480,13 @@ public class TestData {
 
 	public void setSa(CnSegmentAdaptor sa) {
 		this.sa = sa;
+	}
+
+	public MicroarraystudyAdaptor getMa() {
+		return ma;
+	}
+
+	public void setMa(MicroarraystudyAdaptor ma) {
+		this.ma = ma;
 	}
 }

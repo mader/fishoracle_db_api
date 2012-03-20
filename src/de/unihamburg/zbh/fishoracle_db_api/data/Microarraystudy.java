@@ -19,6 +19,10 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
 
 import java.util.Date;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class Microarraystudy {
 
 	private int id;
