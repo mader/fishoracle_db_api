@@ -33,7 +33,7 @@ public class Microarraystudy {
 	private String name;
 	private String Description;
 	private int chipId;
-	private int organ_id;
+	private int organId;
 	private int[] propertyIds;
 	private int userId;
 	
@@ -55,7 +55,7 @@ public class Microarraystudy {
 		this.name = name;
 		Description = description;
 		this.chipId = chipId;
-		organ_id = organId;
+		this.organId = organId;
 		this.propertyIds = propertyIds;
 		this.userId = userId;
 	}
@@ -138,11 +138,11 @@ public class Microarraystudy {
 	}
 
 	public int getOrgan_id() {
-		return organ_id;
+		return organId;
 	}
 
 	public void setOrgan_id(int organId) {
-		organ_id = organId;
+		organId = organId;
 	}
 
 	public int[] getPropertyIds() {

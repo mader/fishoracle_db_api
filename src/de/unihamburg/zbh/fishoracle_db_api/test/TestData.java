@@ -338,8 +338,8 @@ public class TestData {
 			segments1[i] = segments[i];
 		}
 		
-		for(int i=5; i < 8; i++){
-			segments2[i - 5] = segments[i];
+		for(int i=4; i < 8; i++){
+			segments2[i - 4] = segments[i];
 		}
 		
 		for(int i=8; i < 12; i++){
@@ -356,10 +356,13 @@ public class TestData {
 		}
 		
 		mstudy1 = new Microarraystudy(segments1, "teststudy1", "This is a test.", 1, 1, pids, 1);
+		mstudy1.setId(1);
 		
 		mstudy2 = new Microarraystudy(segments2, "teststudy2", "This is a test.", 2, 2, pids, 1);
+		mstudy2.setId(2);
 		
 		mstudy3 = new Microarraystudy(segments3, "teststudy3", "This is a test.", 3, 3, pids, 1);
+		mstudy3.setId(3);
 		
 		Microarraystudy[] mstudies = new Microarraystudy[]{mstudy1, mstudy2, mstudy3};
 		
@@ -408,6 +411,18 @@ public class TestData {
 	
 	public void emptyCnSegmentTable(){
 		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
+	}
+	
+	public void emptyMstudyTable(){
+		((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
+	}
+	
+	public void emptyMstudyInProjectTable(){
+		((BaseAdaptor) ma).truncateTable("microarraystudy_in_project");
+	}
+	
+	public void emptySampleOnChipTable(){
+		((BaseAdaptor) ma).truncateTable("sample_on_chip");
 	}
 	
 	public FODriver getDriver() {

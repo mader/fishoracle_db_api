@@ -393,6 +393,8 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 			.append("microarraystudy_in_project")
 			.append(" WHERE ").append("microarraystudy_id = " + mstudy.getId());
 			
+			executeUpdate(conn, microarraystudyInProjectQuery.toString());
+			
 			socQuery.append("DELETE FROM ").append("sample_on_chip")
 			.append(" WHERE ").append("sample_on_chip_microarraystudy_id = " + mstudy.getId());
 
