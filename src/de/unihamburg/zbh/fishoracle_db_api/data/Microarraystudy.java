@@ -142,7 +142,7 @@ public class Microarraystudy {
 	}
 
 	public void setOrgan_id(int organId) {
-		organId = organId;
+		this.organId = organId;
 	}
 
 	public int[] getPropertyIds() {

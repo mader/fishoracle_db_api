@@ -27,10 +27,21 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 
 	protected ProjectAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
+	}
+
+	@Override
+	protected String[] tables() {
+		return new String[]{"project",
+							"group_project_access",
+							"microarraystudy_in_project"};
 	}
 
 	@Override
@@ -39,9 +50,86 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 							"name",
 							"description"};
 	}
-
+	
 	@Override
-	public Object createObject(ResultSet rs) {
+	public int storeProject(Project project){
+		
+		return storeProject(project.getName(), project.getDescription());
+	}
+	
+	@Override
+	public int storeProject(String name, String description) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int newProjectId = 0;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("INSERT INTO ").append(super.getPrimaryTableName())
+			.append(" (name, description)")
+			.append(" VALUES ")
+			.append("('" + name + "', '" + description + "')");
+			
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newProjectId = rs.getInt(1);
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return newProjectId;
+	}
+
+	/**
+	 * Create an ProjectAccess object from a database result set.
+	 * 
+	 * @param rs The SQL result set.
+	 * @param withChildren Fetches a complete Group object if true.
+	 */
+	private ProjectAccess createPAObject(ResultSet rs, boolean withChildren){
+		ProjectAccess projectAccess = null;
+		int projectAccessId;
+		int groupId;
+		String accessType;
+		
+		try {
+			if(rs.next()) {
+				projectAccessId = rs.getInt(1);
+				groupId = rs.getInt(2);
+				accessType = rs.getString(3);
+				
+				if(withChildren){
+					
+					GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+				
+					Group group = ga.fetchGroupById(groupId);
+				
+					projectAccess = new ProjectAccess(projectAccessId, group, accessType);
+					
+				} else {
+					projectAccess = new ProjectAccess(projectAccessId, groupId, accessType);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return projectAccess;
+	}
+	
+	@Override
+	public Object createObject(ResultSet rs){
+		return createObject(rs, true);
+	}
+	
+	public Object createObject(ResultSet rs, boolean withChildren) {
 		Microarraystudy[] mstudies = null;
 		Project project = null;
 		int projectId = 0;
@@ -56,15 +144,18 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 
 				project = new Project(projectId, name, description);
 				
-				MicroarraystudyAdaptor ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+				if(withChildren){
 				
-				mstudies = ma.fetchMicroarraystudiesForProject(projectId);
+					MicroarraystudyAdaptor ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
 				
-				project.setMstudies(mstudies);
+					mstudies = ma.fetchMicroarraystudiesForProject(projectId);
 				
-				ProjectAccess[] access = this.fetchProjectAccessForProject(projectId);
+					project.setMstudies(mstudies);
 				
-				project.setProjectAccess(access);
+					ProjectAccess[] access = this.fetchProjectAccessForProject(projectId);
+				
+					project.setProjectAccess(access);
+				}
 			}
 			
 		} catch (SQLException e) {
@@ -75,46 +166,38 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	protected String[] tables() {
-		return new String[]{"project",
-							"group_project_access",
-							"microarraystudy_in_project"};
-	}
-
-	@Override
-	public void deleteProject(Project project) {
-	
-		deleteProject(project.getId());
+	public Project[] fetchAllProjects() {
+		return fetchAllProjects(true);
 	}
 	
 	@Override
-	public void deleteProject(int projectId) {
+	public Project[] fetchAllProjects(boolean withChrildren) {
 		Connection conn = null;
-		StringBuffer projectQuery = new StringBuffer();
-		StringBuffer groupProjectAccessQuery = new StringBuffer();
-		StringBuffer microarraystudyInProjectQuery = new StringBuffer();
+		StringBuffer query = new StringBuffer();
+		Project project = null;
+		ArrayList<Project> projectContainer = new ArrayList<Project>();
+		Project[] projects = null;
 		
 		try{
 			
-			conn = getConnection();
+			conn = getConnection();	
 			
-			groupProjectAccessQuery.append("DELETE FROM ")
-			.append("group_project_access")
-			.append(" WHERE ").append("project_id = " + projectId);
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY project_id ASC");
 			
-			executeUpdate(conn, groupProjectAccessQuery.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
-			microarraystudyInProjectQuery.append("DELETE FROM ")
-			.append("microarraystudy_in_project")
-			.append(" WHERE ").append("project_id = " + projectId);
+			Object o;
 			
-			executeUpdate(conn, microarraystudyInProjectQuery.toString());
+			while ((o = createObject(rs, withChrildren)) != null) {
+				project = (Project) o;
+				projectContainer.add(project);
+			}
 			
-			projectQuery.append("DELETE FROM ")
-			.append(getPrimaryTableName())
-			.append(" WHERE ").append("project_id = " + projectId);
+			projects = new Project[projectContainer.size()];
 			
-			executeUpdate(conn, projectQuery.toString());
+			projectContainer.toArray(projects);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -123,15 +206,132 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				close(conn);
 			}
 		}
-		
+		return projects;
 	}
 	
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups){
-		return fetchProjectAccessForGroups(groups, false);
+	@Override
+	public Project fetchProjectById(int projectId) {
+		return fetchProjectById(projectId, true);
+	}
+	
+	@Override
+	public Project fetchProjectById(int projectId, boolean withChildren) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Project project = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_in_project.project_id = project.project_id")
+			.append(" WHERE ").append("project.project_id = " + projectId);
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			if ((o = createObject(rs, withChildren)) != null) {
+				project = (Project) o;
+				
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return project;
+	}
+
+	@Override
+	public String fetchAccessRightForGroup(int projectId, int groupId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		String right = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append("access_type")
+			.append(" FROM ").append("group_project_access")
+			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			while (rs.next()) {
+				right = rs.getString(1);
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return right;
+	}
+	
+	@Override
+	public ProjectAccess[] fetchProjectAccessForProject(int projectId) {
+		return fetchProjectAccessForProject(projectId, true);
 	}
 	
 	//TODO test
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite){
+	@Override
+	public ProjectAccess[] fetchProjectAccessForProject(int projectId, boolean withChildren) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ProjectAccess projectAccess = null;
+		ArrayList<ProjectAccess> projectAccessContainer = new ArrayList<ProjectAccess>();
+		ProjectAccess[] projectAccesses = null;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("SELECT ").append("group_project_access_id, group_id, access_type")
+			.append(" FROM ").append("group_project_access")
+			.append(" WHERE project_id = " + projectId)
+			.append(" ORDER BY project_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			ProjectAccess pa;
+			
+			while ((pa = createPAObject(rs, withChildren)) != null) {
+				projectAccess = pa;
+				projectAccessContainer.add(projectAccess);
+				
+			}
+			
+			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
+			
+			projectAccessContainer.toArray(projectAccesses);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return projectAccesses;
+	}
+	
+	@Override
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups){
+		return fetchProjectAccessForGroups(groups, false, true);
+	}
+	
+	//TODO test
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite, boolean withChildren){
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -163,23 +363,10 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
-			int projectAccessId;
-			int projectId;
-			int groupId;
-			String accessType;
+			ProjectAccess pa;
 			
-			while (rs.next()) {
-				projectAccessId = rs.getInt(1);
-				projectId = rs.getInt(2);
-				groupId = rs.getInt(3);
-				accessType = rs.getString(4);
-				
-				GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
-				
-				Group group = ga.fetchGroupById(groupId);
-				
-				projectAccess = new ProjectAccess(projectAccessId, projectId, group, accessType);
-				
+			while ((pa = createPAObject(rs, withChildren)) != null) {
+				projectAccess = pa;
 				projectAccessContainer.add(projectAccess);
 				
 			}
@@ -197,63 +384,16 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		}
 		
 		return projectAccesses;
+	}
+	
+	@Override
+	public Project[] fetchProjectsForProjectAccess(ProjectAccess[] pAccess){
+		return fetchProjectsForProjectAccess(pAccess, true);
 	}
 	
 	//TODO test
 	@Override
-	public ProjectAccess[] fetchProjectAccessForProject(int id) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		ProjectAccess projectAccess = null;
-		ArrayList<ProjectAccess> projectAccessContainer = new ArrayList<ProjectAccess>();
-		ProjectAccess[] projectAccesses = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("group_project_access_id, group_id, access_type")
-			.append(" FROM ").append("group_project_access")
-			.append(" WHERE project_id = " + id)
-			.append(" ORDER BY project_id ASC");
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			int projectAccessId;
-			int groupId;
-			String accessType;
-			
-			while (rs.next()) {
-				projectAccessId = rs.getInt(1);
-				groupId = rs.getInt(2);
-				accessType = rs.getString(3);
-				
-				GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
-				
-				Group group = ga.fetchGroupById(groupId);
-				
-				projectAccess = new ProjectAccess(projectAccessId, group, accessType);
-				
-				projectAccessContainer.add(projectAccess);
-				
-			}
-			
-			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
-			
-			projectAccessContainer.toArray(projectAccesses);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return projectAccesses;
-	}
-	
-	//TODO test
-	public Project[] fetchProjectsForProjectAccess(ProjectAccess[] pAccess){
+	public Project[] fetchProjectsForProjectAccess(ProjectAccess[] pAccess, boolean withChildren){
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		Project project = null;
@@ -262,7 +402,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		
 		try{
 			
-			conn = getConnection();	
+			conn = getConnection();
 			
 			String whereClause = "";
 			for(int i=0; i < pAccess.length; i++){
@@ -273,8 +413,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				}
 			}
 			
-			query.append("SELECT ").append("project.project_id, project.name, project.description")
-			.append(" FROM ").append(getPrimaryTableName())
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append(whereClause)
 			.append(" ORDER BY project_id ASC");
 			
@@ -282,14 +422,9 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			Object o;
 			
-			while ((o = createObject(rs)) != null) {
+			while ((o = createObject(rs, withChildren)) != null) {
 				project = (Project) o;
 				projectContainer.add(project);
-			}
-			
-			if(project == null){
-
-					throw new AdaptorException("There are no projects available.");
 			}
 				
 			projects = new Project[projectContainer.size()];
@@ -305,122 +440,35 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		}
 		return projects;
 	}
-	
+	//TODO test
 	@Override
-	public Project[] fetchAllProjects() throws Exception {
+	public ProjectAccess addGroupAccessToProject(int groupId, int projectId,
+			String accessRights) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		Project project = null;
-		ArrayList<Project> projectContainer = new ArrayList<Project>();
-		Project[] projects = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("project.project_id, project.name, project.description")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" ORDER BY project_id ASC");
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(rs)) != null) {
-				project = (Project) o;
-				projectContainer.add(project);
-			}
-			
-			if(project == null){
-
-					throw new AdaptorException("There are no projects available.");
-			}
-			
-			projects = new Project[projectContainer.size()];
-			
-			projectContainer.toArray(projects);
-			
-		} catch (Exception e){
-			throw new Exception(e.getMessage());
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return projects;
-	}
-
-	@Override
-	public Project fetchProjectById(int id) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		Project project = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("project.project_id, project.name, project.description")
-			.append(" FROM ").append(getPrimaryTableName())
-			.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_in_project.project_id = project.project_id")
-			.append(" WHERE ").append("project.project_id = " + id);
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(rs)) != null) {
-				project = (Project) o;
-				
-			}
-			
-			if(project == null){
-				
-				throw new AdaptorException("A project with ID: " + id + " does not exist.");
-				
-			}
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return project;
-	}
-
-	@Override
-	public Project[] fetchProjectsForGroup(String accessRights) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int storeProject(Project project){
-		
-		return storeProject(project.getName(), project.getDescription());
-	}
-	
-	@Override
-	public int storeProject(String name, String description) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		int newProjectId = 0;
+		int newProjectAccessId = 0;
+		ProjectAccess projectAccess = null;
 		
 		try{
 			
 			conn = getConnection();
 			
-			query.append("INSERT INTO ").append(getPrimaryTableName())
-			.append(" (name, description)")
+			query.append("INSERT INTO ").append("group_project_access")
+			.append(" (project_id, group_id, access_type)")
 			.append(" VALUES ")
-			.append("('" + name + "', '" + description + "')");
+			.append("('" + projectId + "', '" + groupId + "', '" + accessRights + "')");
 			
 			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
 			
-			if(rs.next()){
-				newProjectId = rs.getInt(1);
+			while(rs.next()){
+				newProjectAccessId = rs.getInt(1);
 			}
+			
+			GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
+			
+			Group group = ga.fetchGroupById(groupId);
+			
+			projectAccess = new ProjectAccess(newProjectAccessId, group, accessRights);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -429,7 +477,81 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				close(conn);
 			}
 		}
-		return newProjectId;
+		return projectAccess;
+	}
+
+	@Override
+	public void removeGroupAccessFromProject(int groupId, int projectId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append("group_project_access")
+			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+	
+	@Override
+	public void removeGroupAccessFromProject(int projectAccessId) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append("group_project_access")
+			.append(" WHERE ").append("group_project_access_id = " + projectAccessId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
+
+	@Override
+	public void modifyGroupAccessForProject(int groupId, int projectId,
+			String accessRights) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("UDATE ")
+			.append("groupp_project_access")
+			.append(" SET access_type = '" + accessRights + "'")
+			.append(" WHERE ").append("group_id = " + groupId + " AND projec_id = " + projectId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
 	}
 
 	@Override
@@ -483,152 +605,39 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public Project[] fetchProjectsForMicroarraystudy(int mstudyId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ProjectAccess addGroupAccessToProject(int groupId, int projectId,
-			String accessRights) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		int newProjectAccessId = 0;
-		ProjectAccess projectAccess = null;
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("INSERT INTO ").append("group_project_access")
-			.append(" (project_id, group_id, access_type)")
-			.append(" VALUES ")
-			.append("('" + projectId + "', '" + groupId + "', '" + accessRights + "')");
-			
-			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
-			
-			while(rs.next()){
-				newProjectAccessId = rs.getInt(1);
-			}
-			
-			GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
-			
-			Group group = ga.fetchGroupById(groupId);
-			
-			projectAccess = new ProjectAccess(newProjectAccessId, group, accessRights);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		//TODO test return
-		return projectAccess;
-	}
-
-	@Override
-	public String fetchAccessRightForGroup(int projectId, int groupId) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		String right = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT ").append("access_type")
-			.append(" FROM ").append("group_project_access")
-			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			while (rs.next()) {
-				right = rs.getString(1);
-			}
-			
-			if(right == null){
-				
-				throw new AdaptorException("The group with ID: " + groupId + " has no access right for the project with the ID: " + projectId + ".");
-				
-			}
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return right;
-	}
-
-	@Override
-	public void modifyGroupAccessForProject(int groupId, int projectId,
-			String accessRights) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("UDATE ")
-			.append("groupp_project_access")
-			.append(" SET access_type = '" + accessRights + "'")
-			.append(" WHERE ").append("group_id = " + groupId + " AND projec_id = " + projectId);
-			
-			executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-	}
-
-	@Override
-	public void removeGroupAccessFromProject(int groupId, int projectId,
-			String accessRights) {
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		
-		try{
-			
-			conn = getConnection();
-			
-			query.append("DELETE FROM ")
-			.append("group_project_access")
-			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
-			
-			executeUpdate(conn, query.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-	}
+	public void deleteProject(Project project) {
 	
+		deleteProject(project.getId());
+	}
+
 	@Override
-	public void removeGroupAccessFromProject(int projectAccessId) {
+	public void deleteProject(int projectId) {
 		Connection conn = null;
-		StringBuffer query = new StringBuffer();
+		StringBuffer projectQuery = new StringBuffer();
+		StringBuffer groupProjectAccessQuery = new StringBuffer();
+		StringBuffer microarraystudyInProjectQuery = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
 			
-			query.append("DELETE FROM ")
+			groupProjectAccessQuery.append("DELETE FROM ")
 			.append("group_project_access")
-			.append(" WHERE ").append("group_project_access_id = " + projectAccessId);
+			.append(" WHERE ").append("project_id = " + projectId);
 			
-			executeUpdate(conn, query.toString());
+			executeUpdate(conn, groupProjectAccessQuery.toString());
+			
+			microarraystudyInProjectQuery.append("DELETE FROM ")
+			.append("microarraystudy_in_project")
+			.append(" WHERE ").append("project_id = " + projectId);
+			
+			executeUpdate(conn, microarraystudyInProjectQuery.toString());
+			
+			projectQuery.append("DELETE FROM ")
+			.append(getPrimaryTableName())
+			.append(" WHERE ").append("project_id = " + projectId);
+			
+			executeUpdate(conn, projectQuery.toString());
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -636,6 +645,6 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			if(conn != null){
 				close(conn);
 			}
-		}
+		}		
 	}
 }

@@ -17,6 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.data;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class Location {
 
 	private String chrosmome;
@@ -56,6 +60,13 @@ public class Location {
 		this.end = end;
 	}
 	
+	/**
+	 * Maximize the range of two locations.
+	 * 
+	 * @param loc The second location.
+	 * @return Returns a new Location Object.
+	 * @throws Exception
+	 */
 	public Location maximize(Location loc) throws Exception{
 		
 		Location maxLoc;

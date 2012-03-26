@@ -35,8 +35,13 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
 import junit.framework.TestCase;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class ProjectAdaptorTest extends TestCase{
-
+	
+	private TestData td;
 	private FODriver driver;
 	private MicroarraystudyAdaptor ma;
 	
@@ -66,6 +71,10 @@ public class ProjectAdaptorTest extends TestCase{
 	private Project project1, project2;
 	
 	protected void setUp() {
+		
+		td = new TestData();
+		
+		/*
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
 		
 		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
@@ -138,6 +147,7 @@ public class ProjectAdaptorTest extends TestCase{
 		
 		project1 = new Project(1, "Project1", "This is the description.");
 		project2 = new Project(2, "Project2", "This is the description.");
+		*/
 	}
 	
 	public void testStoreProject(){
@@ -150,6 +160,7 @@ public class ProjectAdaptorTest extends TestCase{
 		ma.storeMicroarraystudy(mstudy2, 1);
 		
 		pra.addMicroarraystudyToProject(1, 2);
+		
 	}
 	
 	public void testFetchAllProjects(){

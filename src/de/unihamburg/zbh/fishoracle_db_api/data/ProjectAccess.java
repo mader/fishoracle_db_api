@@ -17,6 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.data;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class ProjectAccess {
 
 	private int id;
@@ -83,5 +87,4 @@ public class ProjectAccess {
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
-	
 }
