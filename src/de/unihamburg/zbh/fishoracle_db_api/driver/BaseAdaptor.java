@@ -173,20 +173,6 @@ public abstract class BaseAdaptor implements Adaptor{
 		String[] tables = tables();
 		return tables[0];
 	}
-		
-	//check!
-	private int leftJoinArrayContains(String[][] arr, String str) {
-		if (arr.length > 0) {
-			for (int i = 0; i < arr.length; i++) {
-				if (arr[i].length > 0) {
-					if (arr[i][0].equals(str)) {
-						return i;
-					}
-				}
-			}
-		}
-		return -1;
-	}
 	
 	public void truncateTable(String table){
 		String query = null;
@@ -209,8 +195,7 @@ public abstract class BaseAdaptor implements Adaptor{
 			close(conn);
 		}
 	}
-	
-	
+		
 	public long fetchCount(){
 		return fetchCount(this.getPrimaryTableName(),"");
 	}

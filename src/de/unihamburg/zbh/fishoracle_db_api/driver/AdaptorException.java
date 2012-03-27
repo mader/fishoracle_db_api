@@ -17,6 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
+/**
+ * @author Malte Mader
+ *
+ */
 public class AdaptorException extends Exception{
 
 	private static final long serialVersionUID = 1L;
