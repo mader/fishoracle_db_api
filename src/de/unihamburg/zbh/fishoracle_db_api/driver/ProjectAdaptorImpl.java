@@ -97,14 +97,16 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	private ProjectAccess createPAObject(ResultSet rs, boolean withChildren){
 		ProjectAccess projectAccess = null;
 		int projectAccessId;
+		int projectId;
 		int groupId;
 		String accessType;
 		
 		try {
 			if(rs.next()) {
 				projectAccessId = rs.getInt(1);
-				groupId = rs.getInt(2);
-				accessType = rs.getString(3);
+				projectId = rs.getInt(2);
+				groupId = rs.getInt(3);
+				accessType = rs.getString(4);
 				
 				if(withChildren){
 					
@@ -112,10 +114,10 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				
 					Group group = ga.fetchGroupById(groupId);
 				
-					projectAccess = new ProjectAccess(projectAccessId, group, accessType);
+					projectAccess = new ProjectAccess(projectAccessId, projectId, group, accessType);
 					
 				} else {
-					projectAccess = new ProjectAccess(projectAccessId, groupId, accessType);
+					projectAccess = new ProjectAccess(projectAccessId, projectId, groupId, accessType);
 				}
 			}
 		} catch (SQLException e) {
@@ -283,7 +285,6 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		return fetchProjectAccessForProject(projectId, true);
 	}
 	
-	//TODO test
 	@Override
 	public ProjectAccess[] fetchProjectAccessForProject(int projectId, boolean withChildren) {
 		Connection conn = null;
@@ -296,7 +297,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			conn = getConnection();
 			
-			query.append("SELECT ").append("group_project_access_id, group_id, access_type")
+			query.append("SELECT ").append("group_project_access_id, project_id, group_id, access_type")
 			.append(" FROM ").append("group_project_access")
 			.append(" WHERE project_id = " + projectId)
 			.append(" ORDER BY project_id ASC");
@@ -330,7 +331,6 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		return fetchProjectAccessForGroups(groups, false, true);
 	}
 	
-	//TODO test
 	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite, boolean withChildren){
 		
 		Connection conn = null;
@@ -391,7 +391,6 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		return fetchProjectsForProjectAccess(pAccess, true);
 	}
 	
-	//TODO test
 	@Override
 	public Project[] fetchProjectsForProjectAccess(ProjectAccess[] pAccess, boolean withChildren){
 		Connection conn = null;
@@ -440,7 +439,11 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 		}
 		return projects;
 	}
-	//TODO test
+	
+	public ProjectAccess addGroupAccessToProject(ProjectAccess pac){
+		return addGroupAccessToProject(pac.getGroupId(), pac.getProjectId(), pac.getAccess());
+	}
+	
 	@Override
 	public ProjectAccess addGroupAccessToProject(int groupId, int projectId,
 			String accessRights) {
@@ -538,10 +541,10 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			conn = getConnection();
 			
-			query.append("UDATE ")
-			.append("groupp_project_access")
+			query.append("UPDATE ")
+			.append("group_project_access")
 			.append(" SET access_type = '" + accessRights + "'")
-			.append(" WHERE ").append("group_id = " + groupId + " AND projec_id = " + projectId);
+			.append(" WHERE ").append("group_id = " + groupId + " AND project_id = " + projectId);
 			
 			executeUpdate(conn, query.toString());
 			

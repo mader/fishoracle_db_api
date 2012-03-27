@@ -212,6 +212,15 @@ public interface ProjectAdaptor {
 	/**
 	 * Grant access to a project for a group.
 	 * 
+	 * @param pac The ProjectAccess object containing the rights to be stored
+	 *         in the database.
+	 * @return Returns a ProjectAccess object representing the new access rights.
+	 */
+	public ProjectAccess addGroupAccessToProject(ProjectAccess pac);
+	
+	/**
+	 * Grant access to a project for a group.
+	 * 
 	 * @param groupId The database ID for the group that will get the access
 	 *         right.
 	 * @param projectId The database ID for the project to be accessed.

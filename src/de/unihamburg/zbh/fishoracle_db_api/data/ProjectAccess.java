@@ -40,7 +40,14 @@ public class ProjectAccess {
 		this.group = group;
 		this.access = access;
 	}
-
+	
+	public ProjectAccess(int id, int projectId, int groupId, String access) {
+		this.id = id;
+		this.projectId = projectId;
+		this.groupId = groupId;
+		this.access = access;
+	}
+	
 	public ProjectAccess(int id, int projectId, Group group, String access){
 		this.id = id;
 		this.projectId = projectId;

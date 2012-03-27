@@ -60,7 +60,7 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 	
 			long userCount;
 			
-			userCount = super.fetchCount("username = '" + user.getUserName() + "'");
+			userCount = super.fetchCount(super.getPrimaryTableName(),"username = '" + user.getUserName() + "'");
 			
 			if(userCount == 0){
 				

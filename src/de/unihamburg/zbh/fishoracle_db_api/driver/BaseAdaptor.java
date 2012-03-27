@@ -212,17 +212,16 @@ public abstract class BaseAdaptor implements Adaptor{
 	
 	
 	public long fetchCount(){
-		return fetchCount("");
+		return fetchCount(this.getPrimaryTableName(),"");
 	}
 	
-	public long fetchCount(String constraint){
+	public long fetchCount(String tablename, String constraint){
 		long result = 0;
 		String query = null;
 		Connection conn = null;
-
+		
 		try {
 			conn = getConnection();
-			String tablename = getPrimaryTableName();
 			query = "SELECT count(distinct(" + tablename + "_id))" + " FROM "+ tablename;
 			if(!constraint.equals("")){
 				query += " WHERE " + constraint;

@@ -105,13 +105,14 @@ public class TestData {
 		return users;
 	}
 	
-	public void createAndStoreGroupData(){
+	public Group[] createAndStoreGroupData(){
 		
 		Group[] groups = createGroupData();
 		
 		for(int i = 0; i < groups.length; i++){
 			ga.storeGroup(groups[i]);
 		}
+		return groups;
 	}
 	
 	public Group[] createGroupData(){
@@ -141,11 +142,11 @@ public class TestData {
 		
 		ProjectAccess pa1, pa2, pa3;
 		
-		pa1 = new ProjectAccess(0, 1, "rw");
+		pa1 = new ProjectAccess(1, 1, "rw");
 		pa1.setProjectId(1);
-		pa2 = new ProjectAccess(0, 2, "r");
+		pa2 = new ProjectAccess(2, 2, "r");
 		pa2.setProjectId(1);
-		pa3 = new ProjectAccess(0, 3, "r");
+		pa3 = new ProjectAccess(3, 3, "r");
 		pa3.setProjectId(2);
 		
 		ProjectAccess[] pas = new ProjectAccess[]{pa1, pa2, pa3};
@@ -167,8 +168,8 @@ public class TestData {
 		
 		Project project1, project2;
 		
-		project1 = new Project(0, "Internal", "Internal data");
-		project2 = new Project(0, "External", "External data");
+		project1 = new Project(1, "Internal", "Internal data");
+		project2 = new Project(2, "External", "External data");
 		
 		Project[] projects = new Project[]{project1, project2};
 		
