@@ -48,8 +48,24 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 							"isadmin"};
 	}
 	
-	@Override
 	public int storeUser(User user) throws Exception {
+		return storeUser(user.getFirstName(),
+				user.getLastName(),
+				user.getUserName(),
+				user.getEmail(),
+				user.getPw(),
+				user.getIsActiveAsInt(),
+				user.getIsAdminAsInt());
+	}
+	
+	@Override
+	public int storeUser(String firstName,
+							String lastName,
+							String userName,
+							String email,
+							String pw,
+							int isActive,
+							int isAdmin) throws Exception {
 		Connection conn = null;
 		StringBuffer userQuery = new StringBuffer();
 		int newUserId = 0;
@@ -60,16 +76,16 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 	
 			long userCount;
 			
-			userCount = super.fetchCount(super.getPrimaryTableName(),"username = '" + user.getUserName() + "'");
+			userCount = super.fetchCount(super.getPrimaryTableName(),"username = '" + userName + "'");
 			
 			if(userCount == 0){
 				
 				userQuery.append("INSERT INTO ").append(super.getPrimaryTableName())
 					.append(" (first_name, last_name, username, email, password, isactive, isadmin)")
-					.append(" VALUES ").append("('" + user.getFirstName() + "', '" + user.getLastName() +
-					"', '" + user.getUserName() + "', '" + user.getEmail() + "', '" +
-					SimpleSHA.SHA1(user.getPw()) + "', '" + user.getIsActiveAsInt() + 
-					"', '"+ user.getIsAdminAsInt() + "')");
+					.append(" VALUES ").append("('" + firstName + "', '" + lastName +
+					"', '" + userName + "', '" + email + "', '" +
+					SimpleSHA.SHA1(pw) + "', '" + isActive + 
+					"', '"+ isAdmin + "')");
 			
 				ResultSet rs = executeUpdateGetKeys(conn, userQuery.toString());
 				

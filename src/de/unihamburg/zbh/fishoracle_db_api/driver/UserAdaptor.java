@@ -36,6 +36,27 @@ public interface UserAdaptor {
 	public int storeUser(User user) throws Exception;
 	
 	/**
+	 * Stores a new user in the database.
+	 * 
+	 * @param firstName The first name of the user.
+	 * @param lastName The last name of the user.
+	 * @param userName The username.
+	 * @param email The e-mail of the user.
+	 * @param pw The users password.
+	 * @param isActive Is the user activated?
+	 * @param isAdmin Has the user administration rights?
+	 * @return Returns the database ID of the newly added user.
+	 * @throws Exception
+	 */
+	public int storeUser(String firstName,
+			String lastName,
+			String userName,
+			String email,
+			String pw,
+			int isActive,
+			int isAdmin) throws Exception;
+	
+	/**
 	 * Fetches all users that are stored in the database.
 	 * 
 	 * @return Returns an array of User objects. The User objects are
