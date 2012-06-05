@@ -36,4 +36,6 @@ public interface FODriver extends Driver {
 	GroupAdaptor getGroupAdaptor();
 	
 	ProjectAdaptor getProjectAdaptor();
+	
+	EnsemblDBsAdaptor getEnsemblDBsAdaptor();
 }

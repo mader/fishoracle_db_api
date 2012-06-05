@@ -19,6 +19,7 @@ package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
+import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
@@ -30,6 +31,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.EnsemblDBsAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
@@ -56,6 +58,7 @@ public class TestData {
 	private TissueSampleAdaptor ta;
 	private CnSegmentAdaptor sa;
 	private MicroarraystudyAdaptor ma;
+	private EnsemblDBsAdaptor ea;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -68,6 +71,7 @@ public class TestData {
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 		sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -370,6 +374,19 @@ public class TestData {
 		return mstudies; 
 	}
 	
+	public EnsemblDBs[] createEnsemblDBsData(){
+		
+		EnsemblDBs e1, e2, e3;
+		
+		e1 = new EnsemblDBs(0, "ensembl65", "Ensembl 65");
+		e2 = new EnsemblDBs(0, "ensembl66", "Ensembl 66");
+		e3 = new EnsemblDBs(0, "ensembl67", "Ensembl 67");
+		
+		EnsemblDBs[] edbss = new EnsemblDBs[]{e1,e2,e3};
+		
+		return edbss;
+	}
+	
 	public void emptyChipTable(){
 		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
 	}
@@ -424,6 +441,10 @@ public class TestData {
 	
 	public void emptySampleOnChipTable(){
 		((BaseAdaptor) ma).truncateTable("sample_on_chip");
+	}
+	
+	public void emptyEnsmeblDBsTable(){
+		((BaseAdaptor) ea).truncateTable("ensembl_dbs");
 	}
 	
 	public FODriver getDriver() {
@@ -504,5 +525,13 @@ public class TestData {
 
 	public void setMa(MicroarraystudyAdaptor ma) {
 		this.ma = ma;
+	}
+
+	public EnsemblDBsAdaptor getEa() {
+		return ea;
+	}
+
+	public void setEa(EnsemblDBsAdaptor ea) {
+		this.ea = ea;
 	}
 }

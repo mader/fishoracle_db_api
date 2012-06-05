@@ -209,3 +209,16 @@ CREATE TABLE `microarraystudy_in_project` (
   `microarraystudy_id` int NOT NULL,
   PRIMARY KEY  (`microarraystudy_in_project_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `ensembl_dbs`
+-- 
+
+CREATE TABLE `ensembl_dbs` (
+  `ensembl_dbs_id` int UNSIGNED NOT NULL auto_increment,
+  `db_name` varchar(128) NOT NULL,
+  `label` varchar(128) NOT NULL,
+  PRIMARY KEY  (`ensembl_dbs_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

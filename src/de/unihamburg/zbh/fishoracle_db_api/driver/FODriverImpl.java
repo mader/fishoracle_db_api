@@ -35,6 +35,7 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new MicroarraystudyAdaptorImpl(this));
 		addAdaptor(new GroupAdaptorImpl(this));
 		addAdaptor(new ProjectAdaptorImpl(this));
+		addAdaptor(new EnsemblDBsAdaptorImpl(this));
 	}
 
 	@Override
@@ -80,5 +81,10 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	@Override
 	public ProjectAdaptor getProjectAdaptor() {
 		return (ProjectAdaptor) getAdaptor(ProjectAdaptor.TYPE);
+	}
+	
+	@Override
+	public EnsemblDBsAdaptor getEnsemblDBsAdaptor() {
+		return (EnsemblDBsAdaptor) getAdaptor(EnsemblDBsAdaptor.TYPE);
 	}
 }
