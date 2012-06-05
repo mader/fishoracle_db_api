@@ -314,7 +314,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append(getThresholdSQLClause(lowerTh, upperTh));
 		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
-		query.append(getExperimentSQLClause(experimentFilter));
+		//query.append(getExperimentSQLClause(experimentFilter));
 		
 		try{
 			conn = getConnection();
@@ -384,6 +384,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		return segments;
 	}
 
+	/* FIXME Experiments need to be fetched additionally, not restrictively... */
 	@Override
 	public CnSegment[] fetchCnSegments(String chr,
 										int start,
