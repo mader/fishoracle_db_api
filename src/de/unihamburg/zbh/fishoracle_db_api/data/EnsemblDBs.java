@@ -22,12 +22,14 @@ public class EnsemblDBs {
 	private int id;
 	private String dbName;
 	private String label;
+	private int version;
 	
-	public EnsemblDBs(int id, String dbName, String label) {
+	public EnsemblDBs(int id, String dbName, String label, int version) {
 		super();
 		this.id = id;
 		this.dbName = dbName;
 		this.label = label;
+		this.version = version;
 	}
 
 	public int getId() {
@@ -52,5 +54,13 @@ public class EnsemblDBs {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 }

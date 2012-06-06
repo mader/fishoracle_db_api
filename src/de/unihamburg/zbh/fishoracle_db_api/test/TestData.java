@@ -378,11 +378,11 @@ public class TestData {
 		
 		EnsemblDBs e1, e2, e3;
 		
-		e1 = new EnsemblDBs(0, "ensembl65", "Ensembl 65");
-		e2 = new EnsemblDBs(0, "ensembl66", "Ensembl 66");
-		e3 = new EnsemblDBs(0, "ensembl67", "Ensembl 67");
+		e1 = new EnsemblDBs(0, "ensembl65", "Ensembl 65", 65);
+		e2 = new EnsemblDBs(0, "ensembl66", "Ensembl 66", 66);
+		e3 = new EnsemblDBs(0, "ensembl67", "Ensembl 67", 67);
 		
-		EnsemblDBs[] edbss = new EnsemblDBs[]{e1,e2,e3};
+		EnsemblDBs[] edbss = new EnsemblDBs[]{e3,e2,e1};
 		
 		return edbss;
 	}

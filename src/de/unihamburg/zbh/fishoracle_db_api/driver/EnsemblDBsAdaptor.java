@@ -43,6 +43,14 @@ public interface EnsemblDBsAdaptor {
 	public EnsemblDBs[] fetchAllDBs();
 	
 	/**
+	 * Fetch an Ensembl database for the given ID. 
+	 * 
+	 * @param edbsId The Id.
+	 * @return Ensembl databases object.
+	 */
+	public EnsemblDBs fetchDBById(int edbsId);
+	
+	/**
 	 * Remove a database name from the database.
 	 * 
 	 * @param edbsId The database name id.

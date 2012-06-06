@@ -39,7 +39,8 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 	protected String[] columns() {
 		return new String[]{"ensembl_dbs_id",
 				"db_name",
-				"label"};
+				"label",
+				"version"};
 	}
 
 	@Override
@@ -48,13 +49,15 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 		int id = 0;
 		String dbName = null;
 		String label = null;
+		int version = 0;
 		
 		try {
 			if(rs.next()){
 				id = rs.getInt(1);
 				dbName = rs.getString(2);
 				label = rs.getString(3);
-				edbs = new EnsemblDBs(id, dbName, label);
+				version = rs.getInt(4);
+				edbs = new EnsemblDBs(id, dbName, label, version);
 			}
 			
 		} catch (SQLException e) {
@@ -75,9 +78,9 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 			conn = getConnection();
 			
 			query.append("INSERT INTO ").append(super.getPrimaryTableName())
-			.append(" (db_name, label)")
+			.append(" (db_name, label, version)")
 			.append(" VALUES ")
-			.append("('" + edbs.getDBName() + "', '" + edbs.getLabel() + "')");
+			.append("('" + edbs.getDBName() + "', '" + edbs.getLabel() + "', '" + edbs.getVersion() +"')");
 			
 			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
 			
@@ -107,9 +110,9 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 			
 			conn = getConnection();	
 			
-			query.append("SELECT ").append("ensembl_dbs_id, db_name, label")
+			query.append("SELECT ").append(super.columnsToString(this.columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" ORDER BY ensembl_dbs_id ASC");
+			.append(" ORDER BY version DESC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
@@ -134,6 +137,38 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 		return edbss;
 	}
 
+	@Override
+	public EnsemblDBs fetchDBById(int id) {
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		EnsemblDBs edbs = null;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("SELECT ").append(super.columnsToString(this.columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("ensembl_dbs_id = " + id);
+			
+			ResultSet userRs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			if((o = createObject(userRs)) != null) {
+				edbs = (EnsemblDBs) o;
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}		
+		return edbs;
+	}
+	
 	@Override
 	public void deleteDB(int edbsId) {
 		Connection conn = null;

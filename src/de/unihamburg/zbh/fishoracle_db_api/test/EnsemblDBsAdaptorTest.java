@@ -58,6 +58,22 @@ public class EnsemblDBsAdaptorTest extends TestCase {
 			assertTrue(edbss[i].getId() == i + 1);
 			assertTrue(edbss[i].getDBName().equals(testEdbss[i].getDBName()));
 			assertTrue(edbss[i].getLabel().equals(testEdbss[i].getLabel()));
+			assertTrue(edbss[i].getVersion() == testEdbss[i].getVersion());
+		}
+	}
+	
+	public void testFetchEnsemblDBsById(){
+		EnsemblDBs e1 = ea.fetchDBById(1);
+		EnsemblDBs e2 = ea.fetchDBById(2);
+		EnsemblDBs e3 = ea.fetchDBById(3);
+	
+		EnsemblDBs[] edbs = new EnsemblDBs[]{e1, e2, e3};
+		
+		for(int i = 0; i < edbs.length; i++){
+			assertTrue(edbs[i].getId() == i + 1);
+			assertTrue(edbs[i].getDBName().equals(testEdbss[i].getDBName()));
+			assertTrue(edbs[i].getLabel().equals(testEdbss[i].getLabel()));
+			assertTrue(edbs[i].getVersion() == testEdbss[i].getVersion());
 		}
 	}
 	

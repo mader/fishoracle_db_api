@@ -220,5 +220,6 @@ CREATE TABLE `ensembl_dbs` (
   `ensembl_dbs_id` int UNSIGNED NOT NULL auto_increment,
   `db_name` varchar(128) NOT NULL,
   `label` varchar(128) NOT NULL,
+  `version` int NOT NULL,
   PRIMARY KEY  (`ensembl_dbs_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
