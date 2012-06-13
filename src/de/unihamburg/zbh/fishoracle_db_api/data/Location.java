@@ -23,6 +23,7 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
  */
 public class Location {
 
+	private int id;
 	private String chrosmome;
 	private int start;
 	private int end;
@@ -30,13 +31,14 @@ public class Location {
 	public Location() {
 	}
 
-	public Location(String chrosmome, int start, int end) {
+	public Location(int id, String chrosmome, int start, int end) {
+		this.id = id;
 		this.chrosmome = chrosmome;
 		this.start = start;
 		this.end = end;
 	}
 
-	public String getChrosmome() {
+	public String getChromosome() {
 		return chrosmome;
 	}
 
@@ -60,6 +62,14 @@ public class Location {
 		this.end = end;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	/**
 	 * Maximize the range of two locations.
 	 * 
@@ -71,7 +81,7 @@ public class Location {
 		
 		Location maxLoc;
 		
-		if(this.chrosmome.equals(loc.getChrosmome())){
+		if(this.chrosmome.equals(loc.getChromosome())){
 		
 			maxLoc = new Location();
 			

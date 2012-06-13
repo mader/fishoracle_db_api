@@ -76,25 +76,25 @@ public class CnSegmentTest extends TestCase{
 		CnSegment s3 = sa.fetchCnSegmentById(3);
 		
 		assertTrue(s1.getId() == 1);
-		assertTrue(s1.getChromosome().equals(testsegments[0].getChromosome()));
-		assertTrue(s1.getStart() == testsegments[0].getStart());
-		assertTrue(s1.getEnd() == testsegments[0].getEnd());
+		assertTrue(s1.getLocation().getChromosome().equals(testsegments[0].getLocation().getChromosome()));
+		assertTrue(s1.getLocation().getStart() == testsegments[0].getLocation().getStart());
+		assertTrue(s1.getLocation().getEnd() == testsegments[0].getLocation().getEnd());
 		assertTrue(s1.getMean() == testsegments[0].getMean());
 		assertTrue(s1.getNumberOfMarkers() == testsegments[0].getNumberOfMarkers());
 		assertTrue(s1.getMicroarraystudyId() == 1);
 		
 		assertTrue(s2.getId() == 2);
-		assertTrue(s2.getChromosome().equals(testsegments[1].getChromosome()));
-		assertTrue(s2.getStart() == testsegments[1].getStart());
-		assertTrue(s2.getEnd() == testsegments[1].getEnd());
+		assertTrue(s2.getLocation().getChromosome().equals(testsegments[1].getLocation().getChromosome()));
+		assertTrue(s2.getLocation().getStart() == testsegments[1].getLocation().getStart());
+		assertTrue(s2.getLocation().getEnd() == testsegments[1].getLocation().getEnd());
 		assertTrue(s2.getMean() == testsegments[1].getMean());
 		assertTrue(s2.getNumberOfMarkers() == testsegments[1].getNumberOfMarkers());
 		assertTrue(s2.getMicroarraystudyId() == 1);
 		
 		assertTrue(s3.getId() == 3);
-		assertTrue(s3.getChromosome().equals(testsegments[2].getChromosome()));
-		assertTrue(s3.getStart() == testsegments[2].getStart());
-		assertTrue(s3.getEnd() == testsegments[2].getEnd());
+		assertTrue(s3.getLocation().getChromosome().equals(testsegments[2].getLocation().getChromosome()));
+		assertTrue(s3.getLocation().getStart() == testsegments[2].getLocation().getStart());
+		assertTrue(s3.getLocation().getEnd() == testsegments[2].getLocation().getEnd());
 		assertTrue(s3.getMean() == testsegments[2].getMean());
 		assertTrue(s3.getNumberOfMarkers() == testsegments[2].getNumberOfMarkers());
 		assertTrue(s3.getMicroarraystudyId() == 1);
@@ -105,37 +105,37 @@ public class CnSegmentTest extends TestCase{
 		 Location l1 = sa.fetchLocationForCnSegmentId(1);
 		 Location l2 = sa.fetchLocationForCnSegmentId(2);
 		 
-		 assertTrue(l1.getChrosmome().equals(testsegments[0].getChromosome()));
-		 assertTrue(l1.getStart() == testsegments[0].getStart());
-		 assertTrue(l1.getEnd() == testsegments[0].getEnd());
+		 assertTrue(l1.getChromosome().equals(testsegments[0].getLocation().getChromosome()));
+		 assertTrue(l1.getStart() == testsegments[0].getLocation().getStart());
+		 assertTrue(l1.getEnd() == testsegments[0].getLocation().getEnd());
 		 
-		 assertTrue(l2.getChrosmome().equals(testsegments[1].getChromosome()));
-		 assertTrue(l2.getStart() == testsegments[1].getStart());
-		 assertTrue(l2.getEnd() == testsegments[1].getEnd());
+		 assertTrue(l2.getChromosome().equals(testsegments[1].getLocation().getChromosome()));
+		 assertTrue(l2.getStart() == testsegments[1].getLocation().getStart());
+		 assertTrue(l2.getEnd() == testsegments[1].getLocation().getEnd());
 	 }
 	
 	public void testFetchCnSegmentsForMicroarraystudyId(){
 		CnSegment[] segments = sa.fetchCnSegmentsForMicroarraystudyId(1);
 		
 		assertTrue(segments[0].getId() == testsegments[0].getId());
-		assertTrue(segments[0].getChromosome().equals(testsegments[0].getChromosome()));
-		assertTrue(segments[0].getStart() == testsegments[0].getStart());
-		assertTrue(segments[0].getEnd() == testsegments[0].getEnd());
+		assertTrue(segments[0].getLocation().getChromosome().equals(testsegments[0].getLocation().getChromosome()));
+		assertTrue(segments[0].getLocation().getStart() == testsegments[0].getLocation().getStart());
+		assertTrue(segments[0].getLocation().getEnd() == testsegments[0].getLocation().getEnd());
 		
 		assertTrue(segments[1].getId() == testsegments[1].getId());
-		assertTrue(segments[1].getChromosome().equals(testsegments[1].getChromosome()));
-		assertTrue(segments[1].getStart() == testsegments[1].getStart());
-		assertTrue(segments[1].getEnd() == testsegments[1].getEnd());
+		assertTrue(segments[1].getLocation().getChromosome().equals(testsegments[1].getLocation().getChromosome()));
+		assertTrue(segments[1].getLocation().getStart() == testsegments[1].getLocation().getStart());
+		assertTrue(segments[1].getLocation().getEnd() == testsegments[1].getLocation().getEnd());
 		
 		assertTrue(segments[2].getId() == testsegments[2].getId());
-		assertTrue(segments[2].getChromosome().equals(testsegments[2].getChromosome()));
-		assertTrue(segments[2].getStart() == testsegments[2].getStart());
-		assertTrue(segments[2].getEnd() == testsegments[2].getEnd());
+		assertTrue(segments[2].getLocation().getChromosome().equals(testsegments[2].getLocation().getChromosome()));
+		assertTrue(segments[2].getLocation().getStart() == testsegments[2].getLocation().getStart());
+		assertTrue(segments[2].getLocation().getEnd() == testsegments[2].getLocation().getEnd());
 		
 		assertTrue(segments[3].getId() == testsegments[3].getId());
-		assertTrue(segments[3].getChromosome().equals(testsegments[3].getChromosome()));
-		assertTrue(segments[3].getStart() == testsegments[3].getStart());
-		assertTrue(segments[3].getEnd() == testsegments[3].getEnd());
+		assertTrue(segments[3].getLocation().getChromosome().equals(testsegments[3].getLocation().getChromosome()));
+		assertTrue(segments[3].getLocation().getStart() == testsegments[3].getLocation().getStart());
+		assertTrue(segments[3].getLocation().getEnd() == testsegments[3].getLocation().getEnd());
 		
 	}
 	
@@ -144,7 +144,7 @@ public class CnSegmentTest extends TestCase{
 		//TODO Test this in more detail...
 		Location loc = sa.fetchMaximalOverlappingCnSegmentRange("1", 2000, 3000, null, 0.0, null, null, null);
 		
-		 assertTrue(loc.getChrosmome().equals("1"));
+		 assertTrue(loc.getChromosome().equals("1"));
 		 assertTrue(loc.getStart() == 1);
 		 assertTrue(loc.getEnd() == 4000);
 		
@@ -194,6 +194,7 @@ public class CnSegmentTest extends TestCase{
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) sa).fetchCount() == 0){
+			td.emptyLocationTable();
 			td.emptyCnSegmentTable();
 		}
 	}

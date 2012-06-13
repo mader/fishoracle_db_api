@@ -21,6 +21,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
+import de.unihamburg.zbh.fishoracle_db_api.data.Location;
 import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
@@ -305,20 +306,20 @@ public class TestData {
 					segment5, segment6, segment7, segment8,
 					segment9, segment10, segment11, segment12;
 		
-		segment1 = new CnSegment(1, "1", 1, 3000, 0.5, 100, 1);
-		segment2 = new CnSegment(2, "1", 3001, 5000, 0.7, 300, 1);
-		segment3 = new CnSegment(3, "2", 5000, 7000, 0.3, 600, 1);
-		segment4 = new CnSegment(4, "3", 2000, 3000, -1.2, 250, 1);
+		segment1 = new CnSegment(1, new Location(0, "1", 1, 3000), 0.5, 100, 1);
+		segment2 = new CnSegment(2, new Location(0, "1", 3001, 5000), 0.7, 300, 1);
+		segment3 = new CnSegment(3, new Location(0, "2", 5000, 7000), 0.3, 600, 1);
+		segment4 = new CnSegment(4, new Location(0, "3", 2000, 3000), -1.2, 250, 1);
 		
-		segment5 = new CnSegment(5, "1", 2000, 4000, 0.2, 2300, 2);
-		segment6 = new CnSegment(6, "2", 1000, 4000, 0.55, 400, 2);
-		segment7 = new CnSegment(7, "3", 2500, 3500, -0.52, 630, 2);
-		segment8 = new CnSegment(8, "4", 1, 1111, 1.32, 280, 2);
+		segment5 = new CnSegment(5, new Location(0, "1", 2000, 4000), 0.2, 2300, 2);
+		segment6 = new CnSegment(6, new Location(0, "2", 1000, 4000), 0.55, 400, 2);
+		segment7 = new CnSegment(7, new Location(0, "3", 2500, 3500), -0.52, 630, 2);
+		segment8 = new CnSegment(8, new Location(0, "4", 1, 1111), 1.32, 280, 2);
 		
-		segment9 = new CnSegment(9, "1", 1000, 2000, 0.3, 2300, 3);
-		segment10 = new CnSegment(10, "2", 5000, 10000, 0.55, 400, 3);
-		segment11 = new CnSegment(11, "3", 1, 2222, 0.-32, 630, 3);
-		segment12 = new CnSegment(12, "4", 2222, 3333, 1.32, 280, 3);
+		segment9 = new CnSegment(9, new Location(0, "1", 1000, 2000), 0.3, 2300, 3);
+		segment10 = new CnSegment(10, new Location(0, "2", 5000, 10000), 0.55, 400, 3);
+		segment11 = new CnSegment(11, new Location(0, "3", 1, 2222), 0.-32, 630, 3);
+		segment12 = new CnSegment(12, new Location(0, "4", 2222, 3333), 1.32, 280, 3);
 		
 		CnSegment[] segments = new CnSegment[]{segment1, segment2,
 												segment3, segment4,
@@ -429,6 +430,10 @@ public class TestData {
 	
 	public void emptyCnSegmentTable(){
 		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
+	}
+	
+	public void emptyLocationTable(){
+		((BaseAdaptor) sa).truncateTable("location");
 	}
 	
 	public void emptyMstudyTable(){

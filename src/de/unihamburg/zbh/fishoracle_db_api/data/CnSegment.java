@@ -24,9 +24,7 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
 public class CnSegment {
 
 	private int id;
-	private String chromosome;
-	private int start;
-	private int end;
+	private Location location;
 	private double mean;
 	private int numberOfMarkers;
 	private int microarraystudyId;
@@ -36,31 +34,30 @@ public class CnSegment {
 	 * Stores information about segments calculated by a segmentation algorithm.
 	 * 
 	 * @param id the database ID of the segment.
-	 * @param chromosome The Chromosome.
-	 * @param start The start position of the segment.
-	 * @param end The end position of the segment.
-	 * @param mean The meqan intensity value of the segment. A positive value
+	 * @param loc The genomic location of the segment.
+	 * @param mean The mean intensity value of the segment. A positive value
 	 *         represents a DNA amplification and a negative value represents
 	 *         a DNA deletion. 
 	 * @param numberOfMarkers The number of SNP markers covered by the segment. 
 	 */
-	public CnSegment(int id, String chromosome, int start, int end,
-			double mean, int numberOfMarkers) {
+	public CnSegment(int id,
+						Location loc,
+						double mean,
+						int numberOfMarkers) {
 		this.id = id;
-		this.chromosome = chromosome;
-		this.start = start;
-		this.end = end;
+		this.location = loc;
 		this.mean = mean;
 		this.numberOfMarkers = numberOfMarkers;
 		this.microarraystudyId = 0;
 	}
 	
-	public CnSegment(int id, String chromosome, int start,
-			int end, double mean, int numberOfMarkers, int microarraystudyId) {
+	public CnSegment(int id,
+						Location loc,
+						double mean,
+						int numberOfMarkers,
+						int microarraystudyId) {
 		this.id = id;
-		this.chromosome = chromosome;
-		this.start = start;
-		this.end = end;
+		this.location = loc;
 		this.mean = mean;
 		this.numberOfMarkers = numberOfMarkers;
 		this.microarraystudyId = microarraystudyId;
@@ -73,28 +70,13 @@ public class CnSegment {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getChromosome() {
-		return chromosome;
+	
+	public Location getLocation() {
+		return location;
 	}
 
-	public void setChromosome(String chromosome) {
-		this.chromosome = chromosome;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	public double getMean() {

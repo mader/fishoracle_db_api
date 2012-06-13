@@ -148,9 +148,8 @@ public abstract class BaseAdaptor implements Adaptor{
 	
 	public String columnsToString(String[] columns) {
 		StringBuffer result = new StringBuffer();
-		String primaryTable = getPrimaryTableName();
 		for (int i = 0; i < columns.length; i++) {
-			result.append(primaryTable + "." + columns[i]);
+			result.append(columns[i]);
 			if (i < columns.length - 1) {
 				result.append(", ");
 			}
