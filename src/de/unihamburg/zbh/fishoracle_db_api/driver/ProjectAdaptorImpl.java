@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
-import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
+import de.unihamburg.zbh.fishoracle_db_api.data.Study;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 
@@ -41,14 +41,14 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	protected String[] tables() {
 		return new String[]{"project",
 							"group_project_access",
-							"microarraystudy_in_project"};
+							"study_in_project"};
 	}
 
 	@Override
 	protected String[] columns() {
-		return new String[]{"project_id",
-							"name",
-							"description"};
+		return new String[]{"project.project_id",
+							"project.name",
+							"project.description"};
 	}
 	
 	@Override
@@ -138,7 +138,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 	
 	public Object createObject(ResultSet rs, boolean withChildren) {
-		Microarraystudy[] mstudies = null;
+		Study[] studies = null;
 		Project project = null;
 		int projectId = 0;
 		String name = null;
@@ -154,11 +154,11 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				
 				if(withChildren){
 				
-					MicroarraystudyAdaptor ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+					StudyAdaptor sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 				
-					mstudies = ma.fetchMicroarraystudiesForProject(projectId);
+					studies = sa.fetchStudiesForProject(projectId);
 				
-					project.setMstudies(mstudies);
+					project.setStudies(studies);
 				
 					ProjectAccess[] access = this.fetchProjectAccessForProject(projectId);
 				
@@ -234,7 +234,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy_in_project.project_id = project.project_id")
+			.append(" LEFT JOIN study_in_project ON study_in_project.project_id = project.project_id")
 			.append(" WHERE ").append("project.project_id = " + projectId);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -572,8 +572,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			
 			conn = getConnection();
 			
-			query.append("INSERT INTO ").append("microarraystudy_in_project")
-			.append(" (project_id, microarraystudy_id)")
+			query.append("INSERT INTO ").append("study_in_project")
+			.append(" (project_id, study_id)")
 			.append(" VALUES ")
 			.append("('" + projectId + "', '" + microarraystudyId + "')");
 			
@@ -589,7 +589,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public void removeMicroarraystudyFromProject(int microarraystudyId,
+	public void removeMicroarraystudyFromProject(int studyId,
 			int projectId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -599,8 +599,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			conn = getConnection();
 			
 			query.append("DELETE FROM ")
-			.append("microarraystudy_in_project")
-			.append(" WHERE ").append("project_id = " + projectId + " AND microarraystudy_id = " + microarraystudyId);
+			.append("study_in_project")
+			.append(" WHERE ").append("project_id = " + projectId + " AND study_id = " + studyId);
 			
 			executeUpdate(conn, query.toString());
 			
@@ -637,7 +637,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			executeUpdate(conn, groupProjectAccessQuery.toString());
 			
 			microarraystudyInProjectQuery.append("DELETE FROM ")
-			.append("microarraystudy_in_project")
+			.append("study_in_project")
 			.append(" WHERE ").append("project_id = " + projectId);
 			
 			executeUpdate(conn, microarraystudyInProjectQuery.toString());
@@ -654,6 +654,6 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			if(conn != null){
 				close(conn);
 			}
-		}		
+		}
 	}
 }

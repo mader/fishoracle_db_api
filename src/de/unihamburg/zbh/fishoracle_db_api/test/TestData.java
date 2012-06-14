@@ -17,12 +17,12 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
+import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
-import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
+import de.unihamburg.zbh.fishoracle_db_api.data.Study;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
@@ -30,13 +30,13 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Property;
 import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.ChipAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.EnsemblDBsAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.MicroarraystudyAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.StudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PropertyAdaptor;
@@ -53,12 +53,12 @@ public class TestData {
 	private UserAdaptor ua;
 	private GroupAdaptor ga;
 	private ProjectAdaptor pa;
-	private ChipAdaptor ca;
+	private PlatformAdaptor pfa;
 	private OrganAdaptor oa;
 	private PropertyAdaptor pra;
 	private TissueSampleAdaptor ta;
-	private CnSegmentAdaptor sa;
-	private MicroarraystudyAdaptor ma;
+	private CnSegmentAdaptor csa;
+	private StudyAdaptor sa;
 	private EnsemblDBsAdaptor ea;
 	
 	public TestData() {
@@ -66,12 +66,12 @@ public class TestData {
 		ua = (UserAdaptor) driver.getAdaptor("UserAdaptor");
 		ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
 		pa = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
-		ca = (ChipAdaptor) driver.getAdaptor("ChipAdaptor");
+		pfa = (PlatformAdaptor) driver.getAdaptor("PlatformAdaptor");
 		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
 		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
-		sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
-		ma = (MicroarraystudyAdaptor) driver.getAdaptor("MicroarraystudyAdaptor");
+		csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+		sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 	}
 
@@ -182,26 +182,26 @@ public class TestData {
 		
 	}
 	
-	public void createAndStoreChipData(){
+	public void createAndStorePlatformData(){
 		
-		Chip[] chips = createChipData();
+		Platform[] platforms = createPlatformData();
 		
-		for(int i = 0; i < chips.length; i++){
-			ca.storeChip(chips[i]);
+		for(int i = 0; i < platforms.length; i++){
+			pfa.storePlatform(platforms[i]);
 		}
 	}
 	
-	public Chip[] createChipData(){
+	public Platform[] createPlatformData(){
 		
-		Chip chip1, chip2, chip3;
+		Platform platform1, platform2, platform3;
 		
-		chip1 = new Chip(1, "mapping250k_sty", "snp");
-		chip2 = new Chip(2, "GenomeWideSNP_6", "snp");
-		chip3 = new Chip(3, "hg-u133a_2", "expression");
+		platform1 = new Platform(1, "mapping250k_sty", "snp");
+		platform2 = new Platform(2, "GenomeWideSNP_6", "snp");
+		platform3 = new Platform(3, "hg-u133a_2", "expression");
 		
-		Chip[] chips = new Chip[]{chip1, chip2, chip3};
+		Platform[] platforms = new Platform[]{platform1, platform2, platform3};
 		
-		return chips;
+		return platforms;
 	}
 	
 	public Organ[] createAndStoreOrganData(){
@@ -283,20 +283,20 @@ public class TestData {
 		
 		CnSegment[] segments = createCnSegmentData();
 		
-		sa.storeCnSegment(segments[0], 1);
-		sa.storeCnSegment(segments[1], 1);
-		sa.storeCnSegment(segments[2], 1);
-		sa.storeCnSegment(segments[3], 1);
+		csa.storeCnSegment(segments[0], 1);
+		csa.storeCnSegment(segments[1], 1);
+		csa.storeCnSegment(segments[2], 1);
+		csa.storeCnSegment(segments[3], 1);
 		
-		sa.storeCnSegment(segments[4], 2);
-		sa.storeCnSegment(segments[5], 2);
-		sa.storeCnSegment(segments[6], 2);
-		sa.storeCnSegment(segments[7], 2);
+		csa.storeCnSegment(segments[4], 2);
+		csa.storeCnSegment(segments[5], 2);
+		csa.storeCnSegment(segments[6], 2);
+		csa.storeCnSegment(segments[7], 2);
 		
-		sa.storeCnSegment(segments[8], 3);
-		sa.storeCnSegment(segments[9], 3);
-		sa.storeCnSegment(segments[10], 3);
-		sa.storeCnSegment(segments[11], 3);
+		csa.storeCnSegment(segments[8], 3);
+		csa.storeCnSegment(segments[9], 3);
+		csa.storeCnSegment(segments[10], 3);
+		csa.storeCnSegment(segments[11], 3);
 		
 	}
 	
@@ -330,9 +330,9 @@ public class TestData {
 		return segments;
 	}
 	
-	public Microarraystudy[] createMicroarraystudyData(){
+	public Study[] createStudyData(){
 		
-		Microarraystudy mstudy1, mstudy2, mstudy3;
+		Study study1, study2, study3;
 		
 		CnSegment[] segments = createCnSegmentData();
 		
@@ -361,18 +361,18 @@ public class TestData {
 			
 		}
 		
-		mstudy1 = new Microarraystudy(segments1, "teststudy1", "This is a test.", 1, 1, pids, 1);
-		mstudy1.setId(1);
+		study1 = new Study(segments1, "teststudy1", "microarray", "ncbi36", "This is a test.", 1, 1, pids, 1);
+		study1.setId(1);
 		
-		mstudy2 = new Microarraystudy(segments2, "teststudy2", "This is a test.", 2, 2, pids, 1);
-		mstudy2.setId(2);
+		study2 = new Study(segments2, "teststudy2", "sequencing", "GRCh37", "This is a test.", 2, 2, pids, 1);
+		study2.setId(2);
 		
-		mstudy3 = new Microarraystudy(segments3, "teststudy3", "This is a test.", 3, 3, pids, 1);
-		mstudy3.setId(3);
+		study3 = new Study(segments3, "teststudy3", "sequencing", "GRCh37", "This is a test.", 3, 3, pids, 1);
+		study3.setId(3);
 		
-		Microarraystudy[] mstudies = new Microarraystudy[]{mstudy1, mstudy2, mstudy3};
+		Study[] studies = new Study[]{study1, study2, study3};
 		
-		return mstudies; 
+		return studies; 
 	}
 	
 	public EnsemblDBs[] createEnsemblDBsData(){
@@ -388,8 +388,8 @@ public class TestData {
 		return edbss;
 	}
 	
-	public void emptyChipTable(){
-		((BaseAdaptor) ca).truncateTable(((BaseAdaptor) ca).getPrimaryTableName());
+	public void emptyPlatformTable(){
+		((BaseAdaptor) pfa).truncateTable(((BaseAdaptor) pfa).getPrimaryTableName());
 	}
 	
 	public void emptyOrganTable(){
@@ -429,23 +429,23 @@ public class TestData {
 	}
 	
 	public void emptyCnSegmentTable(){
-		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
+		((BaseAdaptor) csa).truncateTable(((BaseAdaptor) csa).getPrimaryTableName());
 	}
 	
 	public void emptyLocationTable(){
-		((BaseAdaptor) sa).truncateTable("location");
+		((BaseAdaptor) csa).truncateTable("location");
 	}
 	
-	public void emptyMstudyTable(){
-		((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
+	public void emptyStudyTable(){
+		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
 	}
 	
-	public void emptyMstudyInProjectTable(){
-		((BaseAdaptor) ma).truncateTable("microarraystudy_in_project");
+	public void emptyStudyInProjectTable(){
+		((BaseAdaptor) sa).truncateTable("study_in_project");
 	}
 	
-	public void emptySampleOnChipTable(){
-		((BaseAdaptor) ma).truncateTable("sample_on_chip");
+	public void emptySampleOnPlatformTable(){
+		((BaseAdaptor) sa).truncateTable("sample_on_platform");
 	}
 	
 	public void emptyEnsmeblDBsTable(){
@@ -484,12 +484,12 @@ public class TestData {
 		this.pa = pa;
 	}
 
-	public ChipAdaptor getCa() {
-		return ca;
+	public PlatformAdaptor getPfa() {
+		return pfa;
 	}
 
-	public void setCa(ChipAdaptor ca) {
-		this.ca = ca;
+	public void setCa(PlatformAdaptor ca) {
+		this.pfa = ca;
 	}
 
 	public OrganAdaptor getOa() {
@@ -516,20 +516,20 @@ public class TestData {
 		this.ta = ta;
 	}
 
-	public CnSegmentAdaptor getSa() {
+	public CnSegmentAdaptor getCsa() {
+		return csa;
+	}
+
+	public void setCsa(CnSegmentAdaptor csa) {
+		this.csa = csa;
+	}
+
+	public StudyAdaptor getSa() {
 		return sa;
 	}
 
-	public void setSa(CnSegmentAdaptor sa) {
-		this.sa = sa;
-	}
-
-	public MicroarraystudyAdaptor getMa() {
-		return ma;
-	}
-
-	public void setMa(MicroarraystudyAdaptor ma) {
-		this.ma = ma;
+	public void setMa(StudyAdaptor ma) {
+		this.sa = ma;
 	}
 
 	public EnsemblDBsAdaptor getEa() {

@@ -27,8 +27,8 @@ public class CnSegment {
 	private Location location;
 	private double mean;
 	private int numberOfMarkers;
-	private int microarraystudyId;
-	private String microarraystudyName;
+	private int studyId;
+	private String studyName;
 	
 	/**
 	 * Stores information about segments calculated by a segmentation algorithm.
@@ -48,19 +48,19 @@ public class CnSegment {
 		this.location = loc;
 		this.mean = mean;
 		this.numberOfMarkers = numberOfMarkers;
-		this.microarraystudyId = 0;
+		this.studyId = 0;
 	}
 	
 	public CnSegment(int id,
 						Location loc,
 						double mean,
 						int numberOfMarkers,
-						int microarraystudyId) {
+						int studyId) {
 		this.id = id;
 		this.location = loc;
 		this.mean = mean;
 		this.numberOfMarkers = numberOfMarkers;
-		this.microarraystudyId = microarraystudyId;
+		this.studyId = studyId;
 	}
 
 	public int getId() {
@@ -95,19 +95,19 @@ public class CnSegment {
 		this.numberOfMarkers = numberOfMarkers;
 	}
 
-	public int getMicroarraystudyId() {
-		return microarraystudyId;
+	public int getStudyId() {
+		return studyId;
 	}
 
-	public void setMicroarraystudyId(int microarraystudyId) {
-		this.microarraystudyId = microarraystudyId;
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
 	}
 
-	public String getMicroarraystudyName() {
-		return microarraystudyName;
+	public String getStudyName() {
+		return studyName;
 	}
 
-	public void setMicroarraystudyName(String microarraystudyName) {
-		this.microarraystudyName = microarraystudyName;
+	public void setStudyName(String studyName) {
+		this.studyName = studyName;
 	}
 }

@@ -30,9 +30,9 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new OrganAdaptorImpl(this));
 		addAdaptor(new PropertyAdaptorImpl(this));
 		addAdaptor(new TissueSampleAdaptorImpl(this));
-		addAdaptor(new ChipAdaptorImpl(this));
+		addAdaptor(new PlatformAdaptorImpl(this));
 		addAdaptor(new CnSegmentAdaptorImpl(this));
-		addAdaptor(new MicroarraystudyAdaptorImpl(this));
+		addAdaptor(new StudyAdaptorImpl(this));
 		addAdaptor(new GroupAdaptorImpl(this));
 		addAdaptor(new ProjectAdaptorImpl(this));
 		addAdaptor(new EnsemblDBsAdaptorImpl(this));
@@ -59,8 +59,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	}
 	
 	@Override
-	public ChipAdaptor getChipAdaptor() {
-		return (ChipAdaptor) getAdaptor(ChipAdaptor.TYPE);
+	public PlatformAdaptor getChipAdaptor() {
+		return (PlatformAdaptor) getAdaptor(PlatformAdaptor.TYPE);
 	}
 	
 	@Override
@@ -69,8 +69,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	}
 
 	@Override
-	public MicroarraystudyAdaptor getMicroarraystudyAdaptor() {
-		return (MicroarraystudyAdaptor) getAdaptor(MicroarraystudyAdaptor.TYPE);
+	public StudyAdaptor getStudyAdaptor() {
+		return (StudyAdaptor) getAdaptor(StudyAdaptor.TYPE);
 	}
 
 	@Override

@@ -22,28 +22,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.Chip;
+import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 
 /**
  * @author Malte Mader
  *
  */
-public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
+public class PlatformAdaptorImpl extends BaseAdaptor implements PlatformAdaptor {
 
-	protected ChipAdaptorImpl(FODriverImpl driver) {
+	protected PlatformAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
 	}
 	
 	@Override
 	protected String[] tables() {
-		return new String[]{"chip"};
+		return new String[]{"platform"};
 	}
 	
 	@Override
 	protected String[] columns() {
-		return new String[]{"chip_id",
-							"chip_name",
-							"chip_type"};
+		return new String[]{"platform_id",
+							"platform_name",
+							"platform_type"};
 	}
 	
 	@Override
@@ -52,24 +52,24 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 	}
 	
 	@Override
-	public int storeChip(Chip chip) {
+	public int storePlatform(Platform platform) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		int newChipId = 0;
+		int newPlatformId = 0;
 		
 		try{
 			
 			conn = getConnection();
 			
 			query.append("INSERT INTO ").append(super.getPrimaryTableName())
-			.append(" (chip_name, chip_type)")
+			.append(" (platform_name, platform_type)")
 			.append(" VALUES ")
-			.append("('" + chip.getName() + "', '" + chip.getType()  + "')");
+			.append("('" + platform.getName() + "', '" + platform.getType()  + "')");
 			
 			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
 			
 			if(rs.next()){
-				newChipId = rs.getInt(1);
+				newPlatformId = rs.getInt(1);
 			}
 			
 		} catch (Exception e){
@@ -79,12 +79,12 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 				close(conn);
 			}
 		}
-		return newChipId;
+		return newPlatformId;
 	}
 
 	@Override	
 	public Object createObject(ResultSet rs) {
-		Chip chip = null;
+		Platform platform = null;
 		int id = 0;
 		String name = null;
 		String type = null;
@@ -94,43 +94,43 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 				id = rs.getInt(1);
 				name = rs.getString(2);
 				type = rs.getString(3);
-				chip = new Chip(id, name, type);
+				platform = new Platform(id, name, type);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return chip;
+		return platform;
 	}
 
 	@Override
-	public Chip[] fetchAllChips() {
+	public Platform[] fetchAllPlatforms() {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		Chip chip = null;
-		ArrayList<Chip> chipContainer = new ArrayList<Chip>();
-		Chip[] chips = null;
+		Platform platform = null;
+		ArrayList<Platform> platformContainer = new ArrayList<Platform>();
+		Platform[] platforms = null;
 		
 		try{
 			
 			conn = getConnection();	
 			
-			query.append("SELECT ").append("chip_id, chip_name, chip_type")
+			query.append("SELECT ").append("platform_id, platform_name, platform_type")
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" ORDER BY chip_id ASC");
+			.append(" ORDER BY platform_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
 			while ((o = createObject(rs)) != null) {
-				chip = (Chip) o;
-				chipContainer.add(chip);
+				platform = (Platform) o;
+				platformContainer.add(platform);
 			}
 			
-			chips = new Chip[chipContainer.size()];
+			platforms = new Platform[platformContainer.size()];
 			
-			chipContainer.toArray(chips);
+			platformContainer.toArray(platforms);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -139,7 +139,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 				close(conn);
 			}
 		}
-		return chips;
+		return platforms;
 	}
 	
 	@Override
@@ -153,9 +153,9 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			
 			conn = getConnection();	
 			
-			query.append("SELECT ").append("DISTINCT (chip_type)")
+			query.append("SELECT ").append("DISTINCT (platform_type)")
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" ORDER BY chip_type ASC");
+			.append(" ORDER BY platform_type ASC");
 			
 			ResultSet typeRs = executeQuery(conn, query.toString());
 			
@@ -180,25 +180,25 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 	}
 
 	@Override
-	public Chip fetchChipById(int id) {
+	public Platform fetchPlatformById(int id) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		Chip chip = null;
+		Platform platform = null;
 		
 		try{
 			
 			conn = getConnection();
 			
-			query.append("SELECT ").append("chip_id, chip_name, chip_type")
+			query.append("SELECT ").append("platform_id, platform_name, platform_type")
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" WHERE ").append("chip_id = " + id);
+			.append(" WHERE ").append("platform_id = " + id);
 			
 			ResultSet userRs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
 			if((o = createObject(userRs)) != null) {
-				chip = (Chip) o;
+				platform = (Platform) o;
 			}
 			
 		} catch (Exception e){
@@ -208,16 +208,16 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 				close(conn);
 			}
 		}		
-		return chip;
+		return platform;
 	}
 	
 	@Override
-	public void deleteChip(Chip chip){
-		deleteChip(chip.getId());
+	public void deletePlatform(Platform platform){
+		deletePlatform(platform.getId());
 	}
 	
 	@Override
-	public void deleteChip(int chipId) {
+	public void deletePlatform(int platformId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		
@@ -227,7 +227,7 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 			
 			query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
-			.append(" WHERE ").append("chip_id = " + chipId);
+			.append(" WHERE ").append("platform_id = " + platformId);
 			
 			executeUpdate(conn, query.toString());
 			

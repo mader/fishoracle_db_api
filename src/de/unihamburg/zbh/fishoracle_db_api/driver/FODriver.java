@@ -27,11 +27,11 @@ public interface FODriver extends Driver {
 	
 	TissueSampleAdaptor getTissueSampleAdaptor();
 	
-	ChipAdaptor getChipAdaptor();
+	PlatformAdaptor getChipAdaptor();
 	
 	CnSegmentAdaptor getCnSegmentAdaptor();
 	
-	MicroarraystudyAdaptor getMicroarraystudyAdaptor();
+	StudyAdaptor getStudyAdaptor();
 	
 	GroupAdaptor getGroupAdaptor();
 	

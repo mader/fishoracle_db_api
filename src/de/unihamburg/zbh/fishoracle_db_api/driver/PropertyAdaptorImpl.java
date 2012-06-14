@@ -37,10 +37,10 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 
 	@Override
 	protected String[] columns() {
-		return new String[]{"property_id",
-							"property_label",
-							"property_type",
-							"property_activity"};
+		return new String[]{"property.property_id",
+							"property.property_label",
+							"property.property_type",
+							"property.property_activity"};
 	}
 
 	@Override

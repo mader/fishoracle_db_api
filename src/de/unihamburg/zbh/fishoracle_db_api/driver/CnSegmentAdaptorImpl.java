@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
-import de.unihamburg.zbh.fishoracle_db_api.data.Microarraystudy;
+import de.unihamburg.zbh.fishoracle_db_api.data.Study;
 
 /**
  * @author Malte Mader
@@ -50,7 +50,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 							"location.location_end",
 							"cn_segment_mean",
 							"cn_segment_markers",
-							"cn_segment_microarraystudy_id"};
+							"cn_segment_study_id"};
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	}
 	
 	@Override
-	public int storeCnSegment(CnSegment segment, int mstudyId) {
+	public int storeCnSegment(CnSegment segment, int studyId) {
 		Connection conn = null;
 		StringBuffer segment_query = new StringBuffer();
 		StringBuffer loc_query = new StringBuffer();
@@ -90,12 +90,12 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			.append("(location_id, " +
 					"cn_segment_mean, " +
 					"cn_segment_markers, " +
-					"cn_segment_microarraystudy_id)")
+					"cn_segment_study_id)")
 			.append(" VALUES ")
 			.append("('" + newLocId +
 					"', '" + segment.getMean() +
 					"', '" + segment.getNumberOfMarkers() + 
-					"', '" + mstudyId + "')");
+					"', '" + studyId + "')");
 			
 			rs = executeUpdateGetKeys(conn, segment_query.toString());
 			
@@ -114,9 +114,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	}
 
 	@Override
-	public void storeCnSegments(CnSegment[] segments, int mstudyId) {
+	public void storeCnSegments(CnSegment[] segments, int studyId) {
 		for(int i = 0; i < segments.length; i++){
-			storeCnSegment(segments[i], mstudyId);
+			storeCnSegment(segments[i], studyId);
 		}
 	}
 
@@ -161,8 +161,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		CnSegment segment = null;
-		MicroarraystudyAdaptor ma = driver.getMicroarraystudyAdaptor();
-		Microarraystudy m;
+		StudyAdaptor sa = driver.getStudyAdaptor();
+		Study s;
 		
 		try{
 			
@@ -180,9 +180,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			while ((o = createObject(userRs)) != null) {
 				segment = (CnSegment) o;
-				m = ma.fetchMicroarraystudyById(segment.getMicroarraystudyId());
-				if(m != null){
-					segment.setMicroarraystudyName(m.getName());
+				s = sa.fetchStudyById(segment.getStudyId());
+				if(s != null){
+					segment.setStudyName(s.getName());
 				}
 				
 			}
@@ -291,9 +291,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		if(experimentFilter!= null && experimentFilter.length > 0){
 			for(int i = 0; i < experimentFilter.length; i++){
 				if(i == 0){
-					experimentFilterStr = " microarraystudy.microarraystudy_id = '" + (experimentFilter[i]) + "'";
+					experimentFilterStr = " study.study_id = '" + (experimentFilter[i]) + "'";
 				} else {
-					experimentFilterStr = experimentFilterStr + " OR microarraystudy.microarraystudy_id = '" + (experimentFilter[i]) + "'";
+					experimentFilterStr = experimentFilterStr + " OR study.study_id = '" + (experimentFilter[i]) + "'";
 				}
 			}
 			experimentFilterStr = " AND (" + experimentFilterStr + ")";
@@ -319,10 +319,10 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append("SELECT ").append("location.location_id, MIN(location_start) as minstart, MAX(location_end) as maxend")
 		.append(" FROM ").append(getPrimaryTableName())
 		.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
-		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
-		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
-		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
+		.append(" LEFT JOIN study ON study_id = cn_segment_study_id")
+		.append(" LEFT JOIN study_in_project ON study.study_id = study_in_project.study_id")
+		.append(" LEFT JOIN sample_on_platform ON sample_on_platform_id = study_sample_on_platform_id")
+		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_platform_tissue_sample_id")
 		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
 		.append(" WHERE ") 
 		.append("location_chromosome = '" + chr + "'");
@@ -363,7 +363,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	}
 	
 	@Override
-	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int mstudyId) {
+	public CnSegment[] fetchCnSegmentsForStudyId(int studyId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		CnSegment  segment = null;
@@ -377,7 +377,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-			.append(" WHERE ").append("cn_segment_microarraystudy_id = '" + mstudyId + "'")
+			.append(" WHERE ").append("cn_segment_study_id = '" + studyId + "'")
 			.append(" ORDER BY cn_segment_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -418,17 +418,17 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		CnSegment  segment = null;
 		ArrayList<CnSegment> segmentContainer = new ArrayList<CnSegment>();
 		CnSegment[] segments = null;
-		MicroarraystudyAdaptor ma = driver.getMicroarraystudyAdaptor();
-		Microarraystudy m;
+		StudyAdaptor sa = driver.getStudyAdaptor();
+		Study s;
 		
 		StringBuffer query = new StringBuffer();
 		
 		query.append("SELECT ").append(super.columnsToString(columns()))
 		.append(" FROM ").append(super.getPrimaryTableName())
 		.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-		.append(" LEFT JOIN microarraystudy ON microarraystudy_id = cn_segment_microarraystudy_id")
-		.append(" LEFT JOIN microarraystudy_in_project ON microarraystudy.microarraystudy_id = microarraystudy_in_project.microarraystudy_id")
-		.append(" LEFT JOIN sample_on_chip ON sample_on_chip_id = microarraystudy_sample_on_chip_id")
+		.append(" LEFT JOIN study ON study_id = cn_segment_study_id")
+		.append(" LEFT JOIN study_in_project ON study.study_id = study_in_project.study_id")
+		.append(" LEFT JOIN sample_on_platform ON sample_on_platform_id = study_sample_on_platform_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
 		.append(" LEFT JOIN organ ON organ_id = tissue_sample_organ_id ")
 		.append(" WHERE ") 
@@ -447,8 +447,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			while ((o = createObject(rs)) != null) {
 				segment = (CnSegment) o;
-				m = ma.fetchMicroarraystudyById(segment.getMicroarraystudyId());
-				segment.setMicroarraystudyName(m.getName());
+				s = sa.fetchStudyById(segment.getStudyId());
+				segment.setStudyName(s.getName());
 				segmentContainer.add(segment);
 			}
 			
@@ -496,7 +496,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		}
 	}
 
-	public void deleteCnSegment(int microarraystudyId) {
+	public void deleteCnSegment(int studyId) {
 		Connection conn = null;
 		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
@@ -505,16 +505,16 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			
 			conn = getConnection();
 			
-			loc_query.append("DELETE FROM ")
-			.append(" location ")
-			.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-			.append(" WHERE ").append("cn_segment_microarraystudy_id = " + microarraystudyId);
+			loc_query.append("DELETE location.* FROM")
+			.append(" location")
+			.append(" LEFT JOIN cn_segment ON cn_segment.location_id = location.location_id")
+			.append(" WHERE ").append("cn_segment_study_id = " + studyId);
 			
 			executeUpdate(conn, loc_query.toString());
 			
 			segment_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_microarraystudy_id = " + microarraystudyId);
+			.append(" WHERE ").append("cn_segment_study_id = " + studyId);
 			
 			executeUpdate(conn, segment_query.toString());
 			
@@ -527,9 +527,9 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		}
 	}
 
-	public void deleteCnSegment(int[] microarraystudyIds ){
-		for(int i= 0; i < microarraystudyIds.length; i++) {
-			deleteCnSegment(microarraystudyIds[i]);
+	public void deleteCnSegment(int[] studyIds ){
+		for(int i= 0; i < studyIds.length; i++) {
+			deleteCnSegment(studyIds[i]);
 		}
 	}
 }

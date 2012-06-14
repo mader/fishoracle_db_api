@@ -27,7 +27,7 @@ public class Project {
 	private String name;
 	private String description;
 	private ProjectAccess[] projectAccess;
-	private Microarraystudy[] mstudies;
+	private Study[] studies;
 	
 	public Project(int id, String name, String description) {
 		this.id = id;
@@ -59,12 +59,12 @@ public class Project {
 		this.description = description;
 	}
 
-	public Microarraystudy[] getMstudies() {
-		return mstudies;
+	public Study[] getStudies() {
+		return studies;
 	}
 
-	public void setMstudies(Microarraystudy[] mstudies) {
-		this.mstudies = mstudies;
+	public void setStudies(Study[] studies) {
+		this.studies = studies;
 	}
 
 	public ProjectAccess[] getProjectAccess() {

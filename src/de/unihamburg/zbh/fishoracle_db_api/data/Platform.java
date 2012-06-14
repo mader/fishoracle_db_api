@@ -20,9 +20,9 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
 /**
  * @author Malte Mader
  *
- * Stores imformation about microarray chips.
+ * Stores imformation about microarray or sequencing platforms.
  */
-public class Chip {
+public class Platform {
 	
 	private int id;
 	private String name;
@@ -31,10 +31,10 @@ public class Chip {
 	/**
 	 * 
 	 * @param id The ID for the database entry.
-	 * @param name The name of the chip. E.g. "Affymetrix Human SNP Array 6.0" or "Agilent Human 244K".  
-	 * @param type The chip type corresponding to the analysis. E.g. "Expression" or "SNP".
+	 * @param name The name of the platform. E.g. "Affymetrix Human SNP Array 6.0" or "Agilent Human 244K".  
+	 * @param type The platform type corresponding to the analysis. E.g. "Expression" or "SNP".
 	 */
-	public Chip(int id, String name, String type) {
+	public Platform(int id, String name, String type) {
 		this.id = id;
 		this.name = name;
 		this.type = type;

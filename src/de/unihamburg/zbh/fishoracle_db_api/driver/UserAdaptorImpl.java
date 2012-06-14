@@ -39,13 +39,13 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 	/* we do not need the 'password' column most of the time */
 	@Override
 	protected String[] columns() {
-		return new String[]{"user_id",
-							"first_name",
-							"last_name",
-							"username",
-							"email",
-							"isactive",
-							"isadmin"};
+		return new String[]{"user.user_id",
+							"user.first_name",
+							"user.last_name",
+							"user.username",
+							"user.email",
+							"user.isactive",
+							"user.isadmin"};
 	}
 	
 	@Override

@@ -101,7 +101,7 @@ public interface CnSegmentAdaptor {
 	 *          ordered by the CnSegment ID. If there are no segments stored in
 	 *          the database an array of length 0 is returned.
 	 */
-	public CnSegment[] fetchCnSegmentsForMicroarraystudyId(int mstudyId);
+	public CnSegment[] fetchCnSegmentsForStudyId(int mstudyId);
 	
 	/**
 	 * Fetches segments for a range and filter attributes.

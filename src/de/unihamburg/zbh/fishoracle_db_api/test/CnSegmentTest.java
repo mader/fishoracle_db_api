@@ -37,7 +37,7 @@ public class CnSegmentTest extends TestCase{
 		
 		td = new TestData();
 		
-		sa = td.getSa();
+		sa = td.getCsa();
 		
 		testsegments = td.createCnSegmentData();
 	}
@@ -81,7 +81,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s1.getLocation().getEnd() == testsegments[0].getLocation().getEnd());
 		assertTrue(s1.getMean() == testsegments[0].getMean());
 		assertTrue(s1.getNumberOfMarkers() == testsegments[0].getNumberOfMarkers());
-		assertTrue(s1.getMicroarraystudyId() == 1);
+		assertTrue(s1.getStudyId() == 1);
 		
 		assertTrue(s2.getId() == 2);
 		assertTrue(s2.getLocation().getChromosome().equals(testsegments[1].getLocation().getChromosome()));
@@ -89,7 +89,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s2.getLocation().getEnd() == testsegments[1].getLocation().getEnd());
 		assertTrue(s2.getMean() == testsegments[1].getMean());
 		assertTrue(s2.getNumberOfMarkers() == testsegments[1].getNumberOfMarkers());
-		assertTrue(s2.getMicroarraystudyId() == 1);
+		assertTrue(s2.getStudyId() == 1);
 		
 		assertTrue(s3.getId() == 3);
 		assertTrue(s3.getLocation().getChromosome().equals(testsegments[2].getLocation().getChromosome()));
@@ -97,7 +97,7 @@ public class CnSegmentTest extends TestCase{
 		assertTrue(s3.getLocation().getEnd() == testsegments[2].getLocation().getEnd());
 		assertTrue(s3.getMean() == testsegments[2].getMean());
 		assertTrue(s3.getNumberOfMarkers() == testsegments[2].getNumberOfMarkers());
-		assertTrue(s3.getMicroarraystudyId() == 1);
+		assertTrue(s3.getStudyId() == 1);
 		
 	}
 	
@@ -115,7 +115,7 @@ public class CnSegmentTest extends TestCase{
 	 }
 	
 	public void testFetchCnSegmentsForMicroarraystudyId(){
-		CnSegment[] segments = sa.fetchCnSegmentsForMicroarraystudyId(1);
+		CnSegment[] segments = sa.fetchCnSegmentsForStudyId(1);
 		
 		assertTrue(segments[0].getId() == testsegments[0].getId());
 		assertTrue(segments[0].getLocation().getChromosome().equals(testsegments[0].getLocation().getChromosome()));
