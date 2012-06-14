@@ -44,6 +44,11 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	}
 
 	@Override
+	protected String[][] leftJoins() {
+		return null;
+	}
+	
+	@Override
 	public int storeProperty(Property property) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();

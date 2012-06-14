@@ -44,6 +44,11 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 	}
 
 	@Override
+	protected String[][] leftJoins() {
+		return null;
+	}
+	
+	@Override
 	public Object createObject(ResultSet rs) {
 		EnsemblDBs edbs = null;
 		int id = 0;

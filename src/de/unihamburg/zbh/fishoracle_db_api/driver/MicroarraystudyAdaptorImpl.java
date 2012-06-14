@@ -58,6 +58,12 @@ public class MicroarraystudyAdaptorImpl extends BaseAdaptor implements Microarra
 	}
 	
 	@Override
+	protected String[][] leftJoins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int storeMicroarraystudy(Microarraystudy mstudy, int projectId) {
 		Connection conn = null;
 		StringBuffer mstudyQuery = new StringBuffer();

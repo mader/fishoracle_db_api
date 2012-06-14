@@ -46,6 +46,12 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 	}
 	
 	@Override
+	protected String[][] leftJoins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int storeGroup(Group group){
 		return storeGroup(group.getName(), group.getIsactiveAsInt()); 
 	}

@@ -48,6 +48,12 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 							"isadmin"};
 	}
 	
+	@Override
+	protected String[][] leftJoins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public int storeUser(User user) throws Exception {
 		return storeUser(user.getFirstName(),
 				user.getLastName(),

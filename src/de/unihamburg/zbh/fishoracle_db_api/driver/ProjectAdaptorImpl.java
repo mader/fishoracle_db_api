@@ -52,6 +52,12 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 	
 	@Override
+	protected String[][] leftJoins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int storeProject(Project project){
 		
 		return storeProject(project.getName(), project.getDescription());

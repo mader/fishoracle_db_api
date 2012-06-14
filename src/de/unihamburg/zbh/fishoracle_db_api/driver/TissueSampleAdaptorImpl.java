@@ -49,6 +49,11 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 							"tissue_sample_organ_id"};
 	}
 
+	@Override
+	protected String[][] leftJoins() {
+		return null;
+	}
+	
 	public int storeTissueSample(TissueSample tissue) {
 		
 		int[] propertyIds = new int[tissue.getProperties().length];

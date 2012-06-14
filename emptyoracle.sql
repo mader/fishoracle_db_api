@@ -273,13 +273,14 @@ CREATE TABLE `sequencing_study_in_project` (
 CREATE TABLE `mutation` (
   `mutation_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
-  `db_snp_db` varchar(64),
+  `db_snp_id` varchar(64),
   `mut_ref` varchar(1),
   `mut_alt` varchar(1),
   `quality` double,
   `somatic` varchar(64),
   `confidence` varchar(128),
   `snp_tool` varchar(128),
+  `sequencing_study_id` int,
   PRIMARY KEY(`mutation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

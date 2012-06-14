@@ -131,19 +131,24 @@ public abstract class BaseAdaptor implements Adaptor{
 	
 	protected abstract String[] columns();
 	
+	protected abstract String[][] leftJoins();
+	
 	public abstract Object createObject(ResultSet rs);
 	
-	public String finalWhereClause() {
-		return "";
-	}
-	
-	public String finalClause() {
-		return "";
-	}
-	
-	public String[][] leftJoin() {
-		String[][] lj = { {} };
-		return lj;
+	public String leftJoinToString(String[][] leftJoins) {
+		
+		int i;
+		String qry = null;
+		String[] innerArr;
+		for(i = 0; i < leftJoins.length; i++)
+		{
+			qry = " LEFT JOIN ";
+			innerArr = leftJoins[i];
+			qry += innerArr[0];
+			qry += " ON ";
+			qry += innerArr[1];
+		}
+		return qry;
 	}
 	
 	public String columnsToString(String[] columns) {
@@ -168,9 +173,95 @@ public abstract class BaseAdaptor implements Adaptor{
 		return result.toString();
 	}
 	
+	public String getBaseQuery() {
+		String qry;
+		int i;
+		
+		qry = "SELECT ";
+		
+		for(i = 0; i < columns().length; i++)
+		{
+			qry += columns()[i];
+			if(i + 1 != columns().length)
+			{
+				qry += ", ";
+			}
+		}
+		
+		qry += " FROM ";
+		qry += getPrimaryTableName();
+		String leftJoins = leftJoinToString(leftJoins());
+		qry += leftJoins;
+		
+		return qry;
+	}
+	
 	public String getPrimaryTableName() {
 		String[] tables = tables();
 		return tables[0];
+	}
+	
+	public String getArrayFilterSQLWhereClause(String column , int[] filter){
+		String filterStr = "";
+		if(filter != null && filter.length > 0){
+			for(int i = 0; i < filter.length; i++){
+				if(i == 0){
+					filterStr = " " + column + " = '" + (filter[i]) + "'";
+				} else {
+					filterStr = filterStr + " OR " + column + " = '" + (filter[i]) + "'";
+				}
+			}
+			filterStr = " AND (" + filterStr + ")";
+		}
+		return filterStr;
+	}
+	
+	public String getArrayFilterSQLWhereClause(String column , String[] filter){
+		String filterStr = "";
+		if(filter != null && filter.length > 0){
+			for(int i = 0; i < filter.length; i++){
+				if(i == 0){
+					filterStr = " " + column + " = '" + (filter[i]) + "'";
+				} else {
+					filterStr = filterStr + " OR " + column + " = '" + (filter[i]) + "'";
+				}
+			}
+			filterStr = " AND (" + filterStr + ")";
+		}
+		return filterStr;
+	}
+	
+	public String getMaxiamlOverlappingSQLWhereClause(int start, int end){
+		StringBuffer query = new StringBuffer();
+		
+		query.append(" AND ((location_start <= " + start) 
+		.append(" AND location_end >= " + end + ")")
+		.append(" OR ")
+		.append("(location_start >= " + start)
+		.append(" AND location_end <= " + end + ")")
+		.append(" OR ")
+	    .append("(location_start >= " + start)
+	    .append(" AND location_start <= " + end + ")")
+	    .append(" OR ")
+	    .append("(location_end >= " + start)
+	    .append(" AND location_end <= " + end + "))");
+		return query.toString();
+	}
+	
+	public String getScoreSQLWhereClause(String column, Double score, boolean greaterThan) {
+		
+		String qrystr = "";
+		String order;
+		
+		if(greaterThan){
+			order = " > ";
+		} else {
+			order = " < ";
+		}
+		
+		qrystr = qrystr + " AND " + column + order + "'" + score + "'"; 
+		
+		return qrystr;
 	}
 	
 	public void truncateTable(String table){

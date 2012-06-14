@@ -48,6 +48,11 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 	}
 
 	@Override
+	protected String[][] leftJoins() {
+		return null;
+	}
+	
+	@Override
 	public int storeOrgan(Organ organ) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();

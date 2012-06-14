@@ -54,6 +54,12 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 	}
 
 	@Override
+	protected String[][] leftJoins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int storeCnSegment(CnSegment segment, int mstudyId) {
 		Connection conn = null;
 		StringBuffer segment_query = new StringBuffer();
@@ -231,23 +237,6 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			}
 		}
 		return loc;
-	}
-
-	private String getMaxiamlOverlappingSQLWhereClause(int start, int end){
-		StringBuffer query = new StringBuffer();
-		
-		query.append(" AND ((location_start <= " + start) 
-		.append(" AND location_end >= " + end + ")")
-		.append(" OR ")
-		.append("(location_start >= " + start)
-		.append(" AND location_end <= " + end + ")")
-		.append(" OR ")
-	    .append("(location_start >= " + start)
-	    .append(" AND location_start <= " + end + ")")
-	    .append(" OR ")
-	    .append("(location_end >= " + start)
-	    .append(" AND location_end <= " + end + "))");
-		return query.toString();
 	}
 	
 	private String getThresholdSQLClause(Double lowerTh, Double upperTh){

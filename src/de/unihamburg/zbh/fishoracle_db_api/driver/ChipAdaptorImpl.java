@@ -47,6 +47,11 @@ public class ChipAdaptorImpl extends BaseAdaptor implements ChipAdaptor {
 	}
 	
 	@Override
+	protected String[][] leftJoins() {
+		return null;
+	}
+	
+	@Override
 	public int storeChip(Chip chip) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
