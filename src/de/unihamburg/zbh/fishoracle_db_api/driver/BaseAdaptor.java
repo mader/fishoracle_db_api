@@ -138,11 +138,11 @@ public abstract class BaseAdaptor implements Adaptor{
 	public String leftJoinToString(String[][] leftJoins) {
 		
 		int i;
-		String qry = null;
+		String qry = "";
 		String[] innerArr;
 		for(i = 0; i < leftJoins.length; i++)
 		{
-			qry = " LEFT JOIN ";
+			qry += " LEFT JOIN ";
 			innerArr = leftJoins[i];
 			qry += innerArr[0];
 			qry += " ON ";

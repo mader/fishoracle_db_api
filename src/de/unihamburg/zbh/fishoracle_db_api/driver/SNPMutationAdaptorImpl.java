@@ -93,8 +93,8 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 				end = rs.getInt(5);
 				
 				db_snp_id = rs.getString(6);
-				alt = rs.getString(7);
-				ref = rs.getString(8);
+				ref = rs.getString(7);
+				alt = rs.getString(8);
 				quality = rs.getDouble(9);
 				somatic = rs.getString(10);
 				confidence = rs.getString(11);
@@ -103,8 +103,8 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 				
 				loc = new Location(loc_id, chromosome, start, end);
 				
-				snpMut = new SNPMutation(id, loc, db_snp_id, alt, ref, quality, somatic, confidence, snpTool);
-				snpMut.setSstudyId(studyId);
+				snpMut = new SNPMutation(id, loc, db_snp_id, ref, alt, quality, somatic, confidence, snpTool);
+				snpMut.setStudyId(studyId);
 			}
 			
 		} catch (SQLException e) {
@@ -142,7 +142,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 			}
 			
 			mutation_query.append("INSERT INTO ").append(getPrimaryTableName())
-			.append("(location_id, " +
+			.append("(location_id" +
 					", db_snp_id" +
 					", mut_ref" +
 					", mut_alt" +
@@ -154,7 +154,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 					")")
 			.append(" VALUES ")
 			.append("('" + newLocId +
-					"', '" + snpMut.getDb_snp_id() +
+					"', '" + snpMut.getDbSnpId() +
 					"', '" + snpMut.getRef() + 
 					"', '" + snpMut.getAlt() + 
 					"', '" + snpMut.getQuality() + 
@@ -200,7 +200,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 			query.append("SELECT ")
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
+			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
 			.append(" WHERE ").append("mutation_id = " + mutationId);
 			
 			ResultSet userRs = executeQuery(conn, query.toString());
@@ -222,7 +222,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 	}
 
 	@Override
-	public SNPMutation[] fetchSNPMutationsForSequencingStudyId(int studyId) {
+	public SNPMutation[] fetchSNPMutationsForStudyId(int studyId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		SNPMutation snpMut = null;
@@ -235,7 +235,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
+			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY mutation_id ASC");
 			
@@ -283,7 +283,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 		
 		query.append(getBaseQuery())
 		.append(" WHERE ")
-		.append("cn_segment_chromosome = '" + chr + "'");
+		.append("location_chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getScoreSQLWhereClause("mutation.quality", qualityFilter, true));
 		query.append(getArrayFilterSQLWhereClause("mutation.somatic", somaticFilter));

@@ -22,6 +22,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
+import de.unihamburg.zbh.fishoracle_db_api.data.SNPMutation;
 import de.unihamburg.zbh.fishoracle_db_api.data.Study;
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Project;
@@ -36,6 +37,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.EnsemblDBsAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.SNPMutationAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.StudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
@@ -58,6 +60,7 @@ public class TestData {
 	private PropertyAdaptor pra;
 	private TissueSampleAdaptor ta;
 	private CnSegmentAdaptor csa;
+	private SNPMutationAdaptor ma;
 	private StudyAdaptor sa;
 	private EnsemblDBsAdaptor ea;
 	
@@ -71,6 +74,7 @@ public class TestData {
 		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 		csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+		ma = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 		sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 	}
@@ -330,6 +334,60 @@ public class TestData {
 		return segments;
 	}
 	
+	public SNPMutation[] createSNPMutationData(){
+		
+		SNPMutation mut1, mut2, mut3, mut4;
+		
+		mut1 = new SNPMutation(1,
+								new Location(0, "1", 3000, 3000),
+								"id1",
+								"T",
+								"G",
+								60.0,
+								"somatic",
+								"high confidence",
+								"gatk");
+		mut1.setStudyId(1);
+		
+		mut2 = new SNPMutation(2,
+								new Location(0, "1", 500, 500),
+								"id2",
+								"A",
+								"C",
+								30.0,
+								"somatic",
+								"medium confidence",
+								"snv-mix");
+		mut2.setStudyId(2);
+		
+		mut3 = new SNPMutation(3,
+								new Location(0, "2", 1700, 1700),
+								"id3",
+								"G",
+								"C",
+								0.95,
+								"germline",
+								"low confidence",
+								"varscan");
+		mut3.setStudyId(3);
+		
+		mut4 = new SNPMutation(4,
+								new Location(0, "3", 2000, 2000),
+								"id4",
+								"A",
+								"T",
+								75.5,
+								"somatic",
+								"high confidence",
+								"varscan");
+		mut4.setStudyId(4);
+		
+		SNPMutation[] muts = new SNPMutation[]{mut1, mut2, mut3, mut4};
+		
+		return muts;
+		
+	}
+	
 	public Study[] createStudyData(){
 		
 		Study study1, study2, study3;
@@ -436,6 +494,10 @@ public class TestData {
 		((BaseAdaptor) csa).truncateTable("location");
 	}
 	
+	public void emptySNPMutationTable(){
+		((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
+	}
+	
 	public void emptyStudyTable(){
 		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
 	}
@@ -522,6 +584,14 @@ public class TestData {
 
 	public void setCsa(CnSegmentAdaptor csa) {
 		this.csa = csa;
+	}
+	
+	public SNPMutationAdaptor getMa() {
+		return ma;
+	}
+
+	public void setMa(SNPMutationAdaptor ma) {
+		this.ma = ma;
 	}
 
 	public StudyAdaptor getSa() {

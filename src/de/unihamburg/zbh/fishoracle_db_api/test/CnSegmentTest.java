@@ -114,7 +114,7 @@ public class CnSegmentTest extends TestCase{
 		 assertTrue(l2.getEnd() == testsegments[1].getLocation().getEnd());
 	 }
 	
-	public void testFetchCnSegmentsForMicroarraystudyId(){
+	public void testFetchCnSegmentsForStudyId(){
 		CnSegment[] segments = sa.fetchCnSegmentsForStudyId(1);
 		
 		assertTrue(segments[0].getId() == testsegments[0].getId());
@@ -150,7 +150,7 @@ public class CnSegmentTest extends TestCase{
 		
 	}
 	
-	public void testDeleteChip(){
+	public void testDeleteCnSegment(){
 		
 		CnSegment s1 = sa.fetchCnSegmentById(1);
 		CnSegment s2 = sa.fetchCnSegmentById(2);

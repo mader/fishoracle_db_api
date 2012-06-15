@@ -31,6 +31,8 @@ public interface FODriver extends Driver {
 	
 	CnSegmentAdaptor getCnSegmentAdaptor();
 	
+	SNPMutationAdaptor getSNPMutationAdaptor();
+	
 	StudyAdaptor getStudyAdaptor();
 	
 	GroupAdaptor getGroupAdaptor();

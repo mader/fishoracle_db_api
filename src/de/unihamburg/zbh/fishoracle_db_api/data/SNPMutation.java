@@ -21,29 +21,29 @@ public class SNPMutation {
 
 	private int id;
 	private Location location;
-	private String db_snp_id;
-	private String alt;
+	private String dbSnpId;
 	private String ref;
+	private String alt;
 	private double quality;
 	private String somatic;
 	private String confidence;
 	private String snpTool;
-	private int sstudyId;
+	private int studyId;
 	
 	public SNPMutation(int id,
 						Location location,
 						String db_snp_id,
-						String alt,
 						String ref,
+						String alt,
 						double quality,
 						String somatic,
 						String confidence,
 						String snpTool) {
 		this.id = id;
 		this.location = location;
-		this.db_snp_id = db_snp_id;
-		this.alt = alt;
+		this.dbSnpId = db_snp_id;
 		this.ref = ref;
+		this.alt = alt;
 		this.quality = quality;
 		this.somatic = somatic;
 		this.confidence = confidence;
@@ -66,12 +66,20 @@ public class SNPMutation {
 		this.location = location;
 	}
 
-	public String getDb_snp_id() {
-		return db_snp_id;
+	public String getDbSnpId() {
+		return dbSnpId;
 	}
 
-	public void setDb_snp_id(String db_snp_id) {
-		this.db_snp_id = db_snp_id;
+	public void setDbSnpId(String dbSnpId) {
+		this.dbSnpId = dbSnpId;
+	}
+	
+	public String getRef() {
+		return ref;
+	}
+
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 
 	public String getAlt() {
@@ -81,15 +89,7 @@ public class SNPMutation {
 	public void setAlt(String alt) {
 		this.alt = alt;
 	}
-
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
-	}
-
+	
 	public double getQuality() {
 		return quality;
 	}
@@ -122,11 +122,11 @@ public class SNPMutation {
 		this.snpTool = snpTool;
 	}
 
-	public int getSstudyId() {
-		return sstudyId;
+	public int getStudyId() {
+		return studyId;
 	}
 
-	public void setSstudyId(int sstudyId) {
-		this.sstudyId = sstudyId;
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
 	}
 }

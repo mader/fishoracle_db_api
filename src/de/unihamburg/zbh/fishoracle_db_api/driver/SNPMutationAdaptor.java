@@ -21,14 +21,54 @@ import de.unihamburg.zbh.fishoracle_db_api.data.SNPMutation;
 
 public interface SNPMutationAdaptor {
 
-	public int storeSNPMutation(SNPMutation snpMut, int sstudyId);
+	/**
+	 * Stores a mutation.
+	 * 
+	 * @param snpMut The Mutation Object.
+	 * @param studyId The ID to the corresponding study.
+	 * @return Returns The ID of the newly added mutation.
+	 */
+	public int storeSNPMutation(SNPMutation snpMut, int studyId);
 	
-	public void storeSNPMutations(SNPMutation[] snpMuts, int sstudyId);
+	/**
+	 * Stores a several mutation.
+	 * 
+	 * @param snpMuts An array of SNPMutation objects.
+	 * @param studyId The ID to the corresponding study.
+	 */
+	public void storeSNPMutations(SNPMutation[] snpMuts, int studyId);
 	
-	public SNPMutation fetchSNPMutationById(int segmentId);
+	/**
+	 * Fetches a mutation for the given ID from the database.
+	 * 
+	 * @param mutationId The Mutation ID.
+	 * @return A SNPMutation Object.
+	 */
+	public SNPMutation fetchSNPMutationById(int mutationId);
 	
-	public SNPMutation[] fetchSNPMutationsForSequencingStudyId(int sstudyId);
+	/**
+	 * Fetches all mutations for the given study from the database.
+	 * 
+	 * @param studyId The ID for the study.
+	 * @return An array of SNPMutation objects.
+	 */
+	public SNPMutation[] fetchSNPMutationsForStudyId(int studyId);
 	
+	/**
+	 * Fetches mutations that pass the given filters/ 
+	 * 
+	 * @param chr The chromosome.
+	 * @param start The genomic start position.
+	 * @param end The genomic end position.
+	 * @param qualityFilter The quality score filter.
+	 * @param somaticFilter Array of somatic filter options.
+	 * @param confidenceFilter Array of confidence filter options.
+	 * @param snpToolFilter Array of snp tool filter options.
+	 * @param projectFilter Array of project filter options.
+	 * @param organFilter Array of organ filter options.
+	 * @param experimentFilter Array of experiment filter options.
+	 * @return An array of SNPMutation objects.
+	 */
 	public SNPMutation[] fetchSNPMutations(String chr,
 											int start,
 											int end,
@@ -40,11 +80,26 @@ public interface SNPMutationAdaptor {
 											int[] organFilter,
 											int[] experimentFilter);
 	
+	/**
+	 * Deletes a given Mutation from the database/
+	 * 
+	 * @param snpMut The SNPMutation Object to be removed from the database.
+	 */
 	public void deleteSNPMutation(SNPMutation snpMut);
 	
-	public void deleteSNPMutation(int sequencingStudyId);
+	/**
+	 * Remove all mutations belonging to a given study.
+	 * 
+	 * @param studyId The ID to the corresponding study. 
+	 */
+	public void deleteSNPMutation(int studyId);
 	
-	public void deleteSNPMutation(int[] sequencingStudyIds);
+	/**
+	 * Remove all mutations for several studies.
+	 * 
+	 * @param studyIds An array of study IDs.
+	 */
+	public void deleteSNPMutation(int[] studyIds);
 	
 	final static String TYPE = "SNPMutationAdaptor";
 }
