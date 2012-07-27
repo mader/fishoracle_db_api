@@ -124,7 +124,7 @@ public class SNPMutationAdaptorTest extends TestCase {
 		
 	}
 	
-	public void testDeleteSNPMuatation() {
+	public void testDeleteSNPMutation() {
 		
 		SNPMutation m1 = ma.fetchSNPMutationById(1);
 		SNPMutation m2 = ma.fetchSNPMutationById(2);

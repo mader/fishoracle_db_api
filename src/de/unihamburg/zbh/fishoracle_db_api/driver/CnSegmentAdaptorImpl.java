@@ -50,7 +50,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 							"location.location_end",
 							"cn_segment_mean",
 							"cn_segment_markers",
-							"cn_segment_study_id"};
+							"study_id"};
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			.append("(location_id, " +
 					"cn_segment_mean, " +
 					"cn_segment_markers, " +
-					"cn_segment_study_id)")
+					"study_id)")
 			.append(" VALUES ")
 			.append("('" + newLocId +
 					"', '" + segment.getMean() +
@@ -319,7 +319,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append("SELECT ").append("location.location_id, MIN(location_start) as minstart, MAX(location_end) as maxend")
 		.append(" FROM ").append(getPrimaryTableName())
 		.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-		.append(" LEFT JOIN study ON study_id = cn_segment_study_id")
+		.append(" LEFT JOIN study ON study.study_id = cn_segment.study_id")
 		.append(" LEFT JOIN study_in_project ON study.study_id = study_in_project.study_id")
 		.append(" LEFT JOIN sample_on_platform ON sample_on_platform_id = study_sample_on_platform_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_platform_tissue_sample_id")
@@ -377,7 +377,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-			.append(" WHERE ").append("cn_segment_study_id = '" + studyId + "'")
+			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY cn_segment_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -426,7 +426,7 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 		query.append("SELECT ").append(super.columnsToString(columns()))
 		.append(" FROM ").append(super.getPrimaryTableName())
 		.append(" LEFT JOIN location ON cn_segment.location_id = location.location_id")
-		.append(" LEFT JOIN study ON study_id = cn_segment_study_id")
+		.append(" LEFT JOIN study ON study.study_id = cn_segment.study_id")
 		.append(" LEFT JOIN study_in_project ON study.study_id = study_in_project.study_id")
 		.append(" LEFT JOIN sample_on_platform ON sample_on_platform_id = study_sample_on_platform_id")
 		.append(" LEFT JOIN tissue_sample ON tissue_sample_id = sample_on_chip_tissue_sample_id")
@@ -508,13 +508,13 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			loc_query.append("DELETE location.* FROM")
 			.append(" location")
 			.append(" LEFT JOIN cn_segment ON cn_segment.location_id = location.location_id")
-			.append(" WHERE ").append("cn_segment_study_id = " + studyId);
+			.append(" WHERE ").append("study_id = " + studyId);
 			
 			executeUpdate(conn, loc_query.toString());
 			
 			segment_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
-			.append(" WHERE ").append("cn_segment_study_id = " + studyId);
+			.append(" WHERE ").append("study_id = " + studyId);
 			
 			executeUpdate(conn, segment_query.toString());
 			

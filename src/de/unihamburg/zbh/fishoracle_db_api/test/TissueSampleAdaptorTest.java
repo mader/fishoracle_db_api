@@ -55,7 +55,7 @@ public class TissueSampleAdaptorTest extends TestCase{
 	}
 	
 	
-	public void testFetchTissueById() {
+	public void testFetchTissueSampleById() {
 		TissueSample t1 = ta.fetchTissueSampleById(1);
 		TissueSample t2 = ta.fetchTissueSampleById(2);
 		TissueSample t3 = ta.fetchTissueSampleById(3, false);
@@ -78,7 +78,7 @@ public class TissueSampleAdaptorTest extends TestCase{
 		
 	}
 	
-	public void testDeleteOrgan() {
+	public void testDeleteTissue() {
 		TissueSample t1 = ta.fetchTissueSampleById(1);
 		TissueSample t2 = ta.fetchTissueSampleById(2);
 		TissueSample t3 = ta.fetchTissueSampleById(3);
@@ -96,7 +96,6 @@ public class TissueSampleAdaptorTest extends TestCase{
 		td.emptyPropertyTable();
 		if(((BaseAdaptor) ta).fetchCount() == 0){
 			td.emptyTissueSampleTable();
-			td.emptyTissueSamplePropertyTable();
 		}
 	}
 }
