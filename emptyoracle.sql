@@ -14,7 +14,7 @@ CREATE TABLE `area_access` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `chip`
+-- Table structure for table `platform`
 -- 
 
 CREATE TABLE `platform` (
@@ -27,7 +27,7 @@ CREATE TABLE `platform` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `microarraystudy`
+-- Table structure for table `study`
 -- 
 
 CREATE TABLE `study` (
@@ -89,7 +89,7 @@ CREATE TABLE `cn_segment` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `sample_on_chip`
+-- Table structure for table `sample_on_platform`
 -- 
 
 CREATE TABLE `sample_on_platform` (
@@ -200,7 +200,7 @@ CREATE TABLE `group_project_access` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `microarraystudy_in_project`
+-- Table structure for table `study_in_project`
 -- 
 
 CREATE TABLE `study_in_project` (

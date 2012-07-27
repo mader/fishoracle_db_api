@@ -14,21 +14,21 @@ CREATE TABLE `area_access` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `chip`
+-- Table structure for table `platform`
 -- 
 
-CREATE TABLE `chip` (
-  `chip_id` int UNSIGNED NOT NULL auto_increment,
-  `chip_name` varchar(64) NOT NULL,
-  `chip_type` varchar(64) NOT NULL,
-  PRIMARY KEY  (`chip_id`)
+CREATE TABLE `platform` (
+  `platform_id` int UNSIGNED NOT NULL auto_increment,
+  `platform_name` varchar(64) NOT NULL,
+  `platform_type` varchar(64) NOT NULL,
+  PRIMARY KEY  (`platform_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Dumping data for table `chip_table`
 -- 
 
-INSERT INTO `chip` (`chip_name`, `chip_type`) VALUES 
+INSERT INTO `platform` (`platform_name`, `platform_type`) VALUES 
 ('mapping10k_xba142', 'snp'),
 ('mapping50k_hind240', 'snp'),
 ('mapping50k_xba240', 'snp'),
@@ -40,18 +40,20 @@ INSERT INTO `chip` (`chip_name`, `chip_type`) VALUES
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `microarraystudy`
+-- Table structure for table `study`
 -- 
 
-CREATE TABLE `microarraystudy` (
-  `microarraystudy_id` int UNSIGNED NOT NULL auto_increment,
-  `microarraystudy_date_inserted` date NOT NULL,
-  `microarraystudy_name` varchar(255) NOT NULL,
-  `microarraystudy_description` varchar(255) NOT NULL,
-  `microarraystudy_user_id` int NOT NULL,
-  `microarraystudy_sample_on_chip_id` int NOT NULL,
-  PRIMARY KEY  (`microarraystudy_id`),
-  UNIQUE KEY `microarraystudy_name` (`microarraystudy_name`)
+CREATE TABLE `study` (
+  `study_id` int UNSIGNED NOT NULL auto_increment,
+  `study_date_inserted` date NOT NULL,
+  `study_name` varchar(255) NOT NULL,
+  `study_type` varchar(64) NOT NULL,
+  `study_description` varchar(255) NOT NULL,
+  `study_assembly` varchar(64) NOT NULL,
+  `study_user_id` int NOT NULL,
+  `study_sample_on_platform_id` int NOT NULL,
+  PRIMARY KEY  (`study_id`),
+  UNIQUE KEY `study_name` (`study_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -143,12 +145,10 @@ INSERT INTO `property` (`property_id`, `property_label`, `property_type`, `prope
 
 CREATE TABLE `cn_segment` (
   `cn_segment_id` int UNSIGNED NOT NULL auto_increment,
-  `cn_segment_chromosome` varchar(16) NOT NULL,
-  `cn_segment_start` int NOT NULL,
-  `cn_segment_end` int NOT NULL,
+  `location_id` int NOT NULL,
   `cn_segment_mean` double,
   `cn_segment_markers` int,
-  `cn_segment_microarraystudy_id` int,
+  `study_id` int,
   PRIMARY KEY(`cn_segment_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -158,12 +158,12 @@ CREATE TABLE `cn_segment` (
 -- Table structure for table `sample_on_chip`
 -- 
 
-CREATE TABLE `sample_on_chip` (
-  sample_on_chip_id int UNSIGNED NOT NULL auto_increment,
-  `sample_on_chip_chip_id` int NOT NULL,
-  `sample_on_chip_tissue_sample_id` int NOT NULL,
-  `sample_on_chip_microarraystudy_id` int NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`sample_on_chip_id`)
+CREATE TABLE `sample_on_platform` (
+  `sample_on_platform_id` int UNSIGNED NOT NULL auto_increment,
+  `sample_on_platform_platform_id` int NOT NULL,
+  `sample_on_platform_tissue_sample_id` int NOT NULL,
+  `sample_on_platform_study_id` int NOT NULL DEFAULT 0,
+  PRIMARY KEY  (`sample_on_platform_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -266,14 +266,62 @@ CREATE TABLE `group_project_access` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `microarraystudy_in_project`
+-- Table structure for table `study_in_project`
 -- 
 
-CREATE TABLE `microarraystudy_in_project` (
-  `microarraystudy_in_project_id` int UNSIGNED NOT NULL auto_increment,
+CREATE TABLE `study_in_project` (
+  `study_in_project_id` int UNSIGNED NOT NULL auto_increment,
   `project_id` int NOT NULL,
-  `microarraystudy_id` int NOT NULL,
-  PRIMARY KEY  (`microarraystudy_in_project_id`)
+  `study_id` int NOT NULL,
+  PRIMARY KEY  (`study_in_project_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `ensembl_dbs`
+-- 
+
+CREATE TABLE `ensembl_dbs` (
+  `ensembl_dbs_id` int UNSIGNED NOT NULL auto_increment,
+  `db_name` varchar(128) NOT NULL,
+  `label` varchar(128) NOT NULL,
+  `version` int NOT NULL,
+  PRIMARY KEY  (`ensembl_dbs_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `mutation`
+-- 
+
+CREATE TABLE `mutation` (
+  `mutation_id` int UNSIGNED NOT NULL auto_increment,
+  `location_id` int NOT NULL,
+  `db_snp_id` varchar(64),
+  `mut_ref` varchar(1),
+  `mut_alt` varchar(1),
+  `quality` double,
+  `somatic` varchar(64),
+  `confidence` varchar(128),
+  `snp_tool` varchar(128),
+  `study_id` int,
+  PRIMARY KEY(`mutation_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `location`
+-- 
+
+CREATE TABLE `location` (
+  `location_id` int UNSIGNED NOT NULL auto_increment,
+  `location_chromosome` varchar(16) NOT NULL,
+  `location_start` int NOT NULL,
+  `location_end` int NOT NULL,
+  PRIMARY KEY  (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
