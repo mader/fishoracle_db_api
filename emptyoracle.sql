@@ -82,7 +82,7 @@ CREATE TABLE `cn_segment` (
   `location_id` int NOT NULL,
   `cn_segment_mean` double,
   `cn_segment_markers` int,
-  `cn_segment_study_id` int,
+  `study_id` int,
   PRIMARY KEY(`cn_segment_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
