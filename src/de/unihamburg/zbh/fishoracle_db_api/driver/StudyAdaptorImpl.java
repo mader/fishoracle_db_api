@@ -78,7 +78,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			conn = getConnection();
 			
 			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
-			int newTissueSampleId = ta.storeTissueSample(study.getOrgan_id(), study.getPropertyIds());
+			int newTissueSampleId = ta.storeTissueSample(study.getOrganId(), study.getPropertyIds());
 			
 			socQuery.append("INSERT INTO ").append("sample_on_platform")
 			.append(" ( sample_on_platform_platform_id, " +
@@ -180,7 +180,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				if(withChildren){
 					study.setTissue(tissue);
 				} else {
-					study.setOrgan_id(tissue.getOrgan().getId());
+					study.setOrganId(tissue.getOrgan().getId());
 					study.setPropertyIds(tissue.getPropertyIds());
 				}
 				

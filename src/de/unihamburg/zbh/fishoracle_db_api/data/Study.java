@@ -171,11 +171,11 @@ public class Study {
 		this.platformId = platformId;
 	}
 
-	public int getOrgan_id() {
+	public int getOrganId() {
 		return organId;
 	}
 
-	public void setOrgan_id(int organId) {
+	public void setOrganId(int organId) {
 		this.organId = organId;
 	}
 

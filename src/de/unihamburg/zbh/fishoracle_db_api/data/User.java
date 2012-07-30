@@ -115,7 +115,6 @@ public class User {
 	public int getIsActiveAsInt() {
 		return (isActive) ? 1 : 0;
 	}
-
 	
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;

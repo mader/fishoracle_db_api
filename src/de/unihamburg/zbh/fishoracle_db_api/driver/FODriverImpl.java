@@ -60,7 +60,7 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	}
 	
 	@Override
-	public PlatformAdaptor getChipAdaptor() {
+	public PlatformAdaptor getPlatformAdaptor() {
 		return (PlatformAdaptor) getAdaptor(PlatformAdaptor.TYPE);
 	}
 	
