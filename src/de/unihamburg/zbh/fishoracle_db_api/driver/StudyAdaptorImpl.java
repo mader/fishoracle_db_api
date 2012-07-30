@@ -330,60 +330,64 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		ArrayList<Study> studyContainer = new ArrayList<Study>();
 		Study[] studies = null;
 		
-		try{
+		if(projectIds.length < 0){
+		
+			try{
 			
-			conn = getConnection();	
+				conn = getConnection();	
 			
-			query.append("SELECT ").append("study.study_id, " +
-					"study.study_date_inserted, " +
-					"study.study_name, " +
-					"study.study_type, " +
-					"study.study_assembly, " +
-					"study.study_description, " +
-					"sample_on_platform.sample_on_platform_platform_id, " +
-					"sample_on_platform.sample_on_platform_tissue_sample_id")
-					.append(" FROM ").append(super.getPrimaryTableName())
-					.append(" LEFT JOIN ")
-					.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
-					.append(" LEFT JOIN ")
-					.append("study_in_project ON study.study_id = study_in_project.study_id")
-					.append(" WHERE ");
+				query.append("SELECT ").append("study.study_id, " +
+						"study.study_date_inserted, " +
+						"study.study_name, " +
+						"study.study_type, " +
+						"study.study_assembly, " +
+						"study.study_description, " +
+						"sample_on_platform.sample_on_platform_platform_id, " +
+						"sample_on_platform.sample_on_platform_tissue_sample_id")
+						.append(" FROM ").append(super.getPrimaryTableName())
+						.append(" LEFT JOIN ")
+						.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
+						.append(" LEFT JOIN ")
+						.append("study_in_project ON study.study_id = study_in_project.study_id")
+						.append(" WHERE ");
 			
-			String whereClause = "";
+				String whereClause = "";
 			
-			for(int i = 0; i < projectIds.length; i++){
-				
-				if(i + 1 != projectIds.length){
-					whereClause += "study_in_project.project_id = " + projectIds[i] + " OR ";
-				} else {
-					whereClause += "study_in_project.project_id = " + projectIds[i];
-					
+				for(int i = 0; i < projectIds.length; i++){
+					if(i + 1 != projectIds.length){
+						whereClause += "study_in_project.project_id = " + projectIds[i] + " OR ";
+					} else {
+						whereClause += "study_in_project.project_id = " + projectIds[i];	
+					}
+				}
+			
+				query.append(whereClause);
+				query.append(" ORDER BY study.study_id");
+			
+				ResultSet rs = executeQuery(conn, query.toString());
+			
+				Object o;
+			
+				while ((o = createObject(rs, withChrildren)) != null) {
+					study = (Study) o;
+					studyContainer.add(study);
+				}
+			
+				studies = new Study[studyContainer.size()];
+			
+				studyContainer.toArray(studies);
+			
+			} catch (Exception e){
+				e.printStackTrace();
+			} finally {
+				if(conn != null){
+					close(conn);
 				}
 			}
-			
-			query.append(whereClause);
-			query.append(" ORDER BY study.study_id");
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			Object o;
-			
-			while ((o = createObject(rs, withChrildren)) != null) {
-				study = (Study) o;
-				studyContainer.add(study);
-			}
-			
-			studies = new Study[studyContainer.size()];
-			
-			studyContainer.toArray(studies);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
+		} else {
+			studies = new Study[0];
 		}
+		
 		return studies;
 	}
 	
