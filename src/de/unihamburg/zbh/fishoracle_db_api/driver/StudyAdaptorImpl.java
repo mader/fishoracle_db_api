@@ -330,7 +330,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		ArrayList<Study> studyContainer = new ArrayList<Study>();
 		Study[] studies = null;
 		
-		if(projectIds.length < 0){
+		if(projectIds.length > 0){
 		
 			try{
 			
