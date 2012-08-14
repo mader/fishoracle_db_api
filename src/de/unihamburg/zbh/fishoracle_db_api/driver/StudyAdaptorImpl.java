@@ -123,11 +123,17 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		socUpdateQuery.append("UPDATE ").append("sample_on_platform")
 		.append(" SET sample_on_platform_study_id = " + newStudyId)
 		.append(" WHERE ").append("sample_on_platform_id = " + newSampleOnPlatformId);
-			
+		
 		 executeUpdate(conn, socUpdateQuery.toString());
 		 
-		 CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
-		 sa.storeCnSegments(study.getSegments(), newStudyId);
+		 if(study.getSegments() != null){
+			 CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+			 sa.storeCnSegments(study.getSegments(), newStudyId);
+		 }
+		 if(study.getMutations() != null){
+			 SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
+			 snpm.storeSNPMutations(study.getMutations(), newStudyId);
+		 }
 		 
 		 ProjectAdaptor pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
 		 pra.addMicroarraystudyToProject(newStudyId, projectId);
@@ -411,6 +417,9 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			CnSegmentAdaptor csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 			csa.deleteCnSegment(study.getId());
+			
+			SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
+			snpm.deleteSNPMutation(study.getId());
 			
 			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 			ta.deleteTissueSample(study.getTissue());

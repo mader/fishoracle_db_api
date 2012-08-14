@@ -27,6 +27,7 @@ public class Study {
 
 	private int id;
 	private CnSegment segments[];
+	private SNPMutation mutations[];
 	private Platform platform;
 	private TissueSample tissue;
 	private Date date;
@@ -55,8 +56,7 @@ public class Study {
 		this.userId = userId;
 	}
 
-	public Study(CnSegment[] segments,
-					String name,
+	public Study(String name,
 					String type,
 					String assembly,
 					String description,
@@ -64,7 +64,8 @@ public class Study {
 					int organId,
 					int[] propertyIds,
 					int userId) {
-		this.segments = segments;
+		this.segments = null;
+		this.mutations = null;
 		this.name = name;
 		this.type = type;
 		this.assembly = assembly;
@@ -76,14 +77,14 @@ public class Study {
 	}
 
 	public Study(int id,
-					CnSegment[] segments,
 					Platform platform,
 					TissueSample tissue,
 					Date date,
 					String name,
 					String description) {
 		this.id = id;
-		this.segments = segments;
+		this.segments = null;
+		this.mutations = null;
 		this.platform = platform;
 		this.tissue = tissue;
 		this.date = date;
@@ -97,6 +98,14 @@ public class Study {
 
 	public void setSegments(CnSegment[] segments) {
 		this.segments = segments;
+	}
+	
+	public SNPMutation[] getMutations() {
+		return mutations;
+	}
+
+	public void setMutations(SNPMutation[] mutations) {
+		this.mutations = mutations;
 	}
 
 	public Platform getPlatform() {

@@ -419,18 +419,21 @@ public class TestData {
 			
 		}
 		
-		study1 = new Study(segments1, "teststudy1", "microarray", "ncbi36", "This is a test.", 1, 1, pids, 1);
+		study1 = new Study("teststudy1", "microarray", "ncbi36", "This is a test.", 1, 1, pids, 1);
 		study1.setId(1);
+		study1.setSegments(segments1);
 		
-		study2 = new Study(segments2, "teststudy2", "sequencing", "GRCh37", "This is a test.", 2, 2, pids, 1);
+		study2 = new Study("teststudy2", "sequencing", "GRCh37", "This is a test.", 2, 2, pids, 1);
 		study2.setId(2);
+		study2.setSegments(segments2);
 		
-		study3 = new Study(segments3, "teststudy3", "sequencing", "GRCh37", "This is a test.", 3, 3, pids, 1);
+		study3 = new Study("teststudy3", "sequencing", "GRCh37", "This is a test.", 3, 3, pids, 1);
 		study3.setId(3);
+		study3.setSegments(segments3);
 		
 		Study[] studies = new Study[]{study1, study2, study3};
 		
-		return studies; 
+		return studies;
 	}
 	
 	public EnsemblDBs[] createEnsemblDBsData(){
