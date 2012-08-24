@@ -91,6 +91,22 @@ public interface StudyAdaptor {
 	public Study fetchStudyById(int studyId, boolean withChilden);
 	
 	/**
+	 * Fetch a study for a given name
+	 * 
+	 * @param studyName The name for which the database will
+	 *         be queried.
+	 * @param withChrildren If true the corresponding child data of a
+	 *         study will also be fetched from the database.
+	 *         Segment data will not be fetched. This should be done
+	 *         separately if needed.
+	 * @return Returns an array of Study objects. The Study
+	 *          objects are ordered by the study ID. If there are
+	 *          no studies stored in the database an array of length
+	 *          0 is returned.
+	 */
+	public Study fetchStudyForName(String studyName, boolean withChilden);
+	
+	/**
 	 * Fetch all studies that are part of a project including
 	 * including all child objects assigned to a study except
 	 * segments.

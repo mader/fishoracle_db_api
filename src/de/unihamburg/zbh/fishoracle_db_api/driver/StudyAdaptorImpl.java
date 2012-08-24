@@ -77,6 +77,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			conn = getConnection();
 			
+			//TODO Test if study name is unique. If not throw exception.
+			
 			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 			int newTissueSampleId = ta.storeTissueSample(study.getOrganId(), study.getPropertyIds());
 			
@@ -309,6 +311,53 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			}
 		}
 		return study;
+	}
+	
+	@Override
+	public Study fetchStudyForName(String studyName, boolean withChilden){
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Study study = null;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("SELECT ").append("study.study_id, " +
+											"study.study_date_inserted, " +
+											"study.study_name, " +
+											"study.study_type, " +
+											"study.study_assembly, " +
+											"study.study_description, " +
+											"sample_on_platform.sample_on_platform_platform_id, " +
+											"sample_on_platform.sample_on_platform_tissue_sample_id")
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" LEFT JOIN ")
+			.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
+			.append(" LEFT JOIN ")
+			.append("tissue_sample ON sample_on_platform.sample_on_platform_tissue_sample_id = tissue_sample.tissue_sample_id")
+			.append(" WHERE ").append("study.study_name = '" + studyName + "'")
+			.append(" ORDER BY study_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs, withChilden)) != null) {
+				study = (Study) o;
+				
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return study;
+		
+		
 	}
 	
 	@Override

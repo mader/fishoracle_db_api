@@ -89,6 +89,23 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(s3.getSegments() == null);
 	}
 	
+	public void testFetchStudyForName() {
+		Study s1 = sa.fetchStudyForName("teststudy1", false);
+		Study s2 = sa.fetchStudyForName("teststudy2", false);
+		Study s3 = sa.fetchStudyForName("teststudy3", false);
+		
+		Study[] studies = new Study[]{s1, s2, s3};
+		
+		for(int i = 0; i < studies.length; i++) {
+			assertTrue(studies[i].getId() == (i+1));
+			assertTrue(studies[i].getName().equals(teststudies[i].getName()));
+			assertTrue(studies[i].getType().equals(teststudies[i].getType()));
+			assertTrue(studies[i].getAssembly().equals(teststudies[i].getAssembly()));
+			assertTrue(studies[i].getDescription().equals(teststudies[i].getDescription()));
+			assertTrue(studies[i].getSegments() == null);
+		}	
+	}
+	
 	public void testFetchAllStudies(){
 		Study[] studies = sa.fetchAllStudies(true);
 		
