@@ -42,7 +42,7 @@ public interface SNPMutationAdaptor {
 	 * Fetches a mutation for the given ID from the database.
 	 * 
 	 * @param mutationId The Mutation ID.
-	 * @return A SNPMutation Object.
+	 * @return A SNPMutation object.
 	 */
 	public SNPMutation fetchSNPMutationById(int mutationId);
 	
@@ -81,9 +81,9 @@ public interface SNPMutationAdaptor {
 											int[] experimentFilter);
 	
 	/**
-	 * Deletes a given Mutation from the database/
+	 * Deletes a given mutation from the database/
 	 * 
-	 * @param snpMut The SNPMutation Object to be removed from the database.
+	 * @param snpMut The SNPMutation object to be removed from the database.
 	 */
 	public void deleteSNPMutation(SNPMutation snpMut);
 	

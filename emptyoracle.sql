@@ -239,7 +239,7 @@ CREATE TABLE `mutation` (
 CREATE TABLE `translocation` (
   `translocation_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
-  `location_ref_id` int NOT NULL,
+  `translocation_ref_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`translocation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

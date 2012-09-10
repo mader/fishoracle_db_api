@@ -42,7 +42,7 @@ public class TissueSampleAdaptorTest extends TestCase{
 		
 		testtissues = td.createTissueSampleData();
 		
-		ta = td.getTa();
+		ta = td.getTsa();
 	}
 	
 	public void testStoreTissueSample() {

@@ -33,6 +33,8 @@ public interface FODriver extends Driver {
 	
 	SNPMutationAdaptor getSNPMutationAdaptor();
 	
+	TranslocationAdaptor getTranslocationAdaptor();
+	
 	StudyAdaptor getStudyAdaptor();
 	
 	GroupAdaptor getGroupAdaptor();

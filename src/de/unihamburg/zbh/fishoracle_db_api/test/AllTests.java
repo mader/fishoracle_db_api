@@ -15,11 +15,11 @@ public class AllTests {
 		suite.addTestSuite(ProjectAdaptorTest.class);
 		suite.addTestSuite(PropertyAdaptorTest.class);
 		suite.addTestSuite(SNPMutationAdaptorTest.class);
+		suite.addTestSuite(TranslocationAdaptorTest.class);
 		suite.addTestSuite(StudyAdaptorTest.class);
 		suite.addTestSuite(TissueSampleAdaptorTest.class);
 		suite.addTestSuite(UserAdaptorTest.class);
 		
 		return suite;
 	}
-
 }

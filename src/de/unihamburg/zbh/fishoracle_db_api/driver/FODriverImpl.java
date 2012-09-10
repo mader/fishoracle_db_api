@@ -33,6 +33,7 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new PlatformAdaptorImpl(this));
 		addAdaptor(new CnSegmentAdaptorImpl(this));
 		addAdaptor(new SNPMutationAdaptorImpl(this));
+		addAdaptor(new TranslocationAdaptorImpl(this));
 		addAdaptor(new StudyAdaptorImpl(this));
 		addAdaptor(new GroupAdaptorImpl(this));
 		addAdaptor(new ProjectAdaptorImpl(this));
@@ -72,6 +73,11 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	@Override
 	public SNPMutationAdaptor getSNPMutationAdaptor() {
 		return (SNPMutationAdaptor) getAdaptor(SNPMutationAdaptor.TYPE);
+	}
+	
+	@Override
+	public TranslocationAdaptor getTranslocationAdaptor() {
+		return (TranslocationAdaptor) getAdaptor(TranslocationAdaptor.TYPE);
 	}
 	
 	@Override

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
 import de.unihamburg.zbh.fishoracle_db_api.data.SNPMutation;
 
-public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationAdaptor {
+public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAdaptor {
 
 	protected SNPMutationAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
@@ -183,8 +183,7 @@ public class SNPMutationAdaptorImpl  extends BaseAdaptor implements SNPMutationA
 	public void storeSNPMutations(SNPMutation[] snpMuts, int studyId) {
 		for(int i = 0; i < snpMuts.length; i++){
 			storeSNPMutation(snpMuts[i], studyId);
-		}
-		
+		}	
 	}
 
 	@Override

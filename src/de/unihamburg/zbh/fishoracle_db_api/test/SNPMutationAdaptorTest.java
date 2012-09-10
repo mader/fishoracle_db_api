@@ -74,7 +74,7 @@ public class SNPMutationAdaptorTest extends TestCase {
 		}
 	}
 	
-	public void testFetchCnSegmentsForStudyId(){
+	public void testFetchSNPMutationsForStudyId(){
 		SNPMutation[] m1 = ma.fetchSNPMutationsForStudyId(1);
 		SNPMutation[] m2 = ma.fetchSNPMutationsForStudyId(2);
 		SNPMutation[] m3 = ma.fetchSNPMutationsForStudyId(3);

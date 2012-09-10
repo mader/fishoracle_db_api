@@ -29,6 +29,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 import de.unihamburg.zbh.fishoracle_db_api.data.Property;
 import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
+import de.unihamburg.zbh.fishoracle_db_api.data.Translocation;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
@@ -38,6 +39,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.SNPMutationAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.TranslocationAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.StudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ProjectAdaptor;
@@ -58,9 +60,10 @@ public class TestData {
 	private PlatformAdaptor pfa;
 	private OrganAdaptor oa;
 	private PropertyAdaptor pra;
-	private TissueSampleAdaptor ta;
+	private TissueSampleAdaptor tsa;
 	private CnSegmentAdaptor csa;
 	private SNPMutationAdaptor ma;
+	private TranslocationAdaptor ta;
 	private StudyAdaptor sa;
 	private EnsemblDBsAdaptor ea;
 	
@@ -71,10 +74,11 @@ public class TestData {
 		pa = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
 		pfa = (PlatformAdaptor) driver.getAdaptor("PlatformAdaptor");
 		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
-		ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
+		tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
 		csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 		ma = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
+		ta = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
 		sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 	}
@@ -266,7 +270,7 @@ public class TestData {
 		TissueSample[] tissues = createTissueSampleData();
 		
 		for(int i = 0; i < tissues.length; i++){
-			ta.storeTissueSample(tissues[i]);
+			tsa.storeTissueSample(tissues[i]);
 		}
 	}
 	
@@ -388,6 +392,49 @@ public class TestData {
 		
 	}
 	
+	public Translocation[][] createTranslocationData() {
+		
+		Translocation t1[], t2[], t3[];
+		
+		t1 = new Translocation[2];
+		t2 = new Translocation[2];
+		t3 = new Translocation[2];
+		
+		t1[0] = new Translocation(1,
+								new Location(0, "1", 1000, 1000),
+								0);
+		t1[0].setStudyId(1);
+		
+		t1[1] = new Translocation(1,
+								new Location(0, "2", 5000, 5000),
+								0);
+		t1[1].setStudyId(1);
+		
+		t2[0] = new Translocation(1,
+								new Location(0, "1", 2000, 2000),
+								0);
+		t2[0].setStudyId(2);
+		
+		t2[1] = new Translocation(1,
+								new Location(0, "3", 5000, 5000),
+								0);
+		t2[1].setStudyId(2);
+		
+		t3[0] = new Translocation(1,
+								new Location(0, "1", 3000, 3000),
+								0);
+		t3[0].setStudyId(3);
+		
+		t3[1] = new Translocation(1,
+								new Location(0, "4", 5000, 5000),
+								0);
+		t3[1].setStudyId(3);
+		
+		Translocation[][] ts = new Translocation[][]{t1, t2, t3};
+		
+		return ts;
+	}
+	
 	public Study[] createStudyData(){
 		
 		Study study1, study2, study3;
@@ -462,11 +509,11 @@ public class TestData {
 	}
 	
 	public void emptyTissueSampleTable(){
-		((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
+		((BaseAdaptor) tsa).truncateTable(((BaseAdaptor) tsa).getPrimaryTableName());
 	}
 	
 	public void emptyTissueSamplePropertyTable(){
-		((BaseAdaptor) ta).truncateTable("tissue_sample_property");
+		((BaseAdaptor) tsa).truncateTable("tissue_sample_property");
 	}
 	
 	public void emptyUserTable(){
@@ -499,6 +546,10 @@ public class TestData {
 	
 	public void emptySNPMutationTable(){
 		((BaseAdaptor) ma).truncateTable(((BaseAdaptor) ma).getPrimaryTableName());
+	}
+	
+	public void emptyTranslocationTable(){
+		((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
 	}
 	
 	public void emptyStudyTable(){
@@ -573,12 +624,12 @@ public class TestData {
 		this.pra = pra;
 	}
 
-	public TissueSampleAdaptor getTa() {
-		return ta;
+	public TissueSampleAdaptor getTsa() {
+		return tsa;
 	}
 
-	public void setTa(TissueSampleAdaptor ta) {
-		this.ta = ta;
+	public void setTsa(TissueSampleAdaptor tsa) {
+		this.tsa = tsa;
 	}
 
 	public CnSegmentAdaptor getCsa() {
@@ -593,6 +644,10 @@ public class TestData {
 		return ma;
 	}
 
+	public TranslocationAdaptor getTa() {
+		return ta;
+	}
+	
 	public void setMa(SNPMutationAdaptor ma) {
 		this.ma = ma;
 	}
