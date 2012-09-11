@@ -79,8 +79,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			//TODO Test if study name is unique. If not throw exception.
 			
-			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
-			int newTissueSampleId = ta.storeTissueSample(study.getOrganId(), study.getPropertyIds());
+			TissueSampleAdaptor tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
+			int newTissueSampleId = tsa.storeTissueSample(study.getOrganId(), study.getPropertyIds());
 			
 			socQuery.append("INSERT INTO ").append("sample_on_platform")
 			.append(" ( sample_on_platform_platform_id, " +
@@ -135,6 +135,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		 if(study.getMutations() != null){
 			 SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 			 snpm.storeSNPMutations(study.getMutations(), newStudyId);
+		 }
+		 if(study.getTranslocs() != null){
+			 TranslocationAdaptor ta = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
+			 ta.storeTranslocations(study.getTranslocs(), newStudyId);
 		 }
 		 
 		 ProjectAdaptor pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");

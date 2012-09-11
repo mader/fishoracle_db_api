@@ -28,6 +28,7 @@ public class Study {
 	private int id;
 	private CnSegment segments[];
 	private SNPMutation mutations[];
+	private Translocation translocs[][];
 	private Platform platform;
 	private TissueSample tissue;
 	private Date date;
@@ -106,6 +107,14 @@ public class Study {
 
 	public void setMutations(SNPMutation[] mutations) {
 		this.mutations = mutations;
+	}
+	
+	public Translocation[][] getTranslocs() {
+		return translocs;
+	}
+
+	public void setTranslocs(Translocation[][] translocs) {
+		this.translocs = translocs;
 	}
 
 	public Platform getPlatform() {
