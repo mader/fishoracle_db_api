@@ -261,6 +261,20 @@ CREATE TABLE `location` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `feature`
+-- 
+
+CREATE TABLE `feature` (
+  `feature_id` int UNSIGNED NOT NULL auto_increment,
+  `location_id` int NOT NULL,
+  `feature_type` varchar(128) NOT NULL,
+  `study_id` int,
+  PRIMARY KEY(`feature_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `ensembl_dbs`
 -- 
 

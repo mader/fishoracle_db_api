@@ -305,7 +305,7 @@ CREATE TABLE `mutation` (
 CREATE TABLE `translocation` (
   `translocation_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
-  `location_ref_id` int NOT NULL,
+  `translocation_ref_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`translocation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -323,6 +323,20 @@ CREATE TABLE `location` (
   `location_end` int NOT NULL,
   PRIMARY KEY  (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `feature`
+-- 
+
+CREATE TABLE `feature` (
+  `feature_id` int UNSIGNED NOT NULL auto_increment,
+  `location_id` int NOT NULL,
+  `feature_type` varchar(128) NOT NULL,
+  `study_id` int,
+  PRIMARY KEY(`feature_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
