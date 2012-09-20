@@ -35,6 +35,8 @@ public interface FODriver extends Driver {
 	
 	TranslocationAdaptor getTranslocationAdaptor();
 	
+	GenericAdaptor getGenericAdaptor();
+	
 	StudyAdaptor getStudyAdaptor();
 	
 	GroupAdaptor getGroupAdaptor();
