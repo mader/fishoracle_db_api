@@ -17,6 +17,7 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.GenericFeature;
 import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
 import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
@@ -32,6 +33,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 import de.unihamburg.zbh.fishoracle_db_api.data.Translocation;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.GenericAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.EnsemblDBsAdaptor;
@@ -64,6 +66,7 @@ public class TestData {
 	private CnSegmentAdaptor csa;
 	private SNPMutationAdaptor ma;
 	private TranslocationAdaptor ta;
+	private GenericAdaptor gfa;
 	private StudyAdaptor sa;
 	private EnsemblDBsAdaptor ea;
 	
@@ -79,6 +82,7 @@ public class TestData {
 		csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
 		ma = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 		ta = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
+		gfa = (GenericAdaptor) driver.getAdaptor("GenericAdaptor");
 		sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 	}
@@ -435,6 +439,31 @@ public class TestData {
 		return ts;
 	}
 	
+	public GenericFeature[] createGenericFeatureData(){
+		
+		GenericFeature f1, f2, f3;
+		
+		f1 = new GenericFeature(1,
+								new Location(0, "1", 3000, 3000),
+								"Methylation");
+		f1.setStudyId(1);
+		
+		f2 = new GenericFeature(2,
+								new Location(0, "1", 500, 500),
+								"myAnnotation");
+		f2.setStudyId(2);
+		
+		f3 = new GenericFeature(3,
+								new Location(0, "2", 1700, 1700),
+								"whatever");
+		f3.setStudyId(3);
+		
+		GenericFeature[] fs = new GenericFeature[]{f1, f2, f3};
+		
+		return fs;
+		
+	}
+	
 	public Study[] createStudyData(){
 		
 		Study study1, study2, study3;
@@ -552,6 +581,10 @@ public class TestData {
 		((BaseAdaptor) ta).truncateTable(((BaseAdaptor) ta).getPrimaryTableName());
 	}
 	
+	public void emptyFeatureTable(){
+		((BaseAdaptor) gfa).truncateTable(((BaseAdaptor) gfa).getPrimaryTableName());
+	}
+	
 	public void emptyStudyTable(){
 		((BaseAdaptor) sa).truncateTable(((BaseAdaptor) sa).getPrimaryTableName());
 	}
@@ -646,6 +679,10 @@ public class TestData {
 
 	public TranslocationAdaptor getTa() {
 		return ta;
+	}
+	
+	public GenericAdaptor getGfa() {
+		return gfa;
 	}
 	
 	public void setMa(SNPMutationAdaptor ma) {
