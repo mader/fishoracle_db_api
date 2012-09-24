@@ -37,6 +37,91 @@ public class GenericAdaptorTest extends TestCase {
 		testFs = td.createGenericFeatureData();
 	}
 	
+	public void testStoreGenericFeature() {
+		
+		gfa.storeGenericFeature(testFs[0], testFs[0].getStudyId());
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 1);
+		gfa.storeGenericFeature(testFs[1], testFs[1].getStudyId());
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 2);
+		gfa.storeGenericFeature(testFs[2], testFs[2].getStudyId());
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 3);
+	}
+	
+	public void testFetchGenericFeatureById() {
+		GenericFeature f1 = gfa.fetchGenericFeatureById(1);
+		GenericFeature f2 = gfa.fetchGenericFeatureById(2);
+		GenericFeature f3 = gfa.fetchGenericFeatureById(3);
+		
+		GenericFeature[] fs = new GenericFeature[]{f1, f2, f3};
+		
+		for(int i = 0; i < fs.length; i++){
+			
+			assertTrue(fs[i].getId() == i + 1);
+			assertTrue(fs[i].getLocation().getChromosome().equals(testFs[i].getLocation().getChromosome()));
+			assertTrue(fs[i].getLocation().getStart() == testFs[i].getLocation().getStart());
+			assertTrue(fs[i].getLocation().getEnd() == testFs[i].getLocation().getEnd());
+			assertTrue(fs[i].getFeatureType().equals(testFs[i].getFeatureType()));
+			assertTrue(fs[i].getStudyId() == testFs[i].getStudyId());
+		}
+	}
+	
+	public void testFetchGenericFeatureForStudyId(){
+		GenericFeature[] f1 = gfa.fetchGenericFeaturesForStudyId(1);
+		GenericFeature[] f2 = gfa.fetchGenericFeaturesForStudyId(2);
+		GenericFeature[] f3 = gfa.fetchGenericFeaturesForStudyId(3);
+		
+		GenericFeature[] fs = new GenericFeature[]{f1[0], f2[0], f3[0]};
+		
+		for(int i = 0; i < fs.length; i++){
+			
+			assertTrue(fs[i].getId() == i + 1);
+			assertTrue(fs[i].getLocation().getChromosome().equals(testFs[i].getLocation().getChromosome()));
+			assertTrue(fs[i].getLocation().getStart() == testFs[i].getLocation().getStart());
+			assertTrue(fs[i].getLocation().getEnd() == testFs[i].getLocation().getEnd());
+			assertTrue(fs[i].getFeatureType().equals(testFs[i].getFeatureType()));
+			assertTrue(fs[i].getStudyId() == testFs[i].getStudyId());
+		}	
+	}
+	
+	public void testFetchSNPMutation(){
+		
+		//TODO Test this in more detail...
+		GenericFeature[] fs;
+		
+		fs = gfa.fetchGenericFeatures("1", 0, 4000, new String[]{"Methylation"}, new int[0], new int[0], new int[0]);
+			
+		assertTrue(fs[0].getId() == 1);
+		assertTrue(fs[0].getLocation().getChromosome().equals(testFs[0].getLocation().getChromosome()));
+		assertTrue(fs[0].getLocation().getStart() == testFs[0].getLocation().getStart());
+		assertTrue(fs[0].getLocation().getEnd() == testFs[0].getLocation().getEnd());
+		assertTrue(fs[0].getFeatureType().equals(testFs[0].getFeatureType()));
+		assertTrue(fs[0].getStudyId() == testFs[0].getStudyId());
+		
+	}
+	
+	public void testFetchAllTypes() {
+		String[] types = gfa.fetchAllTypes();
+		
+		assertTrue(types[0].equals("Methylation"));
+		assertTrue(types[1].equals("myAnnotation"));
+		assertTrue(types[2].equals("whatever"));
+		
+	}
+	
+	public void testDeleteGenericFeature() {
+		
+		GenericFeature f1 = gfa.fetchGenericFeatureById(1);
+		GenericFeature f2 = gfa.fetchGenericFeatureById(2);
+		GenericFeature f3 = gfa.fetchGenericFeatureById(3);
+		
+		gfa.deleteGenericFeature(f3);
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 2);
+		gfa.deleteGenericFeature(f2);
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 1);
+		gfa.deleteGenericFeature(f1);
+		assertTrue(((BaseAdaptor) gfa).fetchCount() == 0);
+	}
+	
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) gfa).fetchCount() == 0){

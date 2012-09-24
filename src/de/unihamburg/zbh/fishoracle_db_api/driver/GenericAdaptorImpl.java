@@ -78,9 +78,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				chromosome = rs.getString(3);
 				start = rs.getInt(4);
 				end = rs.getInt(5);
-				
 				featureType = rs.getString(6);
-				studyId = rs.getInt(13);
+				studyId = rs.getInt(7);
 				
 				loc = new Location(loc_id, chromosome, start, end);
 				
