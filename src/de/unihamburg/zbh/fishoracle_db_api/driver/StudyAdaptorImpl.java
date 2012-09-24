@@ -140,6 +140,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			 TranslocationAdaptor ta = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
 			 ta.storeTranslocations(study.getTranslocs(), newStudyId);
 		 }
+		 if(study.getFeatures() != null){
+			 GenericAdaptor gfa = (GenericAdaptor) driver.getAdaptor("GenericAdaptor");
+			 gfa.storeGenericFeatures(study.getFeatures(), newStudyId);
+		 }
 		 
 		 ProjectAdaptor pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
 		 pra.addMicroarraystudyToProject(newStudyId, projectId);
