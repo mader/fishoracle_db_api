@@ -122,6 +122,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				newLocId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 			feature_query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append("(location_id" +
 					", feature_type" +
@@ -137,6 +139,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			if(rs.next()){
 				newFeatureId = rs.getInt(1);
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

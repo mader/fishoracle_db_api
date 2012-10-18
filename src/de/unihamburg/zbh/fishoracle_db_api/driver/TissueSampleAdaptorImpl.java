@@ -88,6 +88,8 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 				newTissueSampleId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 			int i;
 			for(i = 0; i < propertyIds.length; i++){
 			

@@ -97,6 +97,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				newSampleOnPlatformId = socRs.getInt(1);
 			}
 			
+			socRs.close();
+			
 			studyQuery.append("INSERT INTO ").append(getPrimaryTableName())
 			.append(" (" +
 					"study_date_inserted, " +
@@ -122,6 +124,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			if(mstudyRs.next()){
 				newStudyId = mstudyRs.getInt(1);
 			}
+			
+			mstudyRs.close();
 			
 		socUpdateQuery.append("UPDATE ").append("sample_on_platform")
 		.append(" SET sample_on_platform_study_id = " + newStudyId)

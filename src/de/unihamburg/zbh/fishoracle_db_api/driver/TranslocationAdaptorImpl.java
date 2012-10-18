@@ -133,6 +133,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 					newLocId = rs.getInt(1);
 				}
 			
+				rs.close();
+				
 				transloc_query.append("INSERT INTO ").append(getPrimaryTableName())
 				.append("(location_id" +
 						", translocation_ref_id" +
@@ -148,6 +150,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				if(rs.next()){
 					newTranslocIds[i] = rs.getInt(1);
 				}
+				
+				rs.close();
 			}
 			
 			update_query = new StringBuffer();

@@ -87,6 +87,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 				newLocId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 			segment_query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append("(location_id, " +
 					"cn_segment_mean, " +
@@ -103,6 +105,8 @@ public class CnSegmentAdaptorImpl extends BaseAdaptor implements CnSegmentAdapto
 			if(rs.next()){
 				newSegmentId = rs.getInt(1);
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

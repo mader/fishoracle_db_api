@@ -142,6 +142,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				newLocId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 			mutation_query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append("(location_id" +
 					", db_snp_id" +
@@ -169,6 +171,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			if(rs.next()){
 				newMutationId = rs.getInt(1);
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

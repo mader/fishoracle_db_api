@@ -83,7 +83,9 @@ CREATE TABLE `cn_segment` (
   `cn_segment_mean` double,
   `cn_segment_markers` int,
   `study_id` int,
-  PRIMARY KEY(`cn_segment_id`)
+  PRIMARY KEY(`cn_segment_id`),
+  INDEX (`cn_segment_mean`),
+  INDEX (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -207,7 +209,9 @@ CREATE TABLE `study_in_project` (
   `study_in_project_id` int UNSIGNED NOT NULL auto_increment,
   `project_id` int NOT NULL,
   `study_id` int NOT NULL,
-  PRIMARY KEY  (`study_in_project_id`)
+  PRIMARY KEY  (`study_in_project_id`),
+  INDEX (`project_id`),
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -227,7 +231,12 @@ CREATE TABLE `mutation` (
   `confidence` varchar(128),
   `snp_tool` varchar(128),
   `study_id` int,
-  PRIMARY KEY(`mutation_id`)
+  PRIMARY KEY(`mutation_id`),
+  INDEX (`quality`),
+  INDEX (`somatic`),
+  INDEX (`confidence`),
+  INDEX (`snp_tool`),
+  INDEX (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -241,7 +250,9 @@ CREATE TABLE `translocation` (
   `location_id` int NOT NULL,
   `translocation_ref_id` int NOT NULL,
   `study_id` int,
-  PRIMARY KEY(`translocation_id`)
+  PRIMARY KEY(`translocation_id`),
+  INDEX (`translocation_ref_id`),
+  INDEX (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -255,7 +266,8 @@ CREATE TABLE `location` (
   `location_chromosome` varchar(16) NOT NULL,
   `location_start` int NOT NULL,
   `location_end` int NOT NULL,
-  PRIMARY KEY  (`location_id`)
+  PRIMARY KEY  (`location_id`),
+  INDEX (`location_chromosome`,`location_start`,`location_end`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -269,7 +281,9 @@ CREATE TABLE `feature` (
   `location_id` int NOT NULL,
   `feature_type` varchar(128) NOT NULL,
   `study_id` int,
-  PRIMARY KEY(`feature_id`)
+  PRIMARY KEY(`feature_id`),
+  INDEX (`feature_type`),
+  INDEX (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
