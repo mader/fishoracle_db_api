@@ -17,9 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.mysql.jdbc.Connection;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Organ;
 import de.unihamburg.zbh.fishoracle_db_api.data.Property;

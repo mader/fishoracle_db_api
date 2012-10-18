@@ -17,12 +17,13 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
+
+import com.mysql.jdbc.Connection;
 
 public abstract class BaseAdaptor implements Adaptor{
 

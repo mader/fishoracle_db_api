@@ -41,7 +41,11 @@ public class Study {
 	private int organId;
 	private int[] propertyIds;
 	private int userId;
+	private String files[];
 	
+	public Study() {
+	}
+
 	public Study(int id,
 					Date date,
 					String name,
@@ -124,6 +128,14 @@ public class Study {
 
 	public void setFeatures(GenericFeature[] features) {
 		this.features = features;
+	}
+	
+	public String[] getFiles() {
+		return files;
+	}
+
+	public void setFiles(String[] files) {
+		this.files = files;
 	}
 
 	public Platform getPlatform() {

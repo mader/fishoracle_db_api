@@ -17,7 +17,10 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.util;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.Connection;
 
 /**
  * Establishes a mysql connection to the fish oracle database.
@@ -32,7 +35,7 @@ public class FishOracleConnection {
 		
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		
-		return (DriverManager.getConnection(url,userName,password));
+		return (Connection) (DriverManager.getConnection(url,userName,password));
 	}
 	
 	
