@@ -1,19 +1,6 @@
 -- fishoracle database
 
 -- 
--- Table structure for table `area_access`
--- 
-
-CREATE TABLE `area_access` (
-  `area_access_area_name` varchar(64) NOT NULL,
-  `area_access_user_id` int NOT NULL default '0',
-  `area_access_table_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`area_access_area_name`,`area_access_user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `platform`
 -- 
 
