@@ -214,11 +214,11 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			.append(" LEFT JOIN location ON translocation.location_id = location.location_id")
 			.append(" WHERE ").append("translocation_id = " + translocationId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				translocReq = (Translocation) o;
 				
 				transloc[0] = translocReq;
@@ -228,6 +228,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 					transloc[1] = translocRef;
 				}
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -273,6 +275,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				
 				translocContainer.add(transloc);
 			}
+			
+			rs.close();
 			
 			translocs = new Translocation[translocContainer.size()][];
 			
@@ -328,6 +332,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				
 				translocContainer.add(transloc);
 			}
+			
+			rs.close();
 			
 			translocs = new Translocation[translocContainer.size()][];
 			

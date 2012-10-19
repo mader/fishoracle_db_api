@@ -263,6 +263,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				studyContainer.add(study);
 			}
 			
+			rs.close();
+			
 			studies = new Study[studyContainer.size()];
 			
 			studyContainer.toArray(studies);
@@ -316,6 +318,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -361,6 +365,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -369,8 +375,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			}
 		}
 		return study;
-		
-		
 	}
 	
 	@Override
@@ -440,7 +444,9 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					study = (Study) o;
 					studyContainer.add(study);
 				}
-			
+				
+				rs.close();
+				
 				studies = new Study[studyContainer.size()];
 			
 				studyContainer.toArray(studies);

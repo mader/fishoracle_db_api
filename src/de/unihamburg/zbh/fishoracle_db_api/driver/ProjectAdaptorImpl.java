@@ -85,6 +85,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				newProjectId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -204,6 +206,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				projectContainer.add(project);
 			}
 			
+			rs.close();
+			
 			projects = new Project[projectContainer.size()];
 			
 			projectContainer.toArray(projects);
@@ -247,6 +251,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -276,6 +282,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			while (rs.next()) {
 				right = rs.getString(1);
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -318,6 +326,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				projectAccessContainer.add(projectAccess);
 				
 			}
+			
+			rs.close();
 			
 			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
 			
@@ -378,6 +388,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				
 			}
 			
+			rs.close();
+			
 			projectAccesses = new ProjectAccess[projectAccessContainer.size()];
 			
 			projectAccessContainer.toArray(projectAccesses);
@@ -432,7 +444,9 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 				project = (Project) o;
 				projectContainer.add(project);
 			}
-				
+			
+			rs.close();
+			
 			projects = new Project[projectContainer.size()];
 			
 			projectContainer.toArray(projects);
@@ -473,6 +487,8 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			while(rs.next()){
 				newProjectAccessId = rs.getInt(1);
 			}
+			
+			rs.close();
 			
 			GroupAdaptor ga = (GroupAdaptor) driver.getAdaptor("GroupAdaptor");
 			
@@ -590,7 +606,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public void removeMicroarraystudyFromProject(int studyId,
+	public void removeStudyFromProject(int studyId,
 			int projectId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();

@@ -73,6 +73,8 @@ public class PlatformAdaptorImpl extends BaseAdaptor implements PlatformAdaptor 
 				newPlatformId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -129,6 +131,8 @@ public class PlatformAdaptorImpl extends BaseAdaptor implements PlatformAdaptor 
 				platformContainer.add(platform);
 			}
 			
+			rs.close();
+			
 			platforms = new Platform[platformContainer.size()];
 			
 			platformContainer.toArray(platforms);
@@ -166,6 +170,8 @@ public class PlatformAdaptorImpl extends BaseAdaptor implements PlatformAdaptor 
 	
 			}
 			
+			typeRs.close();
+			
 			types = new String[typeList.size()];
 			
 			typeList.toArray(types);
@@ -194,13 +200,15 @@ public class PlatformAdaptorImpl extends BaseAdaptor implements PlatformAdaptor 
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("platform_id = " + id);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			if((o = createObject(userRs)) != null) {
+			if((o = createObject(rs)) != null) {
 				platform = (Platform) o;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

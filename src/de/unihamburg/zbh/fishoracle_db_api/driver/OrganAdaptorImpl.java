@@ -74,6 +74,8 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 				newOrganId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -125,14 +127,16 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" ORDER BY organ_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				organ = (Organ) o;
 				organContainer.add(organ);
 			}
+			
+			rs.close();
 			
 			organs = new Organ[organContainer.size()];
 			
@@ -174,14 +178,16 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 			
 			query.append(" ORDER BY organ_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				organ = (Organ) o;
 				organContainer.add(organ);
 			}
+			
+			rs.close();
 			
 			organs = new Organ[organContainer.size()];
 			
@@ -212,14 +218,16 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("organ_id = " + organId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				organ = (Organ) o;
 				
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -254,6 +262,8 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 	
 			}
 			
+			typeRs.close();
+			
 			types = new String[typeList.size()];
 			
 			typeList.toArray(types);
@@ -286,14 +296,16 @@ public class OrganAdaptorImpl extends BaseAdaptor implements OrganAdaptor{
 			.append(" WHERE ").append("organ_type = '" + type + "'")
 			.append(" ORDER BY organ_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				organ = (Organ) o;
 				organContainer.add(organ);
 			}
+			
+			rs.close();
 			
 			organs = new Organ[organContainer.size()];
 			

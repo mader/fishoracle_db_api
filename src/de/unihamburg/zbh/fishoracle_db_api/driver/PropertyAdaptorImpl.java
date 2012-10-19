@@ -70,6 +70,8 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 				newPropertyId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -121,14 +123,16 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" ORDER BY property_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				property = (Property) o;
 				propertyContainer.add(property);
 			}
+			
+			rs.close();
 			
 			properties = new Property[propertyContainer.size()];
 			
@@ -170,14 +174,16 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			
 			query.append(" ORDER BY property_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				property = (Property) o;
 				propertyContainer.add(property);
 			}
+			
+			rs.close();
 			
 			properties = new Property[propertyContainer.size()];
 			
@@ -208,14 +214,16 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("property_id = " + propertyId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				property = (Property) o;
 				
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -250,6 +258,8 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 	
 			}
 			
+			typeRs.close();
+			
 			types = new String[typeList.size()];
 			
 			typeList.toArray(types);
@@ -282,14 +292,16 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			.append(" WHERE ").append("property_type = '" + type + "'")
 			.append(" ORDER BY property_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				property = (Property) o;
 				propertyContainer.add(property);
 			}
+			
+			rs.close();
 			
 			properties = new Property[propertyContainer.size()];
 			
@@ -323,14 +335,16 @@ public class PropertyAdaptorImpl extends BaseAdaptor implements PropertyAdaptor 
 			.append(" WHERE ").append("tissue_sample_property.tissue_sample_id = '" + tissueSampleId + "'")
 			.append(" ORDER BY property_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				property = (Property) o;
 				propertyContainer.add(property);
 			}
+			
+			rs.close();
 			
 			properties = new Property[propertyContainer.size()];
 						

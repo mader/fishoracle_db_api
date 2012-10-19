@@ -54,7 +54,7 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 	
 	@Override
 	public int storeGroup(Group group){
-		return storeGroup(group.getName(), group.getIsactiveAsInt()); 
+		return storeGroup(group.getName(), group.getIsactiveAsInt());
 	}
 
 	@Override
@@ -77,6 +77,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 			if(rs.next()){
 				newGroupId = rs.getInt(1);
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -159,6 +161,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				groupContainer.add(group);
 			}
 			
+			rs.close();
+			
 			groups = new Group[groupContainer.size()];
 			
 			groupContainer.toArray(groups);
@@ -205,6 +209,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				groupContainer.add(group);
 			}
 			
+			rs.close();
+			
 			groups = new Group[groupContainer.size()];
 			
 			groupContainer.toArray(groups);
@@ -250,6 +256,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				group = (Group) o;
 				groupContainer.add(group);
 			}
+			
+			rs.close();
 			
 			groups = new Group[groupContainer.size()];
 			
@@ -313,6 +321,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				groupContainer.add(group);
 			}
 			
+			rs.close();
+			
 			groups = new Group[groupContainer.size()];
 			
 			groupContainer.toArray(groups);
@@ -354,6 +364,8 @@ public class GroupAdaptorImpl extends BaseAdaptor implements GroupAdaptor{
 				group = (Group) o;
 				
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

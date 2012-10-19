@@ -207,13 +207,15 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
 			.append(" WHERE ").append("mutation_id = " + mutationId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				snpMut = (SNPMutation) o;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -251,6 +253,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				snpMut = (SNPMutation) o;
 				mutationContainer.add(snpMut);
 			}
+			
+			rs.close();
 			
 			snpMuts = new SNPMutation[mutationContainer.size()];
 			
@@ -299,6 +303,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		
 		try{
 			conn = getConnection();
+			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
@@ -307,6 +312,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				snpMut = (SNPMutation) o;
 				mutationContainer.add(snpMut);
 			}
+			
+			rs.close();
 			
 			snpMuts = new SNPMutation[mutationContainer.size()];
 			

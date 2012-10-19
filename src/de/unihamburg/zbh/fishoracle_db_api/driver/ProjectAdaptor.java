@@ -277,7 +277,7 @@ public interface ProjectAdaptor {
 	 * @param projectId The database ID of the project from which the
 	 *         microarray study will be removed.
 	 */
-	public void removeMicroarraystudyFromProject(int microarraystudyId, int projectId);
+	public void removeStudyFromProject(int microarraystudyId, int projectId);
 	
 	/**
 	 * Removes a project from the database.

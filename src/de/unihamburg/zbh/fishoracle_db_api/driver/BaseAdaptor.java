@@ -305,6 +305,7 @@ public abstract class BaseAdaptor implements Adaptor{
 			ResultSet rs = executeQuery(conn, query);
 			if (rs.next())
 				result = rs.getLong(1);
+			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.warning(e.getMessage());

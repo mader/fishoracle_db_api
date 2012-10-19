@@ -175,14 +175,16 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("tissue_sample.tissue_sample_id = " + tissueSampleId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs, withChildren)) != null) {
+			while ((o = createObject(rs, withChildren)) != null) {
 				tissue = (TissueSample) o;
 				
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

@@ -175,13 +175,15 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			.append(" LEFT JOIN location ON feature.location_id = location.location_id")
 			.append(" WHERE ").append("feature_id = " + featureId);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				feature = (GenericFeature) o;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -215,6 +217,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				typeList.add(typeRs.getString(1));
 	
 			}
+			
+			typeRs.close();
 			
 			types = new String[typeList.size()];
 			
@@ -257,6 +261,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				feature = (GenericFeature) o;
 				featureContainer.add(feature);
 			}
+			
+			rs.close();
 			
 			features = new GenericFeature[featureContainer.size()];
 			
@@ -307,6 +313,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				feature = (GenericFeature) o;
 				featureContainer.add(feature);
 			}
+			
+			rs.close();
 			
 			features = new GenericFeature[featureContainer.size()];
 			

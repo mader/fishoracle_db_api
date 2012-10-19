@@ -94,6 +94,8 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 				newEdbsId = rs.getInt(1);
 			}
 			
+			rs.close();
+			
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -129,6 +131,8 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 				edbsContainer.add(edbs);
 			}
 			
+			rs.close();
+			
 			edbss = new EnsemblDBs[edbsContainer.size()];
 			
 			edbsContainer.toArray(edbss);
@@ -157,13 +161,15 @@ public class EnsemblDBsAdaptorImpl  extends BaseAdaptor implements EnsemblDBsAda
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("ensembl_dbs_id = " + id);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			if((o = createObject(userRs)) != null) {
+			if((o = createObject(rs)) != null) {
 				edbs = (EnsemblDBs) o;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();

@@ -100,6 +100,8 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 					newUserId = rs.getInt(1);
 				}
 				
+				rs.close();
+				
 			} else {
 				 throw new AdaptorException("User name is already taken! Choose another one.");
 			}
@@ -162,17 +164,19 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" ORDER BY user_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			users = new User[userCount];
 			int i = 0;
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				user = (User) o;
 				users[i] = user;
 				i++;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			System.out.println(e.getMessage());
@@ -203,14 +207,16 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			.append(" WHERE user_in_group.group_id = " + groupId)
 			.append(" ORDER BY user_id ASC");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				user = (User) o;
 				userContainer.add(user);
 			}
+			
+			rs.close();
 			
 			users = new User[userContainer.size()];
 			userContainer.toArray(users);
@@ -263,14 +269,16 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			
 			userContainer = new ArrayList<User>();
 			
-			ResultSet userRs2 = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs2)) != null) {
+			while ((o = createObject(rs)) != null) {
 				userNotInGroup = (User) o;
 				userContainer.add(userNotInGroup);
 			}
+			
+			rs.close();
 			
 			users = new User[userContainer.size()];
 			userContainer.toArray(users);
@@ -301,13 +309,15 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			.append(" WHERE ").append("user.username = '" + userName +
 								"' AND user.password = '" + SimpleSHA.SHA1(pw) + "'");
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			while ((o = createObject(userRs)) != null) {
+			while ((o = createObject(rs)) != null) {
 				user = (User) o;
 			}
+			
+			rs.close();
 			
 			if(user == null){
 				
@@ -346,13 +356,15 @@ public class UserAdaptorImpl extends BaseAdaptor implements UserAdaptor{
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" WHERE ").append("user_id = " + id);
 			
-			ResultSet userRs = executeQuery(conn, query.toString());
+			ResultSet rs = executeQuery(conn, query.toString());
 			
 			Object o;
 			
-			if ((o = createObject(userRs)) != null) {
+			if ((o = createObject(rs)) != null) {
 				user = (User) o;
 			}
+			
+			rs.close();
 			
 		} catch (Exception e){
 			e.printStackTrace();
