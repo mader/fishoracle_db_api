@@ -26,7 +26,7 @@ import java.util.Date;
 public class Study {
 
 	private int id;
-	private CnSegment segments[];
+	private Segment segments[];
 	private SNPMutation mutations[];
 	private Translocation translocs[][];
 	private GenericFeature features[];
@@ -98,11 +98,11 @@ public class Study {
 		Description = description;
 	}
 
-	public CnSegment[] getSegments() {
+	public Segment[] getSegments() {
 		return segments;
 	}
 
-	public void setSegments(CnSegment[] segments) {
+	public void setSegments(Segment[] segments) {
 		this.segments = segments;
 	}
 	

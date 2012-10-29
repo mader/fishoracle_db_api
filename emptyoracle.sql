@@ -64,14 +64,15 @@ CREATE TABLE `property` (
 -- Table structure for table `cnc_segment`
 -- 
 
-CREATE TABLE `cn_segment` (
-  `cn_segment_id` int UNSIGNED NOT NULL auto_increment,
+CREATE TABLE `segment` (
+  `segment_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
-  `cn_segment_mean` double,
-  `cn_segment_markers` int,
+  `score` double NOT NULL DEFAULT 0.0,
+  `markers` int NOT NULL DEFAULT 0,
+  `type` varchar(24) NOT NULL DEFAULT "",
   `study_id` int,
-  PRIMARY KEY(`cn_segment_id`),
-  INDEX (`cn_segment_mean`),
+  PRIMARY KEY(`segment_id`),
+  INDEX (`score`),
   INDEX (`location_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

@@ -300,6 +300,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		query.append(getArrayFilterSQLWhereClause("project_id", projectFilter));
 		query.append(getArrayFilterSQLWhereClause("organ_id", organFilter));
 		query.append(getArrayFilterSQLWhereClause("experiment_id", experimentFilter));
+		query.append(" ORDER BY mutation_id ASC");
 		
 		try{
 			conn = getConnection();

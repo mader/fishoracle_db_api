@@ -31,7 +31,7 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new PropertyAdaptorImpl(this));
 		addAdaptor(new TissueSampleAdaptorImpl(this));
 		addAdaptor(new PlatformAdaptorImpl(this));
-		addAdaptor(new CnSegmentAdaptorImpl(this));
+		addAdaptor(new SegmentAdaptorImpl(this));
 		addAdaptor(new SNPMutationAdaptorImpl(this));
 		addAdaptor(new TranslocationAdaptorImpl(this));
 		addAdaptor(new GenericAdaptorImpl(this));
@@ -67,8 +67,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	}
 	
 	@Override
-	public CnSegmentAdaptor getCnSegmentAdaptor() {
-		return (CnSegmentAdaptor) getAdaptor(CnSegmentAdaptor.TYPE);
+	public SegmentAdaptor getCnSegmentAdaptor() {
+		return (SegmentAdaptor) getAdaptor(SegmentAdaptor.TYPE);
 	}
 	
 	@Override

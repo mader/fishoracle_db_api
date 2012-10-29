@@ -134,8 +134,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		 executeUpdate(conn, socUpdateQuery.toString());
 		 
 		 if(study.getSegments() != null){
-			 CnSegmentAdaptor sa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
-			 sa.storeCnSegments(study.getSegments(), newStudyId);
+			 SegmentAdaptor sa = (SegmentAdaptor) driver.getAdaptor("SegmentAdaptor");
+			 sa.storeSegments(study.getSegments(), newStudyId);
 		 }
 		 if(study.getMutations() != null){
 			 SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
@@ -483,8 +483,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			conn = getConnection();
 			
-			CnSegmentAdaptor csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
-			csa.deleteCnSegment(study.getId());
+			SegmentAdaptor csa = (SegmentAdaptor) driver.getAdaptor("SegmentAdaptor");
+			csa.deleteSegment(study.getId());
 			
 			SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 			snpm.deleteSNPMutation(study.getId());

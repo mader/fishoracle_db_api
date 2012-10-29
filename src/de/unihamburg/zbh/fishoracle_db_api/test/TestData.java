@@ -19,7 +19,7 @@ package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.GenericFeature;
 import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
-import de.unihamburg.zbh.fishoracle_db_api.data.CnSegment;
+import de.unihamburg.zbh.fishoracle_db_api.data.Segment;
 import de.unihamburg.zbh.fishoracle_db_api.data.EnsemblDBs;
 import de.unihamburg.zbh.fishoracle_db_api.data.Group;
 import de.unihamburg.zbh.fishoracle_db_api.data.Location;
@@ -35,7 +35,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GenericAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
-import de.unihamburg.zbh.fishoracle_db_api.driver.CnSegmentAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.SegmentAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.EnsemblDBsAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
@@ -63,7 +63,7 @@ public class TestData {
 	private OrganAdaptor oa;
 	private PropertyAdaptor pra;
 	private TissueSampleAdaptor tsa;
-	private CnSegmentAdaptor csa;
+	private SegmentAdaptor csa;
 	private SNPMutationAdaptor ma;
 	private TranslocationAdaptor ta;
 	private GenericAdaptor gfa;
@@ -79,7 +79,7 @@ public class TestData {
 		oa = (OrganAdaptor) driver.getAdaptor("OrganAdaptor");
 		tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 		pra = (PropertyAdaptor) driver.getAdaptor("PropertyAdaptor");
-		csa = (CnSegmentAdaptor) driver.getAdaptor("CnSegmentAdaptor");
+		csa = (SegmentAdaptor) driver.getAdaptor("SegmentAdaptor");
 		ma = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 		ta = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
 		gfa = (GenericAdaptor) driver.getAdaptor("GenericAdaptor");
@@ -293,47 +293,107 @@ public class TestData {
 	
 	public void createAndStoreCnSegmentData(){
 		
-		CnSegment[] segments = createCnSegmentData();
+		Segment[] segments = createSegmentData();
 		
-		csa.storeCnSegment(segments[0], 1);
-		csa.storeCnSegment(segments[1], 1);
-		csa.storeCnSegment(segments[2], 1);
-		csa.storeCnSegment(segments[3], 1);
+		csa.storeSegment(segments[0], 1);
+		csa.storeSegment(segments[1], 1);
+		csa.storeSegment(segments[2], 1);
+		csa.storeSegment(segments[3], 1);
 		
-		csa.storeCnSegment(segments[4], 2);
-		csa.storeCnSegment(segments[5], 2);
-		csa.storeCnSegment(segments[6], 2);
-		csa.storeCnSegment(segments[7], 2);
+		csa.storeSegment(segments[4], 2);
+		csa.storeSegment(segments[5], 2);
+		csa.storeSegment(segments[6], 2);
+		csa.storeSegment(segments[7], 2);
 		
-		csa.storeCnSegment(segments[8], 3);
-		csa.storeCnSegment(segments[9], 3);
-		csa.storeCnSegment(segments[10], 3);
-		csa.storeCnSegment(segments[11], 3);
+		csa.storeSegment(segments[8], 3);
+		csa.storeSegment(segments[9], 3);
+		csa.storeSegment(segments[10], 3);
+		csa.storeSegment(segments[11], 3);
 		
 	}
 	
-	public CnSegment[] createCnSegmentData(){
+	public Segment[] createSegmentData(){
 		
-		CnSegment segment1, segment2, segment3, segment4,
+		Segment segment1, segment2, segment3, segment4,
 					segment5, segment6, segment7, segment8,
 					segment9, segment10, segment11, segment12;
 		
-		segment1 = new CnSegment(1, new Location(0, "1", 1, 3000), 0.5, 100, 1);
-		segment2 = new CnSegment(2, new Location(0, "1", 3001, 5000), 0.7, 300, 1);
-		segment3 = new CnSegment(3, new Location(0, "2", 5000, 7000), 0.3, 600, 1);
-		segment4 = new CnSegment(4, new Location(0, "3", 2000, 3000), -1.2, 250, 1);
+		segment1 = new Segment(1,
+								new Location(0, "1", 1, 3000),
+								0.5,
+								100,
+								"dnacopy",
+								1);
+		segment2 = new Segment(2,
+								new Location(0, "1", 3001, 5000),
+								0.7,
+								300,
+								"dnacopy",
+								1);
+		segment3 = new Segment(3,
+								new Location(0, "2", 5000, 7000),
+								0.3,
+								600,
+								"dnacopy",
+								1);
+		segment4 = new Segment(4,
+								new Location(0,"3", 2000, 3000),
+								-1.2,
+								250,
+								"dnacopy",
+								1);
 		
-		segment5 = new CnSegment(5, new Location(0, "1", 2000, 4000), 0.2, 2300, 2);
-		segment6 = new CnSegment(6, new Location(0, "2", 1000, 4000), 0.55, 400, 2);
-		segment7 = new CnSegment(7, new Location(0, "3", 2500, 3500), -0.52, 630, 2);
-		segment8 = new CnSegment(8, new Location(0, "4", 1, 1111), 1.32, 280, 2);
+		segment5 = new Segment(5,
+								new Location(0, "1", 2000, 4000),
+								0.2,
+								2300,
+								"dnacopy",
+								2);
+		segment6 = new Segment(6,
+								new Location(0, "2", 1000, 4000),
+								0.55,
+								400,
+								"dnacopy",
+								2);
+		segment7 = new Segment(7,
+								new Location(0, "3", 2500, 3500),
+								-0.52,
+								630,
+								"dnacopy",
+								2);
+		segment8 = new Segment(8,
+								new Location(0, "4", 1, 1111),
+								1.32,
+								280,
+								"dnacopy",
+								2);
 		
-		segment9 = new CnSegment(9, new Location(0, "1", 1000, 2000), 0.3, 2300, 3);
-		segment10 = new CnSegment(10, new Location(0, "2", 5000, 10000), 0.55, 400, 3);
-		segment11 = new CnSegment(11, new Location(0, "3", 1, 2222), 0.-32, 630, 3);
-		segment12 = new CnSegment(12, new Location(0, "4", 2222, 3333), 1.32, 280, 3);
+		segment9 = new Segment(9,
+								new Location(0, "1", 1000, 2000),
+								0.3,
+								2300,
+								"dnacopy",
+								3);
+		segment10 = new Segment(10,
+								new Location(0, "2", 5000, 10000),
+								0.55,
+								400,
+								"dnacopy",
+								3);
+		segment11 = new Segment(11,
+								new Location(0, "3", 1, 2222),
+								0.-32,
+								630,
+								"dnacopy",
+								3);
+		segment12 = new Segment(12,
+								new Location(0, "4", 2222, 3333),
+								1.32,
+								280,
+								"dnacopy",
+								3);
 		
-		CnSegment[] segments = new CnSegment[]{segment1, segment2,
+		Segment[] segments = new Segment[]{segment1, segment2,
 												segment3, segment4,
 												segment5, segment6,
 												segment7, segment8,
@@ -468,11 +528,11 @@ public class TestData {
 		
 		Study study1, study2, study3;
 		
-		CnSegment[] segments = createCnSegmentData();
+		Segment[] segments = createSegmentData();
 		
-		CnSegment[] segments1 = new CnSegment[4];
-		CnSegment[] segments2 = new CnSegment[4];
-		CnSegment[] segments3 = new CnSegment[4];
+		Segment[] segments1 = new Segment[4];
+		Segment[] segments2 = new Segment[4];
+		Segment[] segments3 = new Segment[4];
 		
 		for(int i=0; i < 4; i++){
 			segments1[i] = segments[i];
@@ -665,11 +725,11 @@ public class TestData {
 		this.tsa = tsa;
 	}
 
-	public CnSegmentAdaptor getCsa() {
+	public SegmentAdaptor getCsa() {
 		return csa;
 	}
 
-	public void setCsa(CnSegmentAdaptor csa) {
+	public void setCsa(SegmentAdaptor csa) {
 		this.csa = csa;
 	}
 	

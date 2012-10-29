@@ -7,7 +7,7 @@ public class AllTests {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite(AllTests.class.getName());
-		suite.addTestSuite(CnSegmentTest.class);
+		suite.addTestSuite(SegmentTest.class);
 		suite.addTestSuite(EnsemblDBsAdaptorTest.class);
 		suite.addTestSuite(GroupAdaptorTest.class);
 		suite.addTestSuite(OrganAdaptorTest.class);
