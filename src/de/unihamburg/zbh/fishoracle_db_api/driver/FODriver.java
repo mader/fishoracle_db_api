@@ -29,7 +29,7 @@ public interface FODriver extends Driver {
 	
 	PlatformAdaptor getPlatformAdaptor();
 	
-	SegmentAdaptor getCnSegmentAdaptor();
+	SegmentAdaptor getSegmentAdaptor();
 	
 	SNPMutationAdaptor getSNPMutationAdaptor();
 	

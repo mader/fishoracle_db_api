@@ -67,7 +67,7 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	}
 	
 	@Override
-	public SegmentAdaptor getCnSegmentAdaptor() {
+	public SegmentAdaptor getSegmentAdaptor() {
 		return (SegmentAdaptor) getAdaptor(SegmentAdaptor.TYPE);
 	}
 	
