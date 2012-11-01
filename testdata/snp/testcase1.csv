@@ -1,0 +1,6 @@
+#CHROM	POS	DBSNP_ID	REF	ALT	QUAL	SOMATIC_GERMLINE_CLASSIFICATION	CONFIDENCE
+10	89724672	.	A	T	120	somatic	high confidence
+10	89635632	.	G	C	75	somatic	moderate confidence
+10	89633468	rs1234567	T	G	30	somatic	low confidence
+10	90282632	.	A	C	90	somatic	high confidence
+10	91225632	.	T	C	50	germline	moderate confidence
