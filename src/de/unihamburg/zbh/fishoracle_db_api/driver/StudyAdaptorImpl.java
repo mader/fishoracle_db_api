@@ -24,7 +24,6 @@ import java.util.Date;
 
 import com.mysql.jdbc.Connection;
 
-import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 import de.unihamburg.zbh.fishoracle_db_api.data.Study;
 import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
 
@@ -41,9 +40,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 	@Override
 	protected String[] tables() {
 		return new String[]{"study",
-							"cn_segment",
-							"sample_on_platform",
-							"platform",
+							"segment",
+							"mutation",
+							"translocation",
+							"feature",
 							"tissue_sample",
 							"organ"};
 	}
@@ -56,8 +56,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 							"study_type",
 							"study_assembly",
 							"study_description",
-							"study_user_id",
-							"study_sample_on_platform_id"};
+							"study_user_id"};
 	}
 	
 	@Override
@@ -70,34 +69,11 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 	public int storeStudy(Study study, int projectId) {
 		Connection conn = null;
 		StringBuffer studyQuery = new StringBuffer();
-		StringBuffer socQuery = new StringBuffer();
-		StringBuffer socUpdateQuery = new StringBuffer();
 		int newStudyId = 0;
 		
 		try{
 			
 			conn = getConnection();
-			
-			//TODO Test if study name is unique. If not throw exception.
-			
-			TissueSampleAdaptor tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
-			int newTissueSampleId = tsa.storeTissueSample(study.getOrganId(), study.getPropertyIds());
-			
-			socQuery.append("INSERT INTO ").append("sample_on_platform")
-			.append(" ( sample_on_platform_platform_id, " +
-					"sample_on_platform_tissue_sample_id)")
-			.append(" VALUES ")
-			.append("(" + study.getPlatformId() + ", ")
-			.append(newTissueSampleId + ")");
-			
-			ResultSet socRs = executeUpdateGetKeys(conn, socQuery.toString());
-			
-			int newSampleOnPlatformId = 0;
-			if(socRs.next()){
-				newSampleOnPlatformId = socRs.getInt(1);
-			}
-			
-			socRs.close();
 			
 			studyQuery.append("INSERT INTO ").append(getPrimaryTableName())
 			.append(" (" +
@@ -116,7 +92,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					"', '" + study.getAssembly() +
 					"', '" + study.getDescription() +
 					"', '" + study.getUserId() + 
-					"', '" +  newSampleOnPlatformId +
 					"')");
 			
 			ResultSet mstudyRs = executeUpdateGetKeys(conn, studyQuery.toString());
@@ -125,13 +100,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				newStudyId = mstudyRs.getInt(1);
 			}
 			
-			mstudyRs.close();
+			TissueSampleAdaptor tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
+			tsa.storeTissueSample(study.getOrganId(), study.getPropertyIds(), newStudyId);
 			
-		socUpdateQuery.append("UPDATE ").append("sample_on_platform")
-		.append(" SET sample_on_platform_study_id = " + newStudyId)
-		.append(" WHERE ").append("sample_on_platform_id = " + newSampleOnPlatformId);
-		
-		 executeUpdate(conn, socUpdateQuery.toString());
+		 mstudyRs.close();
 		 
 		 if(study.getSegments() != null){
 			 SegmentAdaptor sa = (SegmentAdaptor) driver.getAdaptor("SegmentAdaptor");
@@ -171,7 +143,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 	public Object createObject(ResultSet rs, boolean withChildren) {
 		Study study = null;
 		TissueSample tissue;
-		Platform platform;
 		
 		int studyId = 0;
 		Date date;
@@ -179,7 +150,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		String studyType = null;
 		String studyAssembly = null;
 		String studyDescription = null;
-		int platformId = 0;
 		int tissueSampleId = 0;
 		
 		try {
@@ -190,8 +160,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				studyType = rs.getString(4);
 				studyAssembly = rs.getString(5);
 				studyDescription = rs.getString(6);
-				platformId = rs.getInt(7);
-				tissueSampleId = rs.getInt(8);
+				tissueSampleId = rs.getInt(7);
 				
 				study = new Study(studyId, date, studyName,studyType, studyAssembly, studyDescription, 0);
 				
@@ -205,14 +174,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					study.setPropertyIds(tissue.getPropertyIds());
 				}
 				
-				PlatformAdaptor ca = (PlatformAdaptor) driver.getAdaptor("PlatformAdaptor");
-				platform = ca.fetchPlatformById(platformId);
-				
-				if(withChildren){
-					study.setPlatform(platform);
-				} else {
-					study.setPlatformId(platform.getId());
-				}
 			}
 			
 		} catch (SQLException e) {
@@ -245,13 +206,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					"study.study_type, " +
 					"study.study_assembly, " +
 					"study.study_description, " +
-					"sample_on_platform.sample_on_platform_platform_id, " +
-					"sample_on_platform.sample_on_platform_tissue_sample_id")
+					"tissue_sample.tissue_sample_id")
 					.append(" FROM ").append(super.getPrimaryTableName())
 					.append(" LEFT JOIN ")
-					.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
-					.append(" LEFT JOIN ")
-					.append("tissue_sample ON sample_on_platform.sample_on_platform_tissue_sample_id = tissue_sample.tissue_sample_id")
+					.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
 					.append(" ORDER BY study_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -299,13 +257,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 											"study.study_type, " +
 											"study.study_assembly, " +
 											"study.study_description, " +
-											"sample_on_platform.sample_on_platform_platform_id, " +
-											"sample_on_platform.sample_on_platform_tissue_sample_id")
+											"tissue_sample.tissue_sample_id")
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN ")
-			.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
-			.append(" LEFT JOIN ")
-			.append("tissue_sample ON sample_on_platform.sample_on_platform_tissue_sample_id = tissue_sample.tissue_sample_id")
+			.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
 			.append(" WHERE ").append("study.study_id = " + id)
 			.append(" ORDER BY study_id ASC");
 			
@@ -346,13 +301,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 											"study.study_type, " +
 											"study.study_assembly, " +
 											"study.study_description, " +
-											"sample_on_platform.sample_on_platform_platform_id, " +
-											"sample_on_platform.sample_on_platform_tissue_sample_id")
+											"tissue_sample.tissue_sample_id")
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN ")
-			.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
-			.append(" LEFT JOIN ")
-			.append("tissue_sample ON sample_on_platform.sample_on_platform_tissue_sample_id = tissue_sample.tissue_sample_id")
+			.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
 			.append(" WHERE ").append("study.study_name = '" + studyName + "'")
 			.append(" ORDER BY study_id ASC");
 			
@@ -414,11 +366,10 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 						"study.study_type, " +
 						"study.study_assembly, " +
 						"study.study_description, " +
-						"sample_on_platform.sample_on_platform_platform_id, " +
-						"sample_on_platform.sample_on_platform_tissue_sample_id")
+						"tissue_sample.tissue_sample_id")
 						.append(" FROM ").append(super.getPrimaryTableName())
 						.append(" LEFT JOIN ")
-						.append("sample_on_platform ON study.study_id = sample_on_platform.sample_on_platform_study_id")
+						.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
 						.append(" LEFT JOIN ")
 						.append("study_in_project ON study.study_id = study_in_project.study_id")
 						.append(" WHERE ");
@@ -498,8 +449,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			executeUpdate(conn, studyInProjectQuery.toString());
 			
-			socQuery.append("DELETE FROM ").append("sample_on_platform")
-			.append(" WHERE ").append("sample_on_platform_study_id = " + study.getId());
+			socQuery.append("DELETE FROM ").append("tissue_sample")
+			.append(" WHERE ").append("study_id = " + study.getId());
 
 			executeUpdate(conn, socQuery.toString());
 			

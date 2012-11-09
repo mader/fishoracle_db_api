@@ -41,7 +41,7 @@ public interface TissueSampleAdaptor {
 	 *         to this tissueSample.
 	 * @return Returns the database ID of the newly added tissue sample.
 	 */
-	public int storeTissueSample(int organ_id, int[] propertyIds);
+	public int storeTissueSample(int organ_id, int[] propertyIds, int studyId);
 	
 	/**
 	 * Fetches tissue sample data for a given tissue sample ID including

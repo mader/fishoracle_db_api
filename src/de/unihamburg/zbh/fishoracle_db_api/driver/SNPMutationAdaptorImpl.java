@@ -50,7 +50,9 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				"mutation.quality",
 				"mutation.somatic",
 				"mutation.confidence",
-				"mutation.snp_tool", 
+				"mutation.snp_tool",
+				"mutation.platform_id",
+				"platform.platform_name",
 				"mutation.study_id"};
 	}
 
@@ -59,7 +61,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		return new String[][]{{"location","mutation.location_id = location.location_id"},
 								{"study","study.study_id = mutation.study_id"},
 								{"study_in_project","study.study_id = study_in_project.study_id"},
-								{"sample_on_platform","sample_on_platform.sample_on_platform_id = study_sample_on_platform_id"},
+								{"platform","platform.platform_id = mutation.platform_id"},
 								{"tissue_sample","tissue_sample_id = sample_on_platform_tissue_sample_id"},
 								{"organ","organ_id = tissue_sample_organ_id"},};
 	}
@@ -83,7 +85,9 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		String confidence = null;
 		String snpTool = null;
 		int studyId = 0;
-
+		
+		int platformId = 0;
+		String platformName = "";
 		
 		try {
 			if(rs.next()){
@@ -100,11 +104,16 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				somatic = rs.getString(10);
 				confidence = rs.getString(11);
 				snpTool = rs.getString(12);
-				studyId = rs.getInt(13);
+				platformId = rs.getInt(13);
+				platformName = rs.getString(14);
+				studyId = rs.getInt(15);
 				
 				loc = new Location(loc_id, chromosome, start, end);
 				
 				snpMut = new SNPMutation(id, loc, db_snp_id, ref, alt, quality, somatic, confidence, snpTool);
+				
+				snpMut.setPlatformId(platformId);
+				snpMut.setPlatformName(platformName);
 				snpMut.setStudyId(studyId);
 			}
 			
@@ -153,6 +162,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 					", somatic" +
 					", confidence" +
 					", snp_tool" +
+					", platform_id" +
 					", study_id" +
 					")")
 			.append(" VALUES ")
@@ -164,6 +174,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 					"', '" + snpMut.getSomatic() + 
 					"', '" + snpMut.getConfidence() + 
 					"', '" + snpMut.getSnpTool() + 
+					"', '" + snpMut.getPlatformId() + 
 					"', '" + studyId + "')");
 			
 			rs = executeUpdateGetKeys(conn, mutation_query.toString());
@@ -205,6 +216,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("mutation_id = " + mutationId);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -242,6 +254,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY mutation_id ASC");
 			

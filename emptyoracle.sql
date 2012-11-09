@@ -25,7 +25,6 @@ CREATE TABLE `study` (
   `study_description` varchar(255) NOT NULL,
   `study_assembly` varchar(64) NOT NULL,
   `study_user_id` int NOT NULL,
-  `study_sample_on_platform_id` int NOT NULL,
   PRIMARY KEY  (`study_id`),
   UNIQUE KEY `study_name` (`study_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -72,25 +71,14 @@ CREATE TABLE `segment` (
   `status` int NOT NULL DEFAULT -1,
   `status_score` double NOT NULL DEFAULT 0.0,
   `type` varchar(24) NOT NULL DEFAULT "",
+  `platform_id` int,
   `study_id` int,
   PRIMARY KEY(`segment_id`),
   INDEX (`mean`),
   INDEX (`status`),
+  INDEX (`platform_id`),
+  INDEX (`study_id`),
   INDEX (`location_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `sample_on_platform`
--- 
-
-CREATE TABLE `sample_on_platform` (
-  `sample_on_platform_id` int UNSIGNED NOT NULL auto_increment,
-  `sample_on_platform_platform_id` int NOT NULL,
-  `sample_on_platform_tissue_sample_id` int NOT NULL,
-  `sample_on_platform_study_id` int NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`sample_on_platform_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -116,6 +104,7 @@ CREATE TABLE `tissue_sample_property` (
 CREATE TABLE `tissue_sample` (
   `tissue_sample_id` int UNSIGNED  NOT NULL auto_increment,
   `tissue_sample_organ_id` int NOT NULL,
+  `study_id` int,
   PRIMARY KEY  (`tissue_sample_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -221,13 +210,16 @@ CREATE TABLE `mutation` (
   `somatic` varchar(64),
   `confidence` varchar(128),
   `snp_tool` varchar(128),
+  `platform_id` int,
   `study_id` int,
   PRIMARY KEY(`mutation_id`),
   INDEX (`quality`),
   INDEX (`somatic`),
   INDEX (`confidence`),
   INDEX (`snp_tool`),
-  INDEX (`location_id`)
+  INDEX (`location_id`),
+  INDEX (`platform_id`),
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -240,10 +232,13 @@ CREATE TABLE `translocation` (
   `translocation_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
   `translocation_ref_id` int NOT NULL,
+  `platform_id` int,
   `study_id` int,
   PRIMARY KEY(`translocation_id`),
   INDEX (`translocation_ref_id`),
-  INDEX (`location_id`)
+  INDEX (`location_id`),
+  INDEX (`platform_id`),
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -271,10 +266,13 @@ CREATE TABLE `feature` (
   `feature_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
   `feature_type` varchar(128) NOT NULL,
+  `platform_id` int,
   `study_id` int,
   PRIMARY KEY(`feature_id`),
   INDEX (`feature_type`),
-  INDEX (`location_id`)
+  INDEX (`location_id`),
+  INDEX (`platform_id`),
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

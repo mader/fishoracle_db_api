@@ -27,11 +27,13 @@ public class TissueSample {
 
 	private int id;
 	private Organ organ;
+	private int studyId;
 	private Property[] properties;
 	
 	public TissueSample(int id, Organ organ, Property[] properties) {
 		this.id = id;
 		this.organ = organ;
+		this.studyId = 0;
 		this.properties = properties;
 	}
 	
@@ -57,6 +59,14 @@ public class TissueSample {
 
 	public void setOrgan(Organ organ) {
 		this.organ = organ;
+	}
+	
+	public int getStudyId() {
+		return studyId;
+	}
+
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
 	}
 
 	public Property[] getProperties() {

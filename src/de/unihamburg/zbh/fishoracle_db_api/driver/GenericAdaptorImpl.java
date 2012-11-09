@@ -45,6 +45,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				"location.location_start",
 				"location.location_end",
 				"feature.feature_type",
+				"feature.platform_id",
+				"platform.platform_name",
 				"feature.study_id"};
 	}
 
@@ -53,7 +55,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		return new String[][]{{"location","feature.location_id = location.location_id"},
 				{"study","study.study_id = feature.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
-				{"sample_on_platform","sample_on_platform.sample_on_platform_id = study_sample_on_platform_id"},
+				{"platform","platform.platform_id = feature.platform_id"},
 				{"tissue_sample","tissue_sample_id = sample_on_platform_tissue_sample_id"},
 				{"organ","organ_id = tissue_sample_organ_id"},};
 	}
@@ -70,6 +72,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		int end = 0;
 		
 		String featureType = null;
+		int platformId = 0;
+		String platformName = "";
 		int studyId = 0;
 		
 		try {
@@ -80,11 +84,15 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				start = rs.getInt(4);
 				end = rs.getInt(5);
 				featureType = rs.getString(6);
-				studyId = rs.getInt(7);
+				platformId = rs.getInt(7);
+				platformName = rs.getString(8);
+				studyId = rs.getInt(9);
 				
 				loc = new Location(loc_id, chromosome, start, end);
 				
 				feature = new GenericFeature(id, loc, featureType);
+				feature.setPlatformId(platformId);
+				feature.setPlatformName(platformName);
 				feature.setStudyId(studyId);
 			}
 			
@@ -127,11 +135,13 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			feature_query.append("INSERT INTO ").append(getPrimaryTableName())
 			.append("(location_id" +
 					", feature_type" +
+					", platform_id" +
 					", study_id" +
 					")")
 			.append(" VALUES ")
 			.append("('" + newLocId +
 					"', '" + feature.getFeatureType() +
+					"', '" + feature.getPlatformId() +
 					"', '" + studyId + "')");
 			
 			rs = executeUpdateGetKeys(conn, feature_query.toString());
@@ -173,6 +183,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON feature.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON feature.platform_id = platform.platform_id")
 			.append(" WHERE ").append("feature_id = " + featureId);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -250,6 +261,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON feature.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON feature.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY feature_id ASC");
 			

@@ -28,6 +28,8 @@ public class SNPMutation {
 	private String somatic;
 	private String confidence;
 	private String snpTool;
+	private int platformId;
+	private String platformName;
 	private int studyId;
 	
 	public SNPMutation(int id,
@@ -48,6 +50,8 @@ public class SNPMutation {
 		this.somatic = somatic;
 		this.confidence = confidence;
 		this.snpTool = snpTool;
+		this.platformName = "";
+		this.platformId = 0;
 	}
 	
 	public int getId() {
@@ -120,6 +124,22 @@ public class SNPMutation {
 
 	public void setSnpTool(String snpTool) {
 		this.snpTool = snpTool;
+	}
+	
+	public int getPlatformId() {
+		return platformId;
+	}
+
+	public void setPlatformId(int platformId) {
+		this.platformId = platformId;
+	}
+
+	public String getPlatformName() {
+		return platformName;
+	}
+
+	public void setPlatformName(String platformName) {
+		this.platformName = platformName;
 	}
 
 	public int getStudyId() {

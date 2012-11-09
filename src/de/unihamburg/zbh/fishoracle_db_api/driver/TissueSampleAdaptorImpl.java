@@ -47,7 +47,8 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 	@Override
 	protected String[] columns() {
 		return new String[]{"tissue_sample_id",
-							"tissue_sample_organ_id"};
+							"tissue_sample_organ_id",
+							"study_id"};
 	}
 
 	@Override
@@ -62,11 +63,11 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 		for(int i = 0; i < tissue.getProperties().length; i++){
 			propertyIds[i] = tissue.getProperties()[i].getId();
 		}
-		return storeTissueSample(tissue.getOrgan().getId(), propertyIds);
+		return storeTissueSample(tissue.getOrgan().getId(), propertyIds, tissue.getStudyId());
 	}
 
 	@Override
-	public int storeTissueSample(int organ_id, int[] propertyIds) {
+	public int storeTissueSample(int organ_id, int[] propertyIds, int studyId) {
 		Connection conn = null;
 		StringBuffer tissueQuery = new StringBuffer();
 		StringBuffer tissuePropertyQuery = new StringBuffer();
@@ -78,9 +79,12 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			conn = getConnection();
 			
 			tissueQuery.append("INSERT INTO ").append(getPrimaryTableName())
-			.append(" (tissue_sample_organ_id)")
+			.append(" (tissue_sample_organ_id), " +
+					"(study_id))")
 			.append(" VALUES ")
-			.append("('" + organ_id + "')");
+			.append("('" + organ_id +
+					"', '" + studyId + 
+					"')");
 			
 			rs = executeUpdateGetKeys(conn, tissueQuery.toString());
 			
@@ -124,11 +128,13 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 		
 		int tissueId = 0;
 		int organId = 0;
+		int studyId = 0;
 		
 		try {
 			if(rs.next()){
 				tissueId = rs.getInt(1);
 				organId = rs.getInt(2);
+				studyId = rs.getInt(3);
 				
 				if(withChildren){
 					
@@ -147,6 +153,7 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 				}
 				
 				tissue = new TissueSample(tissueId, organ, properties);
+				tissue.setStudyId(studyId);
 			}
 			
 		} catch (SQLException e) {

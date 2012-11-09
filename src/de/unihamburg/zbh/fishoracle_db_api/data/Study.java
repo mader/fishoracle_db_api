@@ -30,7 +30,6 @@ public class Study {
 	private SNPMutation mutations[];
 	private Translocation translocs[][];
 	private GenericFeature features[];
-	private Platform platform;
 	private TissueSample tissue;
 	private Date date;
 	private String name;
@@ -83,7 +82,6 @@ public class Study {
 	}
 
 	public Study(int id,
-					Platform platform,
 					TissueSample tissue,
 					Date date,
 					String name,
@@ -91,7 +89,6 @@ public class Study {
 		this.id = id;
 		this.segments = null;
 		this.mutations = null;
-		this.platform = platform;
 		this.tissue = tissue;
 		this.date = date;
 		this.name = name;
@@ -137,15 +134,7 @@ public class Study {
 	public void setFiles(String[] files) {
 		this.files = files;
 	}
-
-	public Platform getPlatform() {
-		return platform;
-	}
-
-	public void setPlatform(Platform platform) {
-		this.platform = platform;
-	}
-
+	
 	public TissueSample getTissue() {
 		return tissue;
 	}

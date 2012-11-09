@@ -49,6 +49,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 								"location.location_start",
 								"location.location_end",
 								"translocation.translocation_ref_id",
+								"translocation.platform_id",
+								"translocation.platform_name",
 								"translocation.study_id"};
 	}
 
@@ -57,7 +59,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 		return new String[][]{{"location","translocation.location_id = location.location_id"},
 				{"study","study.study_id = translocation.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
-				{"sample_on_platform","sample_on_platform.sample_on_platform_id = study_sample_on_platform_id"},
+				{"platform","platform.platform_id = translocation.platform_id"},
 				{"tissue_sample","tissue_sample_id = sample_on_platform_tissue_sample_id"},
 				{"organ","organ_id = tissue_sample_organ_id"}};
 	}
@@ -75,6 +77,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 		int ref_id = 0;
 		int studyId = 0;
 
+		int platformId = 0;
+		String platformName = "";
 		
 		try {
 			if(rs.next()){
@@ -84,12 +88,16 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				start = rs.getInt(4);
 				end = rs.getInt(5);
 				ref_id = rs.getInt(6);
-				studyId = rs.getInt(7);
+				platformId = rs.getInt(7);
+				platformName = rs.getString(8);
+				studyId = rs.getInt(9);
 				
 				loc = new Location(loc_id, chromosome, start, end);
 				
 				transloc = new Translocation(id, loc, ref_id);
 				
+				transloc.setPlatformId(platformId);
+				transloc.setPlatformName(platformName);
 				transloc.setStudyId(studyId);
 			}
 			
@@ -138,12 +146,14 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				transloc_query.append("INSERT INTO ").append(getPrimaryTableName())
 				.append("(location_id" +
 						", translocation_ref_id" +
+						", platform_id" +
 						", study_id" +
 						")")
 						.append(" VALUES ")
 						.append("('" + newLocId +
-								"', '0', '"
-								+ studyId + "')");
+								"', '0', '" + 
+								"', '" + transloc[i].getPlatformId() +
+								"', '" + studyId + "')");
 			
 				rs = executeUpdateGetKeys(conn, transloc_query.toString());
 			
@@ -212,6 +222,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON translocation.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON translocation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("translocation_id = " + translocationId);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -258,6 +269,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN location ON translocation.location_id = location.location_id")
+			.append(" LEFT JOIN platform ON translocation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" AND ").append("translocation_id = (translocation_ref_id - 1)")
 			.append(" ORDER BY translocation_id ASC");

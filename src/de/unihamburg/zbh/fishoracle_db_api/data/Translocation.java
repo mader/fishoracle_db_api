@@ -26,6 +26,8 @@ public class Translocation {
 	private int id;
 	private Location location;
 	private int refId;
+	private int platformId;
+	private String platformName;
 	private int studyId;
 	
 	public Translocation(int id,
@@ -34,6 +36,8 @@ public class Translocation {
 		this.id = id;
 		this.location = location;
 		this.refId = refId;
+		this.platformName = "";
+		this.platformId = 0;
 	}
 
 	public int getId() {
@@ -58,6 +62,22 @@ public class Translocation {
 
 	public void setRefId(int refId) {
 		this.refId = refId;
+	}
+	
+	public int getPlatformId() {
+		return platformId;
+	}
+
+	public void setPlatformId(int platformId) {
+		this.platformId = platformId;
+	}
+
+	public String getPlatformName() {
+		return platformName;
+	}
+
+	public void setPlatformName(String platformName) {
+		this.platformName = platformName;
 	}
 
 	public int getStudyId() {

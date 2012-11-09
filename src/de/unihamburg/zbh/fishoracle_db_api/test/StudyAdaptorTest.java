@@ -63,7 +63,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(s1.getType().equals(teststudies[0].getType()));
 		assertTrue(s1.getAssembly().equals(teststudies[0].getAssembly()));
 		assertTrue(s1.getDescription().equals(teststudies[0].getDescription()));
-		assertTrue(s1.getPlatform().getId() == teststudies[0].getPlatformId());
 		assertTrue(s1.getTissue().getOrgan().getId() == teststudies[0].getOrganId());
 		assertTrue(s1.getTissue().getProperties().length == teststudies[0].getPropertyIds().length);
 		assertTrue(s1.getSegments() == null);
@@ -73,7 +72,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(s2.getType().equals(teststudies[1].getType()));
 		assertTrue(s2.getAssembly().equals(teststudies[1].getAssembly()));
 		assertTrue(s2.getDescription().equals(teststudies[1].getDescription()));
-		assertTrue(s2.getPlatform().getId() == teststudies[1].getPlatformId());
 		assertTrue(s2.getTissue().getOrgan().getId() == teststudies[1].getOrganId());
 		assertTrue(s2.getTissue().getProperties().length == teststudies[1].getPropertyIds().length);
 		assertTrue(s2.getSegments() == null);
@@ -83,7 +81,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(s3.getType().equals(teststudies[2].getType()));
 		assertTrue(s3.getAssembly().equals(teststudies[2].getAssembly()));
 		assertTrue(s3.getDescription().equals(teststudies[2].getDescription()));
-		assertTrue(s3.getPlatform().getId() == teststudies[2].getPlatformId());
 		assertTrue(s3.getTissue().getOrgan().getId() == teststudies[2].getOrganId());
 		assertTrue(s3.getTissue().getProperties().length == teststudies[2].getPropertyIds().length);
 		assertTrue(s3.getSegments() == null);
@@ -115,7 +112,6 @@ public class StudyAdaptorTest extends TestCase{
 			assertTrue(studies[i].getType().equals(teststudies[i].getType()));
 			assertTrue(studies[i].getAssembly().equals(teststudies[i].getAssembly()));
 			assertTrue(studies[i].getDescription().equals(teststudies[i].getDescription()));
-			assertTrue(studies[i].getPlatform().getId() == teststudies[i].getPlatformId());
 			assertTrue(studies[i].getTissue().getOrgan().getId() == teststudies[i].getOrganId());
 			assertTrue(studies[i].getTissue().getProperties().length == teststudies[i].getPropertyIds().length);
 			assertTrue(studies[i].getSegments() == null);
@@ -133,7 +129,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(studies1[0].getType().equals(teststudies[0].getType()));
 		assertTrue(studies1[0].getAssembly().equals(teststudies[0].getAssembly()));
 		assertTrue(studies1[0].getDescription().equals(teststudies[0].getDescription()));
-		assertTrue(studies1[0].getPlatform().getId() == teststudies[0].getPlatformId());
 		assertTrue(studies1[0].getTissue().getOrgan().getId() == teststudies[0].getOrganId());
 		assertTrue(studies1[0].getTissue().getProperties().length == teststudies[0].getPropertyIds().length);
 		assertTrue(studies1[0].getSegments() == null);
@@ -145,7 +140,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(studies2[0].getType().equals(teststudies[1].getType()));
 		assertTrue(studies2[0].getAssembly().equals(teststudies[1].getAssembly()));
 		assertTrue(studies2[0].getDescription().equals(teststudies[1].getDescription()));
-		assertTrue(studies2[0].getPlatform().getId() == teststudies[1].getPlatformId());
 		assertTrue(studies2[0].getTissue().getOrgan().getId() == teststudies[1].getOrganId());
 		assertTrue(studies2[0].getTissue().getProperties().length == teststudies[1].getPropertyIds().length);
 		assertTrue(studies2[0].getSegments() == null);
@@ -155,7 +149,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(studies2[1].getType().equals(teststudies[2].getType()));
 		assertTrue(studies2[1].getAssembly().equals(teststudies[2].getAssembly()));
 		assertTrue(studies2[1].getDescription().equals(teststudies[2].getDescription()));
-		assertTrue(studies2[1].getPlatform().getId() == teststudies[2].getPlatformId());
 		assertTrue(studies2[1].getTissue().getOrgan().getId() == teststudies[2].getOrganId());
 		assertTrue(studies2[1].getTissue().getProperties().length == teststudies[2].getPropertyIds().length);
 		assertTrue(studies2[1].getSegments() == null);
