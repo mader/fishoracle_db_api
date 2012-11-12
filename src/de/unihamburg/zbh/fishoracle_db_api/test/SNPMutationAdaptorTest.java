@@ -70,6 +70,7 @@ public class SNPMutationAdaptorTest extends TestCase {
 			assertTrue(snpMuts[i].getSomatic().equals(testMuts[i].getSomatic()));
 			assertTrue(snpMuts[i].getConfidence().equals(testMuts[i].getConfidence()));
 			assertTrue(snpMuts[i].getSnpTool().equals(testMuts[i].getSnpTool()));
+			assertTrue(snpMuts[i].getPlatformId() == 1);
 			assertTrue(snpMuts[i].getStudyId() == testMuts[i].getStudyId());
 		}
 	}
@@ -95,6 +96,7 @@ public class SNPMutationAdaptorTest extends TestCase {
 			assertTrue(snpMuts[i].getSomatic().equals(testMuts[i].getSomatic()));
 			assertTrue(snpMuts[i].getConfidence().equals(testMuts[i].getConfidence()));
 			assertTrue(snpMuts[i].getSnpTool().equals(testMuts[i].getSnpTool()));
+			assertTrue(snpMuts[i].getPlatformId() == 1);
 			assertTrue(snpMuts[i].getStudyId() == testMuts[i].getStudyId());
 		}	
 	}
@@ -119,6 +121,7 @@ public class SNPMutationAdaptorTest extends TestCase {
 			assertTrue(snpMuts[i].getSomatic().equals(testMuts[i].getSomatic()));
 			assertTrue(snpMuts[i].getConfidence().equals(testMuts[i].getConfidence()));
 			assertTrue(snpMuts[i].getSnpTool().equals(testMuts[i].getSnpTool()));
+			assertTrue(snpMuts[i].getPlatformId() == 1);
 			assertTrue(snpMuts[i].getStudyId() == testMuts[i].getStudyId());
 		}	
 		

@@ -87,6 +87,7 @@ public class SegmentTest extends TestCase{
 		assertTrue(s1.getMean() == testsegments[0].getMean());
 		assertTrue(s1.getNumberOfMarkers() == testsegments[0].getNumberOfMarkers());
 		assertTrue(s1.getType().equals(testsegments[0].getType()));
+		assertTrue(s1.getPlatformId() == testsegments[0].getPlatformId());
 		assertTrue(s1.getStudyId() == 1);
 		
 		assertTrue(s2.getId() == 2);
@@ -96,6 +97,7 @@ public class SegmentTest extends TestCase{
 		assertTrue(s2.getMean() == testsegments[1].getMean());
 		assertTrue(s2.getNumberOfMarkers() == testsegments[1].getNumberOfMarkers());
 		assertTrue(s2.getType().equals(testsegments[1].getType()));
+		assertTrue(s2.getPlatformId() == testsegments[1].getPlatformId());
 		assertTrue(s2.getStudyId() == 1);
 		
 		assertTrue(s3.getId() == 3);
@@ -105,6 +107,7 @@ public class SegmentTest extends TestCase{
 		assertTrue(s3.getMean() == testsegments[2].getMean());
 		assertTrue(s3.getNumberOfMarkers() == testsegments[2].getNumberOfMarkers());
 		assertTrue(s3.getType().equals(testsegments[2].getType()));
+		assertTrue(s3.getPlatformId() == testsegments[2].getPlatformId());
 		assertTrue(s3.getStudyId() == 1);
 		
 		Segment s14 = sa.fetchSegmentById(14);
@@ -115,6 +118,7 @@ public class SegmentTest extends TestCase{
 		assertTrue(s14.getStatus() == testsegments[13].getStatus());
 		assertTrue(s14.getStatusScore() == testsegments[13].getStatusScore());
 		assertTrue(s14.getType().equals(testsegments[13].getType()));
+		assertTrue(s14.getPlatformId() == testsegments[13].getPlatformId());
 		assertTrue(s14.getStudyId() == 3);
 		
 	}

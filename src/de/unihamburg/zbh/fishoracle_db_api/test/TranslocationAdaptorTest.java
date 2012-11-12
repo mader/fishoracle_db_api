@@ -42,6 +42,7 @@ public class TranslocationAdaptorTest extends TestCase {
 				assertTrue(translocs[i][j].getLocation().getChromosome().equals(testTranslocs[i][j].getLocation().getChromosome()));
 				assertTrue(translocs[i][j].getLocation().getStart() == testTranslocs[i][j].getLocation().getStart());
 				assertTrue(translocs[i][j].getLocation().getEnd() == testTranslocs[i][j].getLocation().getEnd());
+				assertTrue(translocs[i][j].getPlatformId() == 1);
 				assertTrue(translocs[i][j].getStudyId() == testTranslocs[i][j].getStudyId());
 			}
 		}
@@ -60,6 +61,7 @@ public class TranslocationAdaptorTest extends TestCase {
 				assertTrue(translocs[i][j][k].getLocation().getChromosome().equals(testTranslocs[i][j].getLocation().getChromosome()));
 				assertTrue(translocs[i][j][k].getLocation().getStart() == testTranslocs[i][j].getLocation().getStart());
 				assertTrue(translocs[i][j][k].getLocation().getEnd() == testTranslocs[i][j].getLocation().getEnd());
+				assertTrue(translocs[i][j][k].getPlatformId() == 1);
 				assertTrue(translocs[i][j][k].getStudyId() == testTranslocs[i][j].getStudyId());
 				}
 			}
@@ -76,6 +78,7 @@ public class TranslocationAdaptorTest extends TestCase {
 				assertTrue(translocs[i][j].getLocation().getChromosome().equals(testTranslocs[i][j].getLocation().getChromosome()));
 				assertTrue(translocs[i][j].getLocation().getStart() == testTranslocs[i][j].getLocation().getStart());
 				assertTrue(translocs[i][j].getLocation().getEnd() == testTranslocs[i][j].getLocation().getEnd());
+				assertTrue(translocs[i][j].getPlatformId() == 1);
 				assertTrue(translocs[i][j].getStudyId() == testTranslocs[i][j].getStudyId());
 			}
 		}

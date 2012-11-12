@@ -328,6 +328,7 @@ public class TestData {
 		
 		segment1.setMean(0.5);
 		segment1.setNumberOfMarkers(100);
+		segment1.setPlatformId(1);
 		segment1.setStudyId(1);
 		
 		segment2 = new Segment(2,
@@ -336,6 +337,7 @@ public class TestData {
 		
 		segment2.setMean(0.7);
 		segment2.setNumberOfMarkers(300);
+		segment2.setPlatformId(1);
 		segment2.setStudyId(1);
 		
 		segment3 = new Segment(3,
@@ -344,6 +346,7 @@ public class TestData {
 		
 		segment3.setMean(0.3);
 		segment3.setNumberOfMarkers(600);
+		segment3.setPlatformId(1);
 		segment3.setStudyId(1);
 		
 		segment4 = new Segment(4,
@@ -352,6 +355,7 @@ public class TestData {
 		
 		segment4.setMean(-1.2);
 		segment4.setNumberOfMarkers(250);
+		segment4.setPlatformId(1);
 		segment4.setStudyId(1);
 		
 		segment5 = new Segment(5,
@@ -360,6 +364,7 @@ public class TestData {
 		
 		segment5.setMean(0.2);
 		segment5.setNumberOfMarkers(2300);
+		segment5.setPlatformId(1);
 		segment5.setStudyId(2);
 		
 		segment6 = new Segment(6,
@@ -368,6 +373,7 @@ public class TestData {
 		
 		segment6.setMean(0.55);
 		segment6.setNumberOfMarkers(400);
+		segment6.setPlatformId(1);
 		segment6.setStudyId(2);
 		
 		segment7 = new Segment(7,
@@ -376,6 +382,7 @@ public class TestData {
 		
 		segment7.setMean(-0.52);
 		segment7.setNumberOfMarkers(630);
+		segment7.setPlatformId(1);
 		segment7.setStudyId(2);
 		
 		segment8 = new Segment(8,
@@ -384,6 +391,7 @@ public class TestData {
 		
 		segment8.setMean(1.32);
 		segment8.setNumberOfMarkers(280);
+		segment8.setPlatformId(1);
 		segment8.setStudyId(2);
 		
 		segment9 = new Segment(9,
@@ -392,6 +400,7 @@ public class TestData {
 		
 		segment9.setMean(0.3);
 		segment9.setNumberOfMarkers(2300);
+		segment9.setPlatformId(1);
 		segment9.setStudyId(3);
 		
 		segment10 = new Segment(10,
@@ -400,6 +409,7 @@ public class TestData {
 		
 		segment10.setMean(0.55);
 		segment10.setNumberOfMarkers(400);
+		segment10.setPlatformId(1);
 		segment10.setStudyId(3);
 		
 		segment11 = new Segment(11,
@@ -408,6 +418,7 @@ public class TestData {
 		
 		segment11.setMean(-0.32);
 		segment11.setNumberOfMarkers(630);
+		segment11.setPlatformId(1);
 		segment11.setStudyId(3);
 		
 		segment12 = new Segment(12,
@@ -416,6 +427,7 @@ public class TestData {
 		
 		segment12.setMean(1.32);
 		segment12.setNumberOfMarkers(280);
+		segment12.setPlatformId(1);
 		segment12.setStudyId(3);
 		
 		segment13 = new Segment(13,
@@ -424,6 +436,7 @@ public class TestData {
 
 		segment13.setStatus(0);
 		segment13.setStatusScore(50.5);
+		segment13.setPlatformId(1);
 		segment13.setStudyId(3);
 		
 		segment14 = new Segment(14,
@@ -432,6 +445,7 @@ public class TestData {
 
 		segment14.setStatus(1);
 		segment14.setStatusScore(60.3);
+		segment14.setPlatformId(1);
 		segment14.setStudyId(3);
 		
 		Segment[] segments = new Segment[]{segment1, segment2,
@@ -457,6 +471,7 @@ public class TestData {
 								"somatic",
 								"high confidence",
 								"gatk");
+		mut1.setPlatformId(1);
 		mut1.setStudyId(1);
 		
 		mut2 = new SNPMutation(2,
@@ -468,6 +483,7 @@ public class TestData {
 								"somatic",
 								"medium confidence",
 								"snv-mix");
+		mut2.setPlatformId(1);
 		mut2.setStudyId(2);
 		
 		mut3 = new SNPMutation(3,
@@ -479,6 +495,7 @@ public class TestData {
 								"germline",
 								"low confidence",
 								"varscan");
+		mut3.setPlatformId(1);
 		mut3.setStudyId(3);
 		
 		mut4 = new SNPMutation(4,
@@ -490,6 +507,7 @@ public class TestData {
 								"somatic",
 								"high confidence",
 								"varscan");
+		mut4.setPlatformId(1);
 		mut4.setStudyId(4);
 		
 		SNPMutation[] muts = new SNPMutation[]{mut1, mut2, mut3, mut4};
@@ -509,31 +527,37 @@ public class TestData {
 		t1[0] = new Translocation(1,
 								new Location(0, "1", 1000, 1000),
 								0);
+		t1[0].setPlatformId(1);
 		t1[0].setStudyId(1);
 		
 		t1[1] = new Translocation(1,
 								new Location(0, "2", 5000, 5000),
 								0);
+		t1[1].setPlatformId(1);
 		t1[1].setStudyId(1);
 		
 		t2[0] = new Translocation(1,
 								new Location(0, "1", 2000, 2000),
 								0);
+		t2[0].setPlatformId(1);
 		t2[0].setStudyId(2);
 		
 		t2[1] = new Translocation(1,
 								new Location(0, "3", 5000, 5000),
 								0);
+		t2[1].setPlatformId(1);
 		t2[1].setStudyId(2);
 		
 		t3[0] = new Translocation(1,
 								new Location(0, "1", 3000, 3000),
 								0);
+		t3[0].setPlatformId(1);
 		t3[0].setStudyId(3);
 		
 		t3[1] = new Translocation(1,
 								new Location(0, "4", 5000, 5000),
 								0);
+		t3[1].setPlatformId(1);
 		t3[1].setStudyId(3);
 		
 		Translocation[][] ts = new Translocation[][]{t1, t2, t3};
@@ -548,16 +572,19 @@ public class TestData {
 		f1 = new GenericFeature(1,
 								new Location(0, "1", 3000, 3000),
 								"Methylation");
+		f1.setPlatformId(1);
 		f1.setStudyId(1);
 		
 		f2 = new GenericFeature(2,
 								new Location(0, "1", 500, 500),
 								"myAnnotation");
+		f2.setPlatformId(1);
 		f2.setStudyId(2);
 		
 		f3 = new GenericFeature(3,
 								new Location(0, "2", 1700, 1700),
 								"whatever");
+		f3.setPlatformId(1);
 		f3.setStudyId(3);
 		
 		GenericFeature[] fs = new GenericFeature[]{f1, f2, f3};
