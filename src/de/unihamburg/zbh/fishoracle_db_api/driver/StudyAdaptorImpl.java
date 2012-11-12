@@ -439,6 +439,12 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			SNPMutationAdaptor snpm = (SNPMutationAdaptor) driver.getAdaptor("SNPMutationAdaptor");
 			snpm.deleteSNPMutation(study.getId());
 			
+			TranslocationAdaptor tra = (TranslocationAdaptor) driver.getAdaptor("TranslocationAdaptor");
+			tra.deleteTranslocation(study.getId());
+			
+			GenericAdaptor ga = (GenericAdaptor) driver.getAdaptor("GenericAdaptor");
+			ga.deleteGenericFeature(study.getId());
+			
 			TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 			ta.deleteTissueSample(study.getTissue());
 			
