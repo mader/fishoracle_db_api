@@ -140,7 +140,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 					")")
 			.append(" VALUES ")
 			.append("('" + newLocId +
-					"', '" + feature.getFeatureType() +
+					"', '" + feature.getType() +
 					"', '" + feature.getPlatformId() +
 					"', '" + studyId + "')");
 			

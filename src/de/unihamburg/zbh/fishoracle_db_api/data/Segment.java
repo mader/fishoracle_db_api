@@ -21,18 +21,12 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
  * @author Malte Mader
  *
  */
-public class Segment {
-
-	private int id;
-	private Location location;
+public class Segment extends GenericFeature {
+	
 	private double mean;
 	private int numberOfMarkers;
 	private int status;
 	private double statusScore;
-	private String type;
-	private int platformId;
-	private String platformName;
-	private int studyId;
 	private String studyName;
 	
 	/**
@@ -52,36 +46,15 @@ public class Segment {
 	public Segment(int id,
 						Location loc,
 						String type) {
-		this.id = id;
-		this.location = loc;
-		this.type = type;
+		super(id, loc, type);
 		
 		this.mean = -23;
 		this.numberOfMarkers = -1;
 		this.status = -1;
 		this.statusScore = -1.0;
-		this.studyId = 0;
 		this.studyName = "";
-		this.platformName = "";
-		this.platformId = 0;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 	
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
 	public double getMean() {
 		return mean;
 	}
@@ -112,38 +85,6 @@ public class Segment {
 
 	public void setStatusScore(double statusScore) {
 		this.statusScore = statusScore;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public int getPlatformId() {
-		return platformId;
-	}
-
-	public void setPlatformId(int platformId) {
-		this.platformId = platformId;
-	}
-
-	public String getPlatformName() {
-		return platformName;
-	}
-
-	public void setPlatformName(String platformName) {
-		this.platformName = platformName;
-	}
-
-	public int getStudyId() {
-		return studyId;
-	}
-
-	public void setStudyId(int studyId) {
-		this.studyId = studyId;
 	}
 
 	public String getStudyName() {

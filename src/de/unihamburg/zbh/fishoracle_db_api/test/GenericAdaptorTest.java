@@ -60,7 +60,7 @@ public class GenericAdaptorTest extends TestCase {
 			assertTrue(fs[i].getLocation().getChromosome().equals(testFs[i].getLocation().getChromosome()));
 			assertTrue(fs[i].getLocation().getStart() == testFs[i].getLocation().getStart());
 			assertTrue(fs[i].getLocation().getEnd() == testFs[i].getLocation().getEnd());
-			assertTrue(fs[i].getFeatureType().equals(testFs[i].getFeatureType()));
+			assertTrue(fs[i].getType().equals(testFs[i].getType()));
 			assertTrue(fs[i].getPlatformId() == 1);
 			assertTrue(fs[i].getStudyId() == testFs[i].getStudyId());
 		}
@@ -79,7 +79,7 @@ public class GenericAdaptorTest extends TestCase {
 			assertTrue(fs[i].getLocation().getChromosome().equals(testFs[i].getLocation().getChromosome()));
 			assertTrue(fs[i].getLocation().getStart() == testFs[i].getLocation().getStart());
 			assertTrue(fs[i].getLocation().getEnd() == testFs[i].getLocation().getEnd());
-			assertTrue(fs[i].getFeatureType().equals(testFs[i].getFeatureType()));
+			assertTrue(fs[i].getType().equals(testFs[i].getType()));
 			assertTrue(fs[i].getPlatformId() == 1);
 			assertTrue(fs[i].getStudyId() == testFs[i].getStudyId());
 		}	
@@ -96,7 +96,7 @@ public class GenericAdaptorTest extends TestCase {
 		assertTrue(fs[0].getLocation().getChromosome().equals(testFs[0].getLocation().getChromosome()));
 		assertTrue(fs[0].getLocation().getStart() == testFs[0].getLocation().getStart());
 		assertTrue(fs[0].getLocation().getEnd() == testFs[0].getLocation().getEnd());
-		assertTrue(fs[0].getFeatureType().equals(testFs[0].getFeatureType()));
+		assertTrue(fs[0].getType().equals(testFs[0].getType()));
 		assertTrue(fs[0].getPlatformId() == 1);
 		assertTrue(fs[0].getStudyId() == testFs[0].getStudyId());
 		

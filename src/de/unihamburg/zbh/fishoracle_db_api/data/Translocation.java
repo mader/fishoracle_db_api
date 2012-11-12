@@ -21,39 +21,16 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
  * @author Malte Mader
  *
  */
-public class Translocation {
-
-	private int id;
-	private Location location;
+public class Translocation extends GenericFeature {
+	
 	private int refId;
-	private int platformId;
-	private String platformName;
-	private int studyId;
 	
 	public Translocation(int id,
 							Location location,
 							int refId) {
-		this.id = id;
-		this.location = location;
+		super(refId, location, "translocation");
+		
 		this.refId = refId;
-		this.platformName = "";
-		this.platformId = 0;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
 	}
 
 	public int getRefId() {
@@ -62,29 +39,5 @@ public class Translocation {
 
 	public void setRefId(int refId) {
 		this.refId = refId;
-	}
-	
-	public int getPlatformId() {
-		return platformId;
-	}
-
-	public void setPlatformId(int platformId) {
-		this.platformId = platformId;
-	}
-
-	public String getPlatformName() {
-		return platformName;
-	}
-
-	public void setPlatformName(String platformName) {
-		this.platformName = platformName;
-	}
-
-	public int getStudyId() {
-		return studyId;
-	}
-
-	public void setStudyId(int studyId) {
-		this.studyId = studyId;
 	}
 }

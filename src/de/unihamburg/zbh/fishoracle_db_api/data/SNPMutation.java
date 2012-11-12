@@ -17,10 +17,8 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.data;
 
-public class SNPMutation {
-
-	private int id;
-	private Location location;
+public class SNPMutation extends GenericFeature {
+	
 	private String dbSnpId;
 	private String ref;
 	private String alt;
@@ -28,9 +26,6 @@ public class SNPMutation {
 	private String somatic;
 	private String confidence;
 	private String snpTool;
-	private int platformId;
-	private String platformName;
-	private int studyId;
 	
 	public SNPMutation(int id,
 						Location location,
@@ -41,8 +36,8 @@ public class SNPMutation {
 						String somatic,
 						String confidence,
 						String snpTool) {
-		this.id = id;
-		this.location = location;
+		super(id, location, snpTool);
+		
 		this.dbSnpId = db_snp_id;
 		this.ref = ref;
 		this.alt = alt;
@@ -50,24 +45,6 @@ public class SNPMutation {
 		this.somatic = somatic;
 		this.confidence = confidence;
 		this.snpTool = snpTool;
-		this.platformName = "";
-		this.platformId = 0;
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
 	}
 
 	public String getDbSnpId() {
@@ -124,29 +101,5 @@ public class SNPMutation {
 
 	public void setSnpTool(String snpTool) {
 		this.snpTool = snpTool;
-	}
-	
-	public int getPlatformId() {
-		return platformId;
-	}
-
-	public void setPlatformId(int platformId) {
-		this.platformId = platformId;
-	}
-
-	public String getPlatformName() {
-		return platformName;
-	}
-
-	public void setPlatformName(String platformName) {
-		this.platformName = platformName;
-	}
-
-	public int getStudyId() {
-		return studyId;
-	}
-
-	public void setStudyId(int studyId) {
-		this.studyId = studyId;
 	}
 }
