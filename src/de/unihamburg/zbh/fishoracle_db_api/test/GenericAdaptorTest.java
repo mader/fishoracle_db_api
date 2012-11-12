@@ -83,7 +83,7 @@ public class GenericAdaptorTest extends TestCase {
 		}	
 	}
 	
-	public void testFetchSNPMutation(){
+	public void testFetchGenericFeature(){
 		
 		//TODO Test this in more detail...
 		GenericFeature[] fs;

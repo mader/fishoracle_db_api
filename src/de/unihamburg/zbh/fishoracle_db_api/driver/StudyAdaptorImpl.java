@@ -82,8 +82,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					"study_type, " +
 					"study_assembly, " +
 					"study_description, " +
-					"study_user_id, " +
-					"study_sample_on_platform_id" +
+					"study_user_id " +
 					")")
 			.append(" VALUES ")
 			.append("( CURDATE() " +
@@ -209,7 +208,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					"tissue_sample.tissue_sample_id")
 					.append(" FROM ").append(super.getPrimaryTableName())
 					.append(" LEFT JOIN ")
-					.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
+					.append("tissue_sample ON tissue_sample.study_id = study.study_id")
 					.append(" ORDER BY study_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -260,7 +259,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 											"tissue_sample.tissue_sample_id")
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN ")
-			.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
+			.append("tissue_sample ON tissue_sample.study_id = study.study_id")
 			.append(" WHERE ").append("study.study_id = " + id)
 			.append(" ORDER BY study_id ASC");
 			
@@ -304,7 +303,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 											"tissue_sample.tissue_sample_id")
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN ")
-			.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
+			.append("tissue_sample ON tissue_sample.study_id = study.study_id")
 			.append(" WHERE ").append("study.study_name = '" + studyName + "'")
 			.append(" ORDER BY study_id ASC");
 			
@@ -369,7 +368,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 						"tissue_sample.tissue_sample_id")
 						.append(" FROM ").append(super.getPrimaryTableName())
 						.append(" LEFT JOIN ")
-						.append("tissue_sample ON study.tissue_sample_id = tissue_sample.tissue_sample_id")
+						.append("tissue_sample ON tissue_sample.study_id = study.study_id")
 						.append(" LEFT JOIN ")
 						.append("study_in_project ON study.study_id = study_in_project.study_id")
 						.append(" WHERE ");

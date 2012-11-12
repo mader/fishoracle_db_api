@@ -174,7 +174,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		if(((BaseAdaptor) sa).fetchCount() == 0){
 			td.emptyStudyTable();
-			td.emptySampleOnPlatformTable();
 			td.emptyTissueSampleTable();
 			td.emptyTissueSamplePropertyTable();
 			td.emptyCnSegmentTable();

@@ -56,7 +56,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				{"study","study.study_id = feature.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
 				{"platform","platform.platform_id = feature.platform_id"},
-				{"tissue_sample","tissue_sample_id = sample_on_platform_tissue_sample_id"},
+				{"tissue_sample","tissue_sample.study_id = study.study_id"},
 				{"organ","organ_id = tissue_sample_organ_id"},};
 	}
 

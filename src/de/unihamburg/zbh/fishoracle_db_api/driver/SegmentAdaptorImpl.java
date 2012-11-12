@@ -108,7 +108,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 							"status, " +
 							"status_score, " +
 							"type, " +
-							", platform_id" +
+							"platform_id, " +
 							"study_id)")
 					.append(" VALUES ")
 					.append("('" + newLocId + 
@@ -405,7 +405,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" LEFT JOIN study_in_project ON " +
 						"study.study_id = study_in_project.study_id")
 				.append(" LEFT JOIN tissue_sample ON " +
-						"tissue_sample.tissue_sample_id = study.tissue_sample_id")
+						"tissue_sample.study_id = study.study_id")
 				.append(" LEFT JOIN organ ON " +
 						"organ_id = tissue_sample_organ_id ")
 				.append(" WHERE ")
@@ -530,10 +530,8 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 						"study.study_id = segment.study_id")
 				.append(" LEFT JOIN study_in_project ON " +
 						"study.study_id = study_in_project.study_id")
-				.append(" LEFT JOIN sample_on_platform ON " +
-						" sample_on_platform_id = study_sample_on_platform_id")
 				.append(" LEFT JOIN tissue_sample ON " +
-						"tissue_sample_id = sample_on_chip_tissue_sample_id")
+						" tissue_sample.study_id = tissue_sample.study_id")
 				.append(" LEFT JOIN organ ON " +
 						"organ_id = tissue_sample_organ_id ")
 				.append(" WHERE ")

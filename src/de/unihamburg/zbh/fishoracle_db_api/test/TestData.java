@@ -695,10 +695,6 @@ public class TestData {
 		((BaseAdaptor) sa).truncateTable("study_in_project");
 	}
 	
-	public void emptySampleOnPlatformTable(){
-		((BaseAdaptor) sa).truncateTable("sample_on_platform");
-	}
-	
 	public void emptyEnsmeblDBsTable(){
 		((BaseAdaptor) ea).truncateTable("ensembl_dbs");
 	}

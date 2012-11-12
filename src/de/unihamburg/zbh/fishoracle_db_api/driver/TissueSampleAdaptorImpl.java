@@ -79,8 +79,8 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			conn = getConnection();
 			
 			tissueQuery.append("INSERT INTO ").append(getPrimaryTableName())
-			.append(" (tissue_sample_organ_id), " +
-					"(study_id))")
+			.append(" (tissue_sample_organ_id, " +
+					"study_id)")
 			.append(" VALUES ")
 			.append("('" + organ_id +
 					"', '" + studyId + 

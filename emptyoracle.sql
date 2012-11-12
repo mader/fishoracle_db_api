@@ -104,7 +104,7 @@ CREATE TABLE `tissue_sample_property` (
 CREATE TABLE `tissue_sample` (
   `tissue_sample_id` int UNSIGNED  NOT NULL auto_increment,
   `tissue_sample_organ_id` int NOT NULL,
-  `study_id` int,
+  `study_id` int NOT NULL,
   PRIMARY KEY  (`tissue_sample_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -210,7 +210,7 @@ CREATE TABLE `mutation` (
   `somatic` varchar(64),
   `confidence` varchar(128),
   `snp_tool` varchar(128),
-  `platform_id` int,
+  `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`mutation_id`),
   INDEX (`quality`),
@@ -232,7 +232,7 @@ CREATE TABLE `translocation` (
   `translocation_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
   `translocation_ref_id` int NOT NULL,
-  `platform_id` int,
+  `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`translocation_id`),
   INDEX (`translocation_ref_id`),
@@ -266,7 +266,7 @@ CREATE TABLE `feature` (
   `feature_id` int UNSIGNED NOT NULL auto_increment,
   `location_id` int NOT NULL,
   `feature_type` varchar(128) NOT NULL,
-  `platform_id` int,
+  `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`feature_id`),
   INDEX (`feature_type`),

@@ -50,7 +50,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 								"location.location_end",
 								"translocation.translocation_ref_id",
 								"translocation.platform_id",
-								"translocation.platform_name",
+								"platform_name",
 								"translocation.study_id"};
 	}
 
@@ -60,7 +60,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 				{"study","study.study_id = translocation.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
 				{"platform","platform.platform_id = translocation.platform_id"},
-				{"tissue_sample","tissue_sample_id = sample_on_platform_tissue_sample_id"},
+				{"tissue_sample","tissue_sample.study_id = study.study_id"},
 				{"organ","organ_id = tissue_sample_organ_id"}};
 	}
 
@@ -151,10 +151,10 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 						")")
 						.append(" VALUES ")
 						.append("('" + newLocId +
-								"', '0', '" + 
-								"', '" + transloc[i].getPlatformId() +
+								"', '0', " + 
+								"'" + transloc[i].getPlatformId() +
 								"', '" + studyId + "')");
-			
+				
 				rs = executeUpdateGetKeys(conn, transloc_query.toString());
 			
 				if(rs.next()){
