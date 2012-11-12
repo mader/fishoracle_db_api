@@ -21,7 +21,6 @@ CREATE TABLE `study` (
   `study_id` int UNSIGNED NOT NULL auto_increment,
   `study_date_inserted` date NOT NULL,
   `study_name` varchar(255) NOT NULL,
-  `study_type` varchar(64) NOT NULL,
   `study_description` varchar(255) NOT NULL,
   `study_assembly` varchar(64) NOT NULL,
   `study_user_id` int NOT NULL,

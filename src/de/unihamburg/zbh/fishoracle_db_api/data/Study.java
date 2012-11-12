@@ -33,10 +33,8 @@ public class Study {
 	private TissueSample tissue;
 	private Date date;
 	private String name;
-	private String type;
 	private String assembly;
 	private String Description;
-	private int platformId;
 	private int organId;
 	private int[] propertyIds;
 	private int userId;
@@ -48,34 +46,28 @@ public class Study {
 	public Study(int id,
 					Date date,
 					String name,
-					String type,
 					String assembly,
 					String description,
 					int userId) {
 		this.id = id;
 		this.date = date;
 		this.name = name;
-		this.type = type;
 		this.assembly = assembly;
 		Description = description;
 		this.userId = userId;
 	}
 
 	public Study(String name,
-					String type,
 					String assembly,
 					String description,
-					int platformId,
 					int organId,
 					int[] propertyIds,
 					int userId) {
 		this.segments = null;
 		this.mutations = null;
 		this.name = name;
-		this.type = type;
 		this.assembly = assembly;
 		Description = description;
-		this.platformId = platformId;
 		this.organId = organId;
 		this.propertyIds = propertyIds;
 		this.userId = userId;
@@ -166,14 +158,6 @@ public class Study {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getAssembly() {
 		return assembly;
@@ -189,14 +173,6 @@ public class Study {
 
 	public void setDescription(String description) {
 		Description = description;
-	}
-
-	public int getPlatformId() {
-		return platformId;
-	}
-
-	public void setPlatformId(int platformId) {
-		this.platformId = platformId;
 	}
 
 	public int getOrganId() {

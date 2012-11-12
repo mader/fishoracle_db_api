@@ -60,7 +60,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		assertTrue(s1.getId() == teststudies[0].getId());
 		assertTrue(s1.getName().equals(teststudies[0].getName()));
-		assertTrue(s1.getType().equals(teststudies[0].getType()));
 		assertTrue(s1.getAssembly().equals(teststudies[0].getAssembly()));
 		assertTrue(s1.getDescription().equals(teststudies[0].getDescription()));
 		assertTrue(s1.getTissue().getOrgan().getId() == teststudies[0].getOrganId());
@@ -69,7 +68,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		assertTrue(s2.getId() == teststudies[1].getId());
 		assertTrue(s2.getName().equals(teststudies[1].getName()));
-		assertTrue(s2.getType().equals(teststudies[1].getType()));
 		assertTrue(s2.getAssembly().equals(teststudies[1].getAssembly()));
 		assertTrue(s2.getDescription().equals(teststudies[1].getDescription()));
 		assertTrue(s2.getTissue().getOrgan().getId() == teststudies[1].getOrganId());
@@ -78,7 +76,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		assertTrue(s3.getId() == teststudies[2].getId());
 		assertTrue(s3.getName().equals(teststudies[2].getName()));
-		assertTrue(s3.getType().equals(teststudies[2].getType()));
 		assertTrue(s3.getAssembly().equals(teststudies[2].getAssembly()));
 		assertTrue(s3.getDescription().equals(teststudies[2].getDescription()));
 		assertTrue(s3.getTissue().getOrgan().getId() == teststudies[2].getOrganId());
@@ -96,7 +93,6 @@ public class StudyAdaptorTest extends TestCase{
 		for(int i = 0; i < studies.length; i++) {
 			assertTrue(studies[i].getId() == (i+1));
 			assertTrue(studies[i].getName().equals(teststudies[i].getName()));
-			assertTrue(studies[i].getType().equals(teststudies[i].getType()));
 			assertTrue(studies[i].getAssembly().equals(teststudies[i].getAssembly()));
 			assertTrue(studies[i].getDescription().equals(teststudies[i].getDescription()));
 			assertTrue(studies[i].getSegments() == null);
@@ -109,7 +105,6 @@ public class StudyAdaptorTest extends TestCase{
 		for(int i = 0; i < studies.length; i++) {
 			assertTrue(studies[i].getId() == (i+1));
 			assertTrue(studies[i].getName().equals(teststudies[i].getName()));
-			assertTrue(studies[i].getType().equals(teststudies[i].getType()));
 			assertTrue(studies[i].getAssembly().equals(teststudies[i].getAssembly()));
 			assertTrue(studies[i].getDescription().equals(teststudies[i].getDescription()));
 			assertTrue(studies[i].getTissue().getOrgan().getId() == teststudies[i].getOrganId());
@@ -126,7 +121,6 @@ public class StudyAdaptorTest extends TestCase{
 		assertTrue(studies1.length == 1);
 		assertTrue(studies1[0].getId() == teststudies[0].getId());
 		assertTrue(studies1[0].getName().equals(teststudies[0].getName()));
-		assertTrue(studies1[0].getType().equals(teststudies[0].getType()));
 		assertTrue(studies1[0].getAssembly().equals(teststudies[0].getAssembly()));
 		assertTrue(studies1[0].getDescription().equals(teststudies[0].getDescription()));
 		assertTrue(studies1[0].getTissue().getOrgan().getId() == teststudies[0].getOrganId());
@@ -137,7 +131,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		assertTrue(studies2[0].getId() == teststudies[1].getId());
 		assertTrue(studies2[0].getName().equals(teststudies[1].getName()));
-		assertTrue(studies2[0].getType().equals(teststudies[1].getType()));
 		assertTrue(studies2[0].getAssembly().equals(teststudies[1].getAssembly()));
 		assertTrue(studies2[0].getDescription().equals(teststudies[1].getDescription()));
 		assertTrue(studies2[0].getTissue().getOrgan().getId() == teststudies[1].getOrganId());
@@ -146,7 +139,6 @@ public class StudyAdaptorTest extends TestCase{
 		
 		assertTrue(studies2[1].getId() == teststudies[2].getId());
 		assertTrue(studies2[1].getName().equals(teststudies[2].getName()));
-		assertTrue(studies2[1].getType().equals(teststudies[2].getType()));
 		assertTrue(studies2[1].getAssembly().equals(teststudies[2].getAssembly()));
 		assertTrue(studies2[1].getDescription().equals(teststudies[2].getDescription()));
 		assertTrue(studies2[1].getTissue().getOrgan().getId() == teststudies[2].getOrganId());

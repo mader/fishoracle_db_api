@@ -53,7 +53,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		return new String[]{"study_id",
 							"study_date_inserted",
 							"study_name",
-							"study_type",
 							"study_assembly",
 							"study_description",
 							"study_user_id"};
@@ -79,7 +78,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			.append(" (" +
 					"study_date_inserted, " +
 					"study_name, " +
-					"study_type, " +
 					"study_assembly, " +
 					"study_description, " +
 					"study_user_id " +
@@ -87,7 +85,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			.append(" VALUES ")
 			.append("( CURDATE() " +
 					", '" + study.getName() + 
-					"', '" + study.getType() +
 					"', '" + study.getAssembly() +
 					"', '" + study.getDescription() +
 					"', '" + study.getUserId() + 
@@ -146,7 +143,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		int studyId = 0;
 		Date date;
 		String studyName = null;
-		String studyType = null;
 		String studyAssembly = null;
 		String studyDescription = null;
 		int tissueSampleId = 0;
@@ -156,12 +152,11 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				studyId = rs.getInt(1);
 				date = rs.getDate(2);
 				studyName = rs.getString(3);
-				studyType = rs.getString(4);
-				studyAssembly = rs.getString(5);
-				studyDescription = rs.getString(6);
-				tissueSampleId = rs.getInt(7);
+				studyAssembly = rs.getString(4);
+				studyDescription = rs.getString(5);
+				tissueSampleId = rs.getInt(6);
 				
-				study = new Study(studyId, date, studyName,studyType, studyAssembly, studyDescription, 0);
+				study = new Study(studyId, date, studyName, studyAssembly, studyDescription, 0);
 				
 				TissueSampleAdaptor ta = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 				tissue = ta.fetchTissueSampleById(tissueSampleId);
@@ -202,7 +197,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			query.append("SELECT ").append("study.study_id, " +
 					"study.study_date_inserted, " +
 					"study.study_name, " +
-					"study.study_type, " +
 					"study.study_assembly, " +
 					"study.study_description, " +
 					"tissue_sample.tissue_sample_id")
@@ -253,7 +247,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			query.append("SELECT ").append("study.study_id, " +
 											"study.study_date_inserted, " +
 											"study.study_name, " +
-											"study.study_type, " +
 											"study.study_assembly, " +
 											"study.study_description, " +
 											"tissue_sample.tissue_sample_id")
@@ -297,7 +290,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			query.append("SELECT ").append("study.study_id, " +
 											"study.study_date_inserted, " +
 											"study.study_name, " +
-											"study.study_type, " +
 											"study.study_assembly, " +
 											"study.study_description, " +
 											"tissue_sample.tissue_sample_id")
@@ -362,7 +354,6 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				query.append("SELECT ").append("study.study_id, " +
 						"study.study_date_inserted, " +
 						"study.study_name, " +
-						"study.study_type, " +
 						"study.study_assembly, " +
 						"study.study_description, " +
 						"tissue_sample.tissue_sample_id")

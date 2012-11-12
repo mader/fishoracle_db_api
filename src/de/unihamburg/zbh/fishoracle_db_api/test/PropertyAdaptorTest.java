@@ -107,7 +107,7 @@ public class PropertyAdaptorTest  extends TestCase {
 		assertTrue(p6.getActivty().equals(testproperties[5].getActivty()));
 	}
 	
-	public void testFetchAllTypes() {
+	public void testFetchZAllTypes() {
 		String[] types = pra.fetchAllTypes();
 		
 		types[0].equals("grade");
