@@ -136,6 +136,46 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		return createObject(rs, true);
 	}
 	
+	public boolean hasType(String type, int studyId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int count = 0;
+		boolean hasType = false;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			
+			query.append("SELECT ").append("count(*)")
+					.append(" FROM ").append(type)
+					.append(" WHERE ")
+					.append("study_id = " + studyId );
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+			
+			rs.close();
+			
+			if(count > 0){
+				hasType = true;
+			}
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+
+		return hasType;
+	}
+	
 	public Object createObject(ResultSet rs, boolean withChildren) {
 		Study study = null;
 		TissueSample tissue;
@@ -167,6 +207,11 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					study.setOrganId(tissue.getOrgan().getId());
 					study.setPropertyIds(tissue.getPropertyIds());
 				}
+				
+				study.setHasSegment(hasType("segment", study.getId()));
+				study.setHasMutation(hasType("mutation", study.getId()));
+				study.setHasTranslocation(hasType("translocation", study.getId()));
+				study.setHasGeneric(hasType("feature", study.getId()));
 				
 			}
 			

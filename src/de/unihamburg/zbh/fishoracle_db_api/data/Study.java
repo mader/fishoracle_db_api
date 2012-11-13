@@ -40,6 +40,11 @@ public class Study {
 	private int userId;
 	private String files[];
 	
+	private boolean hasSegment;
+	private boolean hasMutation;
+	private boolean hasTranslocation;
+	private boolean hasGeneric;
+	
 	public Study() {
 	}
 
@@ -197,5 +202,37 @@ public class Study {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isHasSegment() {
+		return hasSegment;
+	}
+
+	public void setHasSegment(boolean hasSegment) {
+		this.hasSegment = hasSegment;
+	}
+
+	public boolean isHasMutation() {
+		return hasMutation;
+	}
+
+	public void setHasMutation(boolean hasMutation) {
+		this.hasMutation = hasMutation;
+	}
+
+	public boolean isHasTranslocation() {
+		return hasTranslocation;
+	}
+
+	public void setHasTranslocation(boolean hasTranslocation) {
+		this.hasTranslocation = hasTranslocation;
+	}
+
+	public boolean isHasGeneric() {
+		return hasGeneric;
+	}
+
+	public void setHasGeneric(boolean hasGeneric) {
+		this.hasGeneric = hasGeneric;
 	}
 }
