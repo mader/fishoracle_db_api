@@ -166,6 +166,27 @@ public interface StudyAdaptor {
 	 */
 	public Study[] fetchStudiesForProject(int[] projectIds, boolean withChrildren);
 	
+	
+	/**
+	 * 
+	 * Fetch all studies that are not a member of the given project.
+	 * 
+	 * @param projectIds
+	 * @param withChrildren
+	 * @return Returns an array of Study objects. The Study objects are
+	 *          ordered by the study ID. If there are no studies stored in
+	 *          the database an array of length 0 is returned.
+	 */
+	public Study[] fetchStudiesNotInProject(int projectIds, boolean withChrildren);
+	
+	/**
+	 * Counts how often a study is associated to a project.
+	 * 
+	 * @param studyId
+	 * @return Number of projects that stire the study.
+	 */
+	public int countStudyInProjects(int studyId);
+	
 	/**
 	 * Removes a study from the database.
 	 * 

@@ -452,6 +452,107 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 	}
 	
 	@Override
+	public Study[] fetchStudiesNotInProject(int projectId,
+												boolean withChrildren) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Study studyNotInGroup = null;
+		ArrayList<Study> studyContainer = new ArrayList<Study>();
+		Study[] studies = null;
+		
+		try{
+			
+			conn = getConnection();
+			
+			/* First get all studies that _are_ in the project.*/
+			Study[] studiesInGroup = fetchStudiesForProject(projectId);
+
+			/* Then get all users but the users we just received. */
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName());
+			
+			String whereClause = " ";
+			
+			boolean where = true;
+			if(studiesInGroup.length > 0){
+				for(int i=0; i < studiesInGroup.length; i++){
+					
+					if(where){
+						whereClause += " WHERE study.study_id != " + studiesInGroup[i].getId();	
+						where = false;
+					} else {
+						whereClause += " AND study.study_id != " + studiesInGroup[i].getId();
+					}
+				}
+			}
+			query.append(whereClause).append(" ORDER BY study.study_id ASC");
+			
+			studyContainer = new ArrayList<Study>();
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				studyNotInGroup = (Study) o;
+				studyContainer.add(studyNotInGroup);
+			}
+			
+			rs.close();
+			
+			studies = new Study[studyContainer.size()];
+			studyContainer.toArray(studies);
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return studies;
+	}
+	
+	@Override
+	public int countStudyInProjects(int studyId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int count = 0;
+		
+		try{
+			
+			conn = getConnection();	
+		
+			query.append("SELECT COUNT(stud_in_project_id)")
+			.append(" FROM ")
+			.append("study_in_project")
+			.append(" WHERE ")
+			.append("study_id = ")
+			.append(studyId);
+		
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+			
+			rs.close();
+		
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		
+		return count;
+	}
+	
+	@Override
 	public void deleteStudy(int studyId) {
 		
 		Study m = fetchStudyById(studyId, true);
