@@ -119,7 +119,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 		 }
 		 
 		 ProjectAdaptor pra = (ProjectAdaptor) driver.getAdaptor("ProjectAdaptor");
-		 pra.addMicroarraystudyToProject(newStudyId, projectId);
+		 pra.addStudyToProject(newStudyId, projectId);
 		 
 		} catch (Exception e){
 			e.printStackTrace();

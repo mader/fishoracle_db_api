@@ -581,7 +581,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 
 	@Override
-	public void addMicroarraystudyToProject(int microarraystudyId, int projectId) {
+	public void addStudyToProject(int studyId, int projectId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
 		
@@ -592,7 +592,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			query.append("INSERT INTO ").append("study_in_project")
 			.append(" (project_id, study_id)")
 			.append(" VALUES ")
-			.append("('" + projectId + "', '" + microarraystudyId + "')");
+			.append("('" + projectId + "', '" + studyId + "')");
 			
 			executeUpdate(conn, query.toString());
 			

@@ -260,24 +260,24 @@ public interface ProjectAdaptor {
 	public void modifyGroupAccessForProject(int groupId, int projectId, String accessRights);
 	
 	/**
-	 * Adds a microarray study to a project.
+	 * Adds a study to a project.
 	 * 
-	 * @param microarraystudyId The database ID of the microarray study that
+	 * @param studyId The database ID of the study that
 	 *         will be added. 
 	 * @param projectId The database ID of the project that will be assigned
 	 *         the new microarray study. 
 	 */
-	public void addMicroarraystudyToProject(int microarraystudyId, int projectId);
+	public void addStudyToProject(int studyId, int projectId);
 	
 	/**
 	 * Remove a microarray study from a project.
 	 * 
-	 * @param microarraystudyId The database ID of the microarray study that
+	 * @param studyId The database ID of the study that
 	 *         will be removed. 
 	 * @param projectId The database ID of the project from which the
 	 *         microarray study will be removed.
 	 */
-	public void removeStudyFromProject(int microarraystudyId, int projectId);
+	public void removeStudyFromProject(int studyId, int projectId);
 	
 	/**
 	 * Removes a project from the database.
