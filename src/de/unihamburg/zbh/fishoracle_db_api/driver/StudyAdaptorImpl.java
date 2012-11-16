@@ -453,11 +453,12 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 	
 	@Override
 	public Study[] fetchStudiesNotInProject(int projectId,
+												int notInProjectId,
 												boolean withChrildren) {
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
-		Study studyNotInGroup = null;
+		Study studyNotInProject = null;
 		ArrayList<Study> studyContainer = new ArrayList<Study>();
 		Study[] studies = null;
 		
@@ -466,26 +467,34 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			conn = getConnection();
 			
 			/* First get all studies that _are_ in the project.*/
-			Study[] studiesInGroup = fetchStudiesForProject(projectId);
+			Study[] studiesInProject = fetchStudiesForProject(notInProjectId);
 
-			/* Then get all users but the users we just received. */
-			query.append("SELECT ").append(super.columnsToString(columns()))
-			.append(" FROM ").append(super.getPrimaryTableName());
+			/* Then get all studies but the users we just received. */
+			query.append("SELECT ").append("study.study_id," +
+					"study_date_inserted," + 
+					"study_name," +
+					"study_assembly," +
+					"study_description," + 
+					"study_user_id")
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" LEFT JOIN study_in_project ON ")
+			.append("study_in_project.study_id = study.study_id");
 			
 			String whereClause = " ";
 			
 			boolean where = true;
-			if(studiesInGroup.length > 0){
-				for(int i=0; i < studiesInGroup.length; i++){
+			if(studiesInProject.length > 0){
+				for(int i=0; i < studiesInProject.length; i++){
 					
 					if(where){
-						whereClause += " WHERE study.study_id != " + studiesInGroup[i].getId();	
+						whereClause += " WHERE study.study_id != " + studiesInProject[i].getId();	
 						where = false;
 					} else {
-						whereClause += " AND study.study_id != " + studiesInGroup[i].getId();
+						whereClause += " AND study.study_id != " + studiesInProject[i].getId();
 					}
 				}
 			}
+			whereClause += " AND project_id = " + projectId;
 			query.append(whereClause).append(" ORDER BY study.study_id ASC");
 			
 			studyContainer = new ArrayList<Study>();
@@ -495,8 +504,8 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			Object o;
 			
 			while ((o = createObject(rs)) != null) {
-				studyNotInGroup = (Study) o;
-				studyContainer.add(studyNotInGroup);
+				studyNotInProject = (Study) o;
+				studyContainer.add(studyNotInProject);
 			}
 			
 			rs.close();

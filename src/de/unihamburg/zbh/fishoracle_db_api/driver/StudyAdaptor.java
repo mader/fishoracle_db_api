@@ -177,7 +177,9 @@ public interface StudyAdaptor {
 	 *          ordered by the study ID. If there are no studies stored in
 	 *          the database an array of length 0 is returned.
 	 */
-	public Study[] fetchStudiesNotInProject(int projectIds, boolean withChrildren);
+	public Study[] fetchStudiesNotInProject(int projectId, 
+												int notInProjectId,
+												boolean withChrildren);
 	
 	/**
 	 * Counts how often a study is associated to a project.
