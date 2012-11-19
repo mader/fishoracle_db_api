@@ -494,7 +494,12 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 					}
 				}
 			}
-			whereClause += " AND project_id = " + projectId;
+			
+			if(where){
+				whereClause += " WHERE project_id = " + projectId;
+			} else {
+				whereClause += " AND project_id = " + projectId;
+			}
 			query.append(whereClause).append(" ORDER BY study.study_id ASC");
 			
 			studyContainer = new ArrayList<Study>();
@@ -535,7 +540,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 			
 			conn = getConnection();	
 		
-			query.append("SELECT COUNT(stud_in_project_id)")
+			query.append("SELECT COUNT(study_in_project_id)")
 			.append(" FROM ")
 			.append("study_in_project")
 			.append(" WHERE ")
