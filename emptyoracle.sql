@@ -287,3 +287,74 @@ CREATE TABLE `ensembl_dbs` (
   `version` int NOT NULL,
   PRIMARY KEY  (`ensembl_dbs_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `config_attribute`
+-- 
+
+CREATE TABLE `config_attribute` (
+  `config_attribute_id` int UNSIGNED NOT NULL auto_increment,
+  `key` varchar(32) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY  (`config_attribute_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `config`
+-- 
+
+CREATE TABLE `config` (
+  `config_id` int UNSIGNED NOT NULL auto_increment,
+  `user_id` INT NOT NULL,
+  `track_config_id` INT NOT NULL,
+  `cnv_sorted` TINYINT NOT NULL,
+  `cnv_caption` TINYINT NOT NULL,
+  `global_th` TINYINT NOT NULL,
+  `ensembl_db_id` INT NOT NULL,
+  PRIMARY KEY  (`config_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `config`
+-- 
+
+CREATE TABLE `track_config` (
+  `track_config_id` int UNSIGNED NOT NULL auto_increment,
+  `config_id` INT NOT NULL,
+  `title` varchar(32) NOT NULL,
+  `data_type` varchar(32) NOT NULL,
+  `track_number` INT NOT NULL,
+  PRIMARY KEY  (`track_config_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `attrib_in_config`
+-- 
+
+CREATE TABLE `attrib_in_config` (
+  `attrib_in_config_id` int UNSIGNED NOT NULL auto_increment,
+  `config_id` INT NOT NULL,
+  `config_attribute_id` INT NOT NULL,
+  PRIMARY KEY  (`attrib_in_config_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `attrib_in_track_config`
+-- 
+
+CREATE TABLE `attrib_in_track_config` (
+  `attrib_in_track_config_id` int UNSIGNED NOT NULL auto_increment,
+  `track_config_id` INT NOT NULL,
+  `config_attribute_id` INT NOT NULL,
+  PRIMARY KEY  (`attrib_in_track_config_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
