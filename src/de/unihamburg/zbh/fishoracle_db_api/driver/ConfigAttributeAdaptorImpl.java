@@ -18,96 +18,327 @@
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.mysql.jdbc.Connection;
+
+import de.unihamburg.zbh.fishoracle_db_api.data.Attribute;
 
 public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAttributeAdaptor {
-
+	
 	protected ConfigAttributeAdaptorImpl(FODriverImpl driver, String type) {
-		super(driver, type);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public int storeAttribute(String key, String value) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String[] fetchAllKeys() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] fetchKeysForConfigId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] fetchKeysForTrackConfigId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] fetchAttributesAsString(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int[] fetchAttributesAsInt(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double[] fetchAttributesAsDouble(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] fetchAttributeById(int attribId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] fetchAttribute(String Key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int deleteAttribute(int attrib_id) {
-		// TODO Auto-generated method stub
-		return 0;
+		super(driver, TYPE);
 	}
 
 	@Override
 	protected String[] tables() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[]{"config_attribute"};
 	}
 
 	@Override
 	protected String[] columns() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[]{"config_attribute.config_attribute_id",
+				"config_attribute.key",
+				"config_attribute.value"};
 	}
 
 	@Override
 	protected String[][] leftJoins() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Object createObject(ResultSet rs) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		int id = 0;
+		String key = "";
+		String value = "";
+		Attribute a = null;
+		
+		try {
+			if(rs.next()){
+				id = rs.getInt(1);
+				key = rs.getString(2);
+				value = rs.getString(3);
+				
+				a = new Attribute(id, key, value);	
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return a;
+	}
+	
+	@Override
+	public int storeAttribute(String key, String value) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int newAttrId = 0;
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("INSERT INTO  config_attribute")
+			.append("(key, " +
+					"value, " + 
+					"location_end) ")
+			.append(" VALUES ")
+			.append("('" + key + 
+					"', '" + value + "')");
+			
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newAttrId = rs.getInt(1);
+			}
+			
+			rs.close();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return newAttrId;
 	}
 
+	@Override
+	public String[] fetchAllKeys() {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ArrayList<String> keyContainer = new ArrayList<String>();
+		String[] keys = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT DISTINCT key")
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" ORDER BY key ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			while(rs.next()){
+				
+				keyContainer.add(rs.getString(1));
+	
+			}
+
+			rs.close();
+			
+			keys = new String[keyContainer.size()];
+			
+			keyContainer.toArray(keys);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return keys;
+	}
+
+	@Override
+	public String[] fetchKeysForConfigId(int configId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ArrayList<String> keyContainer = new ArrayList<String>();
+		String[] keys = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT DISTINCT key")
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" LEFT JOIN attrib_in_config")
+			.append(" ON config_attribute.config_attribute_id = attrib_in_config.config_attribute_id")
+			.append(" WHERE config_id = " + configId)
+			.append(" ORDER BY key ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			while(rs.next()){
+				
+				keyContainer.add(rs.getString(1));
+	
+			}
+
+			rs.close();
+			
+			keys = new String[keyContainer.size()];
+			
+			keyContainer.toArray(keys);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return keys;
+		
+	}
+
+	@Override
+	public String[] fetchKeysForTrackConfigId(int trackConfigId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		ArrayList<String> keyContainer = new ArrayList<String>();
+		String[] keys = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT DISTINCT key")
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" LEFT JOIN attrib_in_config")
+			.append(" ON config_attribute.config_attribute_id = attrib_in_track_config.config_attribute_id")
+			.append(" WHERE track_config_id = " + trackConfigId)
+			.append(" ORDER BY key ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			while(rs.next()){
+				
+				keyContainer.add(rs.getString(1));
+	
+			}
+
+			rs.close();
+			
+			keys = new String[keyContainer.size()];
+			
+			keyContainer.toArray(keys);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return keys;
+		
+	}
+
+	@Override
+	public Attribute fetchAttributeById(int attribId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Attribute a = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("config_attribute_id = '" + attribId + "'")
+			.append(" ORDER BY config_attribute_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			if ((o = createObject(rs)) != null) {
+				a = (Attribute) o;
+			}
+			
+			rs.close();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return a;
+		
+	}
+
+	@Override
+	public Attribute[] fetchAttribute(String key) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Attribute a = null;
+		ArrayList<Attribute> aContainer = new ArrayList<Attribute>();
+		Attribute[] attribs = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("key = '" + key + "'")
+			.append(" ORDER BY config_attribute_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				a = (Attribute) o;
+				aContainer.add(a);
+			}
+			
+			rs.close();
+			
+			attribs = new Attribute[aContainer.size()];
+			
+			aContainer.toArray(attribs);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return attribs;
+	}
+
+	@Override
+	public void deleteAttribute(int attribId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append(super.getPrimaryTableName())
+			.append(" WHERE ").append("config_attribute_id = " + attribId);
+			
+			executeUpdate(conn, query.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+	}
 }

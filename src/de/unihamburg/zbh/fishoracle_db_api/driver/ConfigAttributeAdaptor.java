@@ -17,6 +17,8 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.driver;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.Attribute;
+
 public interface ConfigAttributeAdaptor {
 
 	/**
@@ -30,19 +32,15 @@ public interface ConfigAttributeAdaptor {
 	
 	public String[] fetchAllKeys();
 	
-	public String[] fetchKeysForConfigId();
+	public String[] fetchKeysForConfigId(int configId);
 	
-	public String[] fetchKeysForTrackConfigId();
+	public String[] fetchKeysForTrackConfigId(int trackConfigId);
 	
-	public String[] fetchAttributesAsString(String key);
+	public Attribute fetchAttributeById(int attribId);
 	
-	public int[] fetchAttributesAsInt(String key);
-	
-	public double[] fetchAttributesAsDouble(String key);
-	
-	public String[] fetchAttributeById(int attribId);
-	
-	public String[] fetchAttribute(String Key);
+	public Attribute[] fetchAttribute(String key);
 
-	public int deleteAttribute(int attrib_id);
+	public void deleteAttribute(int attribId);
+	
+	final static String TYPE = "ConfigAttributeAdaptor";
 }
