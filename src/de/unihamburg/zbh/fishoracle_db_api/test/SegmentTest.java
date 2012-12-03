@@ -172,6 +172,25 @@ public class SegmentTest extends TestCase{
 		
 	}
 	
+	public void testFetchSegments(){
+		
+		//TODO Test this in more detail...
+		Segment[] s = sa.fetchSegments("1", 1000, 5000, null, 0.19, new int[0], new int[0], new int[0]);
+		
+		assertTrue(s.length == 4);
+		
+		s = sa.fetchSegments("2", 500, 11000, null, 0.2, new int[0], new int[0], new int[0]);
+		
+		assertTrue(s.length == 3);
+		
+		/*
+		assertTrue(loc.getChromosome().equals("1"));
+		assertTrue(loc.getStart() == 1);
+		assertTrue(loc.getEnd() == 4000);
+		*/
+		
+	}
+	
 	public void testDeleteSegment(){
 		
 		Segment s1 = sa.fetchSegmentById(1);

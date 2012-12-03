@@ -46,7 +46,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 	@Override
 	protected String[] columns() {
-		return new String[] { "segment_id",
+		return new String[] { "segment.segment_id",
 								"location.location_id",
 								"location.location_chromosome",
 								"location.location_start",
@@ -58,7 +58,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 								"type",
 								"segment.platform_id",
 								"platform_name",
-								"study_id" };
+								"segment.study_id" };
 	}
 
 	@Override
@@ -526,12 +526,14 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(super.getPrimaryTableName())
 				.append(" LEFT JOIN location ON " +
 						"segment.location_id = location.location_id")
+				.append(" LEFT JOIN platform ON " +
+						"segment.platform_id = platform.platform_id")
 				.append(" LEFT JOIN study ON " +
 						"study.study_id = segment.study_id")
 				.append(" LEFT JOIN study_in_project ON " +
 						"study.study_id = study_in_project.study_id")
 				.append(" LEFT JOIN tissue_sample ON " +
-						" tissue_sample.study_id = tissue_sample.study_id")
+						" tissue_sample.study_id = study.study_id")
 				.append(" LEFT JOIN organ ON " +
 						"organ_id = tissue_sample_organ_id ")
 				.append(" WHERE ")
@@ -541,7 +543,8 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
 		query.append(getExperimentSQLClause(experimentFilter));
-
+		query.append(" AND type = 'dnacopy'");
+		
 		try {
 			conn = getConnection();
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -550,8 +553,8 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 			while ((o = createObject(rs)) != null) {
 				segment = (Segment) o;
-				s = sa.fetchStudyById(segment.getStudyId());
-				segment.setStudyName(s.getName());
+				//s = sa.fetchStudyById(segment.getStudyId());
+				//segment.setStudyName(s.getName());
 				segmentContainer.add(segment);
 			}
 
