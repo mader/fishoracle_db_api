@@ -17,52 +17,28 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.data;
 
-public class TrackData {
-
-	//TODO Refactor Class.
+public class TrackData extends Config {
 	
-	private String dataType;
-	private String dataSubType;
+	private int id;
 	private String trackName;
 	private int trackNumber;
-	private int[] ProjectIds;
-	private int[] tissueIds;
-	private int[] experimentIds;
 	
-	private double qualityScore;
-	private String[] somatic;
-	private String[] confidence;
-	private String[] snpTool;
-	
-	private String lowerTh;
-	private String upperTh;
-	
-	private int[] cnvStati;
-	
-	private Segment[] trackSegments;
-	
-	public TrackData() {
+	public TrackData(){
+		super();
 	}
 
 	public TrackData(String trackName, int trackNumber) {
+		super();
 		this.trackName = trackName;
 		this.trackNumber = trackNumber;
 	}
 	
-	public String getDataType() {
-		return dataType;
+	public int getId() {
+		return id;
 	}
 
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
-	}
-	
-	public String getDataSubType() {
-		return dataSubType;
-	}
-
-	public void setDataSubType(String dataSubType) {
-		this.dataSubType = dataSubType;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTrackName() {
@@ -79,117 +55,5 @@ public class TrackData {
 
 	public void setTrackNumber(int trackNumber) {
 		this.trackNumber = trackNumber;
-	}
-
-	public int[] getProjectIds() {
-		return ProjectIds;
-	}
-
-	public void setProjectIds(int[] projectIds) {
-		ProjectIds = projectIds;
-	}
-
-	public int[] getTissueIds() {
-		return tissueIds;
-	}
-
-	public void setTissueIds(int[] tissueIds) {
-		this.tissueIds = tissueIds;
-	}
-
-	public int[] getExperimentIds() {
-		return experimentIds;
-	}
-
-	public void setExperimentIds(int[] experimentIds) {
-		this.experimentIds = experimentIds;
-	}
-	
-	public double getQualityScore() {
-		return qualityScore;
-	}
-
-	public void setQualityScore(double qualityScore) {
-		this.qualityScore = qualityScore;
-	}
-
-	public String[] getSomatic() {
-		return somatic;
-	}
-
-	public void setSomatic(String[] somatic) {
-		this.somatic = somatic;
-	}
-
-	public String[] getConfidence() {
-		return confidence;
-	}
-
-	public void setConfidence(String[] confidence) {
-		this.confidence = confidence;
-	}
-
-	public String[] getSnpTool() {
-		return snpTool;
-	}
-
-	public void setSnpTool(String[] snpTool) {
-		this.snpTool = snpTool;
-	}
-
-	public String getLowerTh() {
-		return lowerTh;
-	}
-
-	public Double getLowerThAsDouble() {
-		
-		Double r;
-		
-		if(lowerTh == null){
-			r = null;
-		} else {
-			r = Double.parseDouble(lowerTh);
-		}
-		return r;
-	}
-	
-	public void setLowerTh(String lowerTh) {
-		this.lowerTh = lowerTh;
-	}
-
-	public String getUpperTh() {
-		return upperTh;
-	}
-	
-	public Double getUpperThasDouble() {
-		
-		Double r;
-		
-		if(upperTh == null){
-			r = null;
-		} else {
-			r = Double.parseDouble(upperTh);
-		}
-		return r;
-	}
-
-	public void setUpperTh(String upperTh) {
-		this.upperTh = upperTh;
-	}
-	
-	public int[] getCnvStati() {
-		return cnvStati;
-	}
-
-	public void setCnvStati(int[] cnvStati) {
-		this.cnvStati = cnvStati;
-	}
-
-	public Segment[] getTrackSegments() {
-		return trackSegments;
-	}
-
-	public void setTrackSegments(Segment[] trackSegments) {
-		this.trackSegments = trackSegments;
 	}
 }

@@ -44,4 +44,6 @@ public interface FODriver extends Driver {
 	ProjectAdaptor getProjectAdaptor();
 	
 	EnsemblDBsAdaptor getEnsemblDBsAdaptor();
+	
+	ConfigAttributeAdaptor getConfigAttributeAdaptor();
 }

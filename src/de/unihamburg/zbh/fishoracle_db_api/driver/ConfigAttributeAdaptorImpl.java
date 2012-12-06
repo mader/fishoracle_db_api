@@ -27,7 +27,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Attribute;
 
 public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAttributeAdaptor {
 	
-	protected ConfigAttributeAdaptorImpl(FODriverImpl driver, String type) {
+	protected ConfigAttributeAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
 	}
 
@@ -275,7 +275,7 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 	}
 
 	@Override
-	public Attribute[] fetchAttribute(String key) {
+	public Attribute[] fetchAttribute(String key, int configId, boolean global) {
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -288,9 +288,23 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 			conn = getConnection();	
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
-			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" WHERE ").append("key = '" + key + "'")
-			.append(" ORDER BY config_attribute_id ASC");
+			.append(" FROM ").append(super.getPrimaryTableName());
+			
+			if(global){
+				query.append(" LEFT JOIN attrib_in_config")
+				.append(" ON config_attribute.config_attribute_id = attrib_in_config.config_attribute_id");
+			} else {
+				query.append(" LEFT JOIN attrib_in_config")
+				.append(" ON config_attribute.config_attribute_id = attrib_in_track_config.config_attribute_id");
+			}
+			query.append(" WHERE ").append("key = '" + key + "'");
+			
+			if(global){
+				query.append(" AND config_id = '" + configId + "'");
+			} else {
+				query.append(" AND track_config_id = '" + configId + "'");
+			}
+			query.append(" ORDER BY config_attribute_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			

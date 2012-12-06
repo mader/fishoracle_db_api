@@ -310,10 +310,6 @@ CREATE TABLE `config_attribute` (
 CREATE TABLE `config` (
   `config_id` int UNSIGNED NOT NULL auto_increment,
   `user_id` INT NOT NULL,
-  `track_config_id` INT NOT NULL,
-  `cnv_sorted` TINYINT NOT NULL,
-  `cnv_caption` TINYINT NOT NULL,
-  `global_th` TINYINT NOT NULL,
   `ensembl_db_id` INT NOT NULL,
   PRIMARY KEY  (`config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -328,7 +324,6 @@ CREATE TABLE `track_config` (
   `track_config_id` int UNSIGNED NOT NULL auto_increment,
   `config_id` INT NOT NULL,
   `title` varchar(32) NOT NULL,
-  `data_type` varchar(32) NOT NULL,
   `track_number` INT NOT NULL,
   PRIMARY KEY  (`track_config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
