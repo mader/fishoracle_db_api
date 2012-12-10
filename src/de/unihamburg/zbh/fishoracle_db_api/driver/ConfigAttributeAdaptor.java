@@ -38,9 +38,11 @@ public interface ConfigAttributeAdaptor {
 	
 	public Attribute fetchAttributeById(int attribId);
 	
+	Attribute fetchAttribute(String key, String value);
+	
 	public Attribute[] fetchAttribute(String key, int configId, boolean global);
 
 	public void deleteAttribute(int attribId);
 	
-	final static String TYPE = "ConfigAttributeAdaptor";
+	final static String TYPE = "ConfigAttributeAdaptor";	
 }

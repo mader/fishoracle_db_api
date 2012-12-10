@@ -20,6 +20,7 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
 public class TrackData extends Config {
 	
 	private int id;
+	private int configId;
 	private String trackName;
 	private int trackNumber;
 	
@@ -39,6 +40,14 @@ public class TrackData extends Config {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getConfigId() {
+		return configId;
+	}
+
+	public void setConfigId(int configId) {
+		this.configId = configId;
 	}
 
 	public String getTrackName() {

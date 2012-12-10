@@ -275,6 +275,42 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 	}
 
 	@Override
+	public Attribute fetchAttribute(String key, String value) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		Attribute a = null;
+		
+		try{
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName());
+			
+			query.append(" WHERE ").append("key = '" + key + "'");
+			query.append(" AND value = '" + value + "'");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				a = (Attribute) o;
+			}
+			
+			rs.close();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return a;
+	}
+	
+	@Override
 	public Attribute[] fetchAttribute(String key, int configId, boolean global) {
 		
 		Connection conn = null;
