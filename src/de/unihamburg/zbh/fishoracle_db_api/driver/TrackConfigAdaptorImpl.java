@@ -3,8 +3,6 @@ package de.unihamburg.zbh.fishoracle_db_api.driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import com.mysql.jdbc.Connection;
@@ -14,15 +12,14 @@ import de.unihamburg.zbh.fishoracle_db_api.data.TrackData;
 
 public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAdaptor {
 
-	protected TrackConfigAdaptorImpl(FODriverImpl driver, String type) {
+	protected TrackConfigAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
 		
 	}
 
 	@Override
 	protected String[] tables() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[]{"track_config"};
 	}
 
 	@Override
@@ -55,30 +52,21 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 				
 				ConfigAttributeAdaptor caa = driver.getConfigAttributeAdaptor();
 				
-				String[] keys = caa.fetchKeysForConfigId(id);
+				String[] keys = caa.fetchKeysForConfigId(id, false);
 				
 				String[] arr = null;
 				Attribute[] a;
-				String s;
 				
 				for(int i = 0; i < keys.length; i++){
 					a = caa.fetchAttribute(keys[i], id, false);
-					
-					if(a.length > 1){
 						
-						arr = new String[a.length];
+					arr = new String[a.length];
 						
-						for(int j = 0; j < a.length; j++){
-							arr[j] = a[j].getValue();
-						}
-						
-						td.addStrArray(keys[i], arr);
+					for(int j = 0; j < a.length; j++){
+						arr[j] = a[j].getValue();
 					}
-					if(a.length == 1){
-						s = a[0].getValue();
 						
-						td.addStrVal(keys[i], s);
-					}
+					td.addStrArray(keys[i], arr);
 				}
 			}
 		} catch (SQLException e) {
@@ -99,7 +87,7 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 			
 			conn = getConnection();
 			
-			query.append("INSERT INTO track_config")
+			query.append("INSERT INTO track_config ")
 			.append("(config_id, " +
 					"title, " + 
 					"track_number) ")
@@ -133,16 +121,7 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 					} else {
 						attribId = a.getId();
 					}
-					
-					query.append("INSERT INTO attrib_in_track_config")
-					.append("(track_config_id, " +
-							"config_attribute_id )")  
-					.append(" VALUES ")
-					.append("('" + td.getId() + 
-							"', '" + attribId + "')");
-					
-					rs = executeUpdateGetKeys(conn, query.toString());
-					rs.close();
+					caa.addAttributeToConfig(attribId, td.getId(), false);
 				}
 			}
 			
@@ -154,24 +133,117 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 			}
 		}
 		return newTrackConfigId;
-		
 	}
 
 	@Override
 	public TrackData fetchTrackConfigById(int trackConfigId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		TrackData td = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName())
+			.append(" WHERE ").append("trackl_config_id = '" + trackConfigId + "'")
+			.append(" ORDER BY track_config_id ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			if ((o = createObject(rs)) != null) {
+				td = (TrackData) o;
+			}
+			
+			rs.close();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return td;
 	}
 
 	@Override
 	public TrackData[] fetchTrackConfigForConfigId(int ConfigId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		TrackData td = null;
+		ArrayList<TrackData> tdContainer = new ArrayList<TrackData>();
+		TrackData[] tds = null;
+		
+		try{
+			
+			conn = getConnection();	
+			
+			query.append("SELECT ").append(super.columnsToString(columns()))
+			.append(" FROM ").append(super.getPrimaryTableName());
+			query.append(" WHERE ").append("config_id = '" + ConfigId + "'");
+			query.append(" ORDER BY track_number ASC");
+			
+			ResultSet rs = executeQuery(conn, query.toString());
+			
+			Object o;
+			
+			while ((o = createObject(rs)) != null) {
+				td = (TrackData) o;
+				tdContainer.add(td);
+			}
+			
+			rs.close();
+			
+			tds = new TrackData[tdContainer.size()];
+			
+			tdContainer.toArray(tds);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return tds;
 	}
 
 	@Override
-	public int deleteTrackConfig(int trackConfigId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void deleteTrackConfig(int trackConfigId) {
+		
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		
+		try{
+			
+			conn = getConnection();
+			
+			query.append("DELETE FROM ")
+			.append(super.getPrimaryTableName())
+			.append(" WHERE ").append("track_config_id = " + trackConfigId);
+			
+			executeUpdate(conn, query.toString());
+			
+			query.append("DELETE FROM ")
+			.append("attrib_in_track_config")
+			.append(" WHERE ").append("track_config_id = " + trackConfigId);
+			
+			executeUpdate(conn, query.toString());
+			
+			//TODO remove attributes if there are no references to them left...
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
 	}
 }

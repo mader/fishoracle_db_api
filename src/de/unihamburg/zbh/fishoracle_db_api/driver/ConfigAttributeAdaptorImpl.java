@@ -83,10 +83,9 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 			
 			conn = getConnection();
 			
-			query.append("INSERT INTO  config_attribute")
-			.append("(key, " +
-					"value, " + 
-					"location_end) ")
+			query.append("INSERT INTO config_attribute ")
+			.append("(`key`, " +
+					"value) ")
 			.append(" VALUES ")
 			.append("('" + key + 
 					"', '" + value + "')");
@@ -108,7 +107,53 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 		}
 		return newAttrId;
 	}
-
+	
+	@Override
+	public int addAttributeToConfig(int attribId, int configId, boolean global){
+		Connection conn = null;
+		StringBuffer query = new StringBuffer();
+		int newAttrId = 0;
+		
+		try{
+			
+			conn = getConnection();
+			
+			if(global){
+				
+				query.append("INSERT INTO attrib_in_config")
+				.append("(config_id, " +
+						"config_attribute_id )")  
+				.append(" VALUES ")
+				.append("('" + configId + 
+						"', '" + attribId + "')");
+				
+			} else {
+				query.append("INSERT INTO attrib_in_track_config")
+				.append("(track_config_id, " +
+						"config_attribute_id )")  
+						.append(" VALUES ")
+						.append("('" + configId + 
+						"', '" + attribId + "')");
+			}
+			
+			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
+			
+			if(rs.next()){
+				newAttrId = rs.getInt(1);
+			}
+			
+			rs.close();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(conn != null){
+				close(conn);
+			}
+		}
+		return newAttrId;
+	}
+	
 	@Override
 	public String[] fetchAllKeys() {
 		
@@ -121,9 +166,9 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 			
 			conn = getConnection();	
 			
-			query.append("SELECT DISTINCT key")
+			query.append("SELECT DISTINCT `key`")
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" ORDER BY key ASC");
+			.append(" ORDER BY `key` ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
@@ -150,7 +195,7 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 	}
 
 	@Override
-	public String[] fetchKeysForConfigId(int configId) {
+	public String[] fetchKeysForConfigId(int configId, boolean global) {
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
@@ -161,56 +206,21 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 			
 			conn = getConnection();	
 			
-			query.append("SELECT DISTINCT key")
-			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN attrib_in_config")
-			.append(" ON config_attribute.config_attribute_id = attrib_in_config.config_attribute_id")
-			.append(" WHERE config_id = " + configId)
-			.append(" ORDER BY key ASC");
-			
-			ResultSet rs = executeQuery(conn, query.toString());
-			
-			while(rs.next()){
-				
-				keyContainer.add(rs.getString(1));
-	
+			if(global){
+				query.append("SELECT DISTINCT `key`")
+				.append(" FROM ").append(super.getPrimaryTableName())
+				.append(" LEFT JOIN attrib_in_config")
+				.append(" ON config_attribute.config_attribute_id = attrib_in_config.config_attribute_id")
+				.append(" WHERE config_id = " + configId)
+				.append(" ORDER BY `key` ASC");
+			} else {
+				query.append("SELECT DISTINCT `key`")
+				.append(" FROM ").append(super.getPrimaryTableName())
+				.append(" LEFT JOIN attrib_in_track_config")
+				.append(" ON config_attribute.config_attribute_id = attrib_in_track_config.config_attribute_id")
+				.append(" WHERE track_config_id = " + configId)
+				.append(" ORDER BY `key` ASC");
 			}
-
-			rs.close();
-			
-			keys = new String[keyContainer.size()];
-			
-			keyContainer.toArray(keys);
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(conn != null){
-				close(conn);
-			}
-		}
-		return keys;
-		
-	}
-
-	@Override
-	public String[] fetchKeysForTrackConfigId(int trackConfigId) {
-		
-		Connection conn = null;
-		StringBuffer query = new StringBuffer();
-		ArrayList<String> keyContainer = new ArrayList<String>();
-		String[] keys = null;
-		
-		try{
-			
-			conn = getConnection();	
-			
-			query.append("SELECT DISTINCT key")
-			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN attrib_in_config")
-			.append(" ON config_attribute.config_attribute_id = attrib_in_track_config.config_attribute_id")
-			.append(" WHERE track_config_id = " + trackConfigId)
-			.append(" ORDER BY key ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
 			
@@ -287,7 +297,7 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName());
 			
-			query.append(" WHERE ").append("key = '" + key + "'");
+			query.append(" WHERE ").append("`key` = '" + key + "'");
 			query.append(" AND value = '" + value + "'");
 			
 			ResultSet rs = executeQuery(conn, query.toString());

@@ -5,6 +5,7 @@ public class ConfigData extends Config {
 	private int id;
 	private int userId;
 	private int ensemblDBId;
+	private String name;
 	private TrackData[] tracks;
 	
 	public ConfigData() {
@@ -33,6 +34,14 @@ public class ConfigData extends Config {
 
 	public void setEnsemblDBId(int ensemblDBId) {
 		this.ensemblDBId = ensemblDBId;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public TrackData[] getTracks() {

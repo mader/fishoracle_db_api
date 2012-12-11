@@ -17,6 +17,7 @@
 
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
+import de.unihamburg.zbh.fishoracle_db_api.data.Attribute;
 import de.unihamburg.zbh.fishoracle_db_api.data.GenericFeature;
 import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 import de.unihamburg.zbh.fishoracle_db_api.data.Segment;
@@ -30,9 +31,11 @@ import de.unihamburg.zbh.fishoracle_db_api.data.Project;
 import de.unihamburg.zbh.fishoracle_db_api.data.ProjectAccess;
 import de.unihamburg.zbh.fishoracle_db_api.data.Property;
 import de.unihamburg.zbh.fishoracle_db_api.data.TissueSample;
+import de.unihamburg.zbh.fishoracle_db_api.data.TrackData;
 import de.unihamburg.zbh.fishoracle_db_api.data.Translocation;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.ConfigAttributeAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GenericAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.SegmentAdaptor;
@@ -41,6 +44,7 @@ import de.unihamburg.zbh.fishoracle_db_api.driver.FODriver;
 import de.unihamburg.zbh.fishoracle_db_api.driver.FODriverImpl;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GroupAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.SNPMutationAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.TrackConfigAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.TranslocationAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.StudyAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.OrganAdaptor;
@@ -69,6 +73,8 @@ public class TestData {
 	private GenericAdaptor gfa;
 	private StudyAdaptor sa;
 	private EnsemblDBsAdaptor ea;
+	private ConfigAttributeAdaptor caa;
+	private TrackConfigAdaptor tca;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -85,6 +91,8 @@ public class TestData {
 		gfa = (GenericAdaptor) driver.getAdaptor("GenericAdaptor");
 		sa = (StudyAdaptor) driver.getAdaptor("StudyAdaptor");
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
+		caa = (ConfigAttributeAdaptor) driver.getAdaptor("ConfigAttributeAdaptor");
+		tca = (TrackConfigAdaptor) driver.getAdaptor("TrackConfigAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -654,6 +662,44 @@ public class TestData {
 		return edbss;
 	}
 	
+	public Attribute[] createAttributeData(){
+		
+		Attribute a1, a2, a3;
+		
+		a1 = new Attribute("sorted", "1");
+		a2 = new Attribute("projectId", "0");
+		a3 = new Attribute("projectId", "1");
+		
+		Attribute[] as = new Attribute[]{a1,a2,a3};
+		
+		return as;
+	}
+	
+	public TrackData[] createTrackData(){
+		
+		TrackData td1, td2, td3;
+		
+		td1 = new TrackData("test1", 1);
+		td1.setConfigId(1);
+		td1.addStrArray("sorted", new String[]{"1"});
+		td1.addStrArray("projectId", new String[]{"1", "2", "3"});
+		
+		td2 = new TrackData("test2", 2);
+		td2.setConfigId(2);
+		td2.addStrArray("showCaption", new String[]{"1"});
+		td2.addStrArray("tissueId", new String[]{"1", "2"});
+		
+		
+		td3 = new TrackData("test3", 3);
+		td3.setConfigId(3);
+		td3.addStrArray("segmentMean", new String[]{"-0.25"});
+		td2.addStrArray("showCaption", new String[]{"0"});
+		
+		TrackData[] td = new TrackData[]{td1,td2,td3};
+		
+		return td;
+	}
+	
 	public void emptyPlatformTable(){
 		((BaseAdaptor) pfa).truncateTable(((BaseAdaptor) pfa).getPrimaryTableName());
 	}
@@ -724,6 +770,22 @@ public class TestData {
 	
 	public void emptyEnsmeblDBsTable(){
 		((BaseAdaptor) ea).truncateTable("ensembl_dbs");
+	}
+	
+	public void emptyConfigAttributeTable(){
+		((BaseAdaptor) caa).truncateTable("config_attribute");
+	}
+	
+	public void emptyAttributeInTrackConfigTable(){
+		((BaseAdaptor) caa).truncateTable("attrib_in_track_config");
+	}
+	
+	public void emptyAttributeInConfigTable(){
+		((BaseAdaptor) caa).truncateTable("attrib_in_config");
+	}
+	
+	public void emptyTrackConfigTable(){
+		((BaseAdaptor) tca).truncateTable("track_config");
 	}
 	
 	public FODriver getDriver() {
@@ -828,5 +890,21 @@ public class TestData {
 
 	public void setEa(EnsemblDBsAdaptor ea) {
 		this.ea = ea;
+	}
+	
+	public ConfigAttributeAdaptor getCaa() {
+		return caa;
+	}
+	
+	public void setCaa(ConfigAttributeAdaptor caa) {
+		this.caa = caa;
+	}
+
+	public TrackConfigAdaptor getTca() {
+		return tca;
+	}
+
+	public void setTca(TrackConfigAdaptor tca) {
+		this.tca = tca;
 	}
 }

@@ -46,4 +46,8 @@ public interface FODriver extends Driver {
 	EnsemblDBsAdaptor getEnsemblDBsAdaptor();
 	
 	ConfigAttributeAdaptor getConfigAttributeAdaptor();
+	
+	TrackConfigAdaptor getTrackConfigAdaptor();
+	
+	ConfigAdaptor getConfigAdaptor();
 }

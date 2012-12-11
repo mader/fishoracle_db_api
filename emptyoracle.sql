@@ -311,6 +311,7 @@ CREATE TABLE `config` (
   `config_id` int UNSIGNED NOT NULL auto_increment,
   `user_id` INT NOT NULL,
   `ensembl_db_id` INT NOT NULL,
+  `name` varchar(16) NOT NULL,
   PRIMARY KEY  (`config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

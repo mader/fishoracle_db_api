@@ -10,7 +10,7 @@ public interface TrackConfigAdaptor {
 	
 	public TrackData[] fetchTrackConfigForConfigId(int ConfigId);
 	
-	public int deleteTrackConfig(int trackConfigId);
+	public void deleteTrackConfig(int trackConfigId);
 	
 	final static String TYPE = "TrackConfigAdaptor";
 }

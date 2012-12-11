@@ -30,15 +30,15 @@ public interface ConfigAttributeAdaptor {
 	 */
 	public int storeAttribute(String key, String value);
 	
+	public int addAttributeToConfig(int attribId, int configId, boolean global);
+	
 	public String[] fetchAllKeys();
 	
-	public String[] fetchKeysForConfigId(int configId);
-	
-	public String[] fetchKeysForTrackConfigId(int trackConfigId);
+	public String[] fetchKeysForConfigId(int configId, boolean global);
 	
 	public Attribute fetchAttributeById(int attribId);
 	
-	Attribute fetchAttribute(String key, String value);
+	public Attribute fetchAttribute(String key, String value);
 	
 	public Attribute[] fetchAttribute(String key, int configId, boolean global);
 

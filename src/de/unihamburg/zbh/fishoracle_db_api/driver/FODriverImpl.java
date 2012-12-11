@@ -40,6 +40,8 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 		addAdaptor(new ProjectAdaptorImpl(this));
 		addAdaptor(new EnsemblDBsAdaptorImpl(this));
 		addAdaptor(new ConfigAttributeAdaptorImpl(this));
+		addAdaptor(new TrackConfigAdaptorImpl(this));
+		addAdaptor(new ConfigAdaptorImpl(this));
 	}
 
 	@Override
@@ -106,8 +108,19 @@ public class FODriverImpl extends DriverImpl implements FODriver{
 	public EnsemblDBsAdaptor getEnsemblDBsAdaptor() {
 		return (EnsemblDBsAdaptor) getAdaptor(EnsemblDBsAdaptor.TYPE);
 	}
+	
 	@Override
 	public ConfigAttributeAdaptor getConfigAttributeAdaptor() {
 		return (ConfigAttributeAdaptor) getAdaptor(ConfigAttributeAdaptor.TYPE);
+	}
+	
+	@Override
+	public TrackConfigAdaptor getTrackConfigAdaptor() {
+		return (TrackConfigAdaptor) getAdaptor(TrackConfigAdaptor.TYPE);
+	}
+	
+	@Override
+	public ConfigAdaptor getConfigAdaptor() {
+		return (ConfigAdaptor) getAdaptor(ConfigAdaptor.TYPE);
 	}
 }
