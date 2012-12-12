@@ -121,7 +121,7 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 					} else {
 						attribId = a.getId();
 					}
-					caa.addAttributeToConfig(attribId, td.getId(), false);
+					caa.addAttributeToConfig(attribId, newTrackConfigId, false);
 				}
 			}
 			
@@ -148,7 +148,7 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" WHERE ").append("trackl_config_id = '" + trackConfigId + "'")
+			.append(" WHERE ").append("track_config_id = '" + trackConfigId + "'")
 			.append(" ORDER BY track_config_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -229,6 +229,8 @@ public class TrackConfigAdaptorImpl extends BaseAdaptor implements TrackConfigAd
 			.append(" WHERE ").append("track_config_id = " + trackConfigId);
 			
 			executeUpdate(conn, query.toString());
+			
+			query.delete(0, query.length());
 			
 			query.append("DELETE FROM ")
 			.append("attrib_in_track_config")

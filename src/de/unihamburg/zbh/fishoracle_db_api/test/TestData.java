@@ -691,9 +691,9 @@ public class TestData {
 		
 		
 		td3 = new TrackData("test3", 3);
-		td3.setConfigId(3);
+		td3.setConfigId(2);
 		td3.addStrArray("segmentMean", new String[]{"-0.25"});
-		td2.addStrArray("showCaption", new String[]{"0"});
+		td3.addStrArray("showCaption", new String[]{"0"});
 		
 		TrackData[] td = new TrackData[]{td1,td2,td3};
 		

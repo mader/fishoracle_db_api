@@ -340,10 +340,10 @@ public class ConfigAttributeAdaptorImpl extends BaseAdaptor implements ConfigAtt
 				query.append(" LEFT JOIN attrib_in_config")
 				.append(" ON config_attribute.config_attribute_id = attrib_in_config.config_attribute_id");
 			} else {
-				query.append(" LEFT JOIN attrib_in_config")
+				query.append(" LEFT JOIN attrib_in_track_config")
 				.append(" ON config_attribute.config_attribute_id = attrib_in_track_config.config_attribute_id");
 			}
-			query.append(" WHERE ").append("key = '" + key + "'");
+			query.append(" WHERE ").append("`key` = '" + key + "'");
 			
 			if(global){
 				query.append(" AND config_id = '" + configId + "'");
