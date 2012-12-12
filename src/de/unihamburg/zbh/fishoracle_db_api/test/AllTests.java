@@ -19,6 +19,9 @@ public class AllTests {
 		suite.addTestSuite(StudyAdaptorTest.class);
 		suite.addTestSuite(TissueSampleAdaptorTest.class);
 		suite.addTestSuite(UserAdaptorTest.class);
+		suite.addTestSuite(ConfigAttributeAdaptorTest.class);
+		suite.addTestSuite(TrackConfigAdaptorTest.class);
+		suite.addTestSuite(ConfigAdaptorTest.class);
 		
 		return suite;
 	}

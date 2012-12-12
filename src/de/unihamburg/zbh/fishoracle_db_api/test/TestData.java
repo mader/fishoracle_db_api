@@ -18,6 +18,7 @@
 package de.unihamburg.zbh.fishoracle_db_api.test;
 
 import de.unihamburg.zbh.fishoracle_db_api.data.Attribute;
+import de.unihamburg.zbh.fishoracle_db_api.data.ConfigData;
 import de.unihamburg.zbh.fishoracle_db_api.data.GenericFeature;
 import de.unihamburg.zbh.fishoracle_db_api.data.Platform;
 import de.unihamburg.zbh.fishoracle_db_api.data.Segment;
@@ -35,6 +36,7 @@ import de.unihamburg.zbh.fishoracle_db_api.data.TrackData;
 import de.unihamburg.zbh.fishoracle_db_api.data.Translocation;
 import de.unihamburg.zbh.fishoracle_db_api.data.User;
 import de.unihamburg.zbh.fishoracle_db_api.driver.BaseAdaptor;
+import de.unihamburg.zbh.fishoracle_db_api.driver.ConfigAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.ConfigAttributeAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.GenericAdaptor;
 import de.unihamburg.zbh.fishoracle_db_api.driver.PlatformAdaptor;
@@ -75,6 +77,7 @@ public class TestData {
 	private EnsemblDBsAdaptor ea;
 	private ConfigAttributeAdaptor caa;
 	private TrackConfigAdaptor tca;
+	private ConfigAdaptor ca;
 	
 	public TestData() {
 		driver = new FODriverImpl("localhost", "emptyoracle", "fouser", "fish4me", "3306");
@@ -93,6 +96,7 @@ public class TestData {
 		ea = (EnsemblDBsAdaptor) driver.getAdaptor("EnsemblDBsAdaptor");
 		caa = (ConfigAttributeAdaptor) driver.getAdaptor("ConfigAttributeAdaptor");
 		tca = (TrackConfigAdaptor) driver.getAdaptor("TrackConfigAdaptor");
+		ca = (ConfigAdaptor) driver.getAdaptor("ConfigAdaptor");
 	}
 
 	public User[] createAndStoreUserData() throws Exception{
@@ -700,6 +704,30 @@ public class TestData {
 		return td;
 	}
 	
+	public ConfigData[] createConfigData(){
+		
+		ConfigData cd1, cd2;
+	
+		TrackData[] td = createTrackData();
+		
+		cd1 = new ConfigData();
+		cd1.setName("Config1");
+		cd1.setUserId(1);
+		cd1.setEnsemblDBId(1);
+		cd1.setTracks(new TrackData[]{td[0]});
+		cd1.addStrArray("globalAttrib", new String[]{"1"});
+		
+		cd2 = new ConfigData();
+		cd2.setName("Config2");
+		cd2.setUserId(2);
+		cd2.setEnsemblDBId(2);
+		cd2.setTracks(new TrackData[]{td[1], td[2]});
+		
+		ConfigData[] cds = new ConfigData[]{cd1, cd2};
+		
+		return cds;
+	}
+	
 	public void emptyPlatformTable(){
 		((BaseAdaptor) pfa).truncateTable(((BaseAdaptor) pfa).getPrimaryTableName());
 	}
@@ -786,6 +814,10 @@ public class TestData {
 	
 	public void emptyTrackConfigTable(){
 		((BaseAdaptor) tca).truncateTable("track_config");
+	}
+	
+	public void emptyConfigTable(){
+		((BaseAdaptor) ca).truncateTable("config");
 	}
 	
 	public FODriver getDriver() {
@@ -906,5 +938,13 @@ public class TestData {
 
 	public void setTca(TrackConfigAdaptor tca) {
 		this.tca = tca;
+	}
+
+	public ConfigAdaptor getCa() {
+		return ca;
+	}
+
+	public void setCa(ConfigAdaptor ca) {
+		this.ca = ca;
 	}
 }

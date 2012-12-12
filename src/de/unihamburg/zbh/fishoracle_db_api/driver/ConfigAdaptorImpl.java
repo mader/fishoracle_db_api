@@ -103,9 +103,11 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			
 			query.append("INSERT INTO config")
 			.append("(user_id, " +
-					"ensmebl_db_id) ")
+					"name, " +
+					"ensembl_db_id) ")
 			.append(" VALUES ")
-			.append("('" + cd.getUserId() + 
+			.append("('" + cd.getUserId() +
+					"', '" + cd.getName() +
 					"', '" + cd.getEnsemblDBId() + "')");
 			
 			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
@@ -115,6 +117,12 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			}
 			
 			rs.close();
+			
+			TrackConfigAdaptor tca = driver.getTrackConfigAdaptor();
+			
+			for(int i = 0; i < cd.getTracks().length; i++){
+				tca.storeTrackConfig(cd.getTracks()[i]);
+			}
 			
 			ConfigAttributeAdaptor caa = driver.getConfigAttributeAdaptor();
 			Attribute a;
@@ -133,16 +141,7 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 					} else {
 						attribId = a.getId();
 					}
-					
-					query.append("INSERT INTO attrib_in_config")
-					.append("(config_id, " +
-							"config_attribute_id )")  
-					.append(" VALUES ")
-					.append("('" + cd.getId() + 
-							"', '" + attribId + "')");
-					
-					rs = executeUpdateGetKeys(conn, query.toString());
-					rs.close();
+					caa.addAttributeToConfig(attribId, newConfigId, true);
 				}
 			}
 			
@@ -247,6 +246,8 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			.append(" WHERE ").append("config_id = " + configId);
 			
 			executeUpdate(conn, query.toString());
+			
+			query.delete(0, query.length());
 			
 			query.append("DELETE FROM ")
 			.append("attrib_in_config")

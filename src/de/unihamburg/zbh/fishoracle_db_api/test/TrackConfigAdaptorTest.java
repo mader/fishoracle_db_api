@@ -28,7 +28,6 @@ public class TrackConfigAdaptorTest extends TestCase {
 		assertTrue(((BaseAdaptor) tca).fetchCount() == 2);
 		tca.storeTrackConfig(testTracks[2]);
 		assertTrue(((BaseAdaptor) tca).fetchCount() == 3);
-		
 	}
 	
 	public void testFetchTrackConfigById(){
@@ -130,7 +129,6 @@ public class TrackConfigAdaptorTest extends TestCase {
 		assertTrue(((BaseAdaptor) tca).fetchCount() == 1);
 		tca.deleteTrackConfig(td3.getId());
 		assertTrue(((BaseAdaptor) tca).fetchCount() == 0);
-		
 	}
 	
 	protected void tearDown() {
