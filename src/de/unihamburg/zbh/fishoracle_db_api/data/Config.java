@@ -21,4 +21,12 @@ public abstract class Config {
 	public HashMap<String, String[]> getStrArrays() {
 		return strArrays;
 	}
+	
+	public void setStrArrays(HashMap<String, String[]> strArrays) {
+		this.strArrays = strArrays;
+	}
+	
+	public HashMap<String, String[]>  getStrArray(){
+		return strArrays;
+	}
 }
