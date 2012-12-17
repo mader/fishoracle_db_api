@@ -7,6 +7,7 @@ public class Constants {
 	public static final String EXPERIMENT_IDS = "experimentIds";
 	public static final String CNV_STATI = "cnvStati";
 	
+	public static final String SCORE = "score";
 	public static final String SOMATIC = "somatic";
 	public static final String CONFIDENCE = "confidence";
 	public static final String SNP_TOOL = "snpTool";
