@@ -164,7 +164,7 @@ public class SegmentTest extends TestCase{
 	public void testFetchMaximalOverlappingSegmentRange(){
 		
 		//TODO Test this in more detail...
-		Location loc = sa.fetchMaximalOverlappingSegmentRange("1", 2000, 3000, null, 0.0, null, null, null);
+		Location loc = sa.fetchMaximalOverlappingSegmentRange("1", 2000, 3000, 0.1, null, null, null);
 		
 		 assertTrue(loc.getChromosome().equals("1"));
 		 assertTrue(loc.getStart() == 1);
@@ -175,11 +175,11 @@ public class SegmentTest extends TestCase{
 	public void testFetchSegments(){
 		
 		//TODO Test this in more detail...
-		Segment[] s = sa.fetchSegments("1", 1000, 5000, null, 0.19, new int[0], new int[0], new int[0]);
+		Segment[] s = sa.fetchSegments("1", 1000, 5000, 0.19, new String[0], new String[0], new String[0]);
 		
 		assertTrue(s.length == 4);
 		
-		s = sa.fetchSegments("2", 500, 11000, null, 0.2, new int[0], new int[0], new int[0]);
+		s = sa.fetchSegments("2", 500, 11000, 0.2, new String[0], new String[0], new String[0]);
 		
 		assertTrue(s.length == 3);
 		

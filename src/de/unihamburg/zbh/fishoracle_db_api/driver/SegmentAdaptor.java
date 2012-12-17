@@ -86,11 +86,10 @@ public interface SegmentAdaptor {
 	public Location fetchMaximalOverlappingSegmentRange(String chr,
 															int start,
 															int end,
-															Double lowerTh,
-															Double upperTh,
-															int[] projectFilter,
-															int[] organFilter,
-															int[] experimentFilter);
+															Double segMean,
+															String[] projectFilter,
+															String[] organFilter,
+															String[] experimentFilter);
 	
 	/**
 	 * Fetches all segments for a study.
@@ -124,11 +123,10 @@ public interface SegmentAdaptor {
 	public Segment[] fetchSegments(String chr,
 										int start,
 										int end,
-										Double lowerTh,
-										Double upperTh,
-										int[] projectFilter,
-										int[] organFilter,
-										int[] experimentFilter);
+										Double segMean,
+										String[] projectFilter,
+										String[] organFilter,
+										String[] experimentFilter);
 	
 	/**
 	 * Removes a segment from the database.

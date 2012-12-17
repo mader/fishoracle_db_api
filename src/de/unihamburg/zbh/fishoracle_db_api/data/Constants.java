@@ -17,7 +17,6 @@ public class Constants {
 	public static final String SNP_TOOL = "snpTool";
 	
 	public static final String IS_GLOBAL_SEGMENT_TH = "isGlobalSegmentTh";
-	public static final String GLOBAL_TH = "globalTh";
 	
 	public static final String ENSEMBL_ID = "ensemblId";
 	public static final String ENSEMBL_BIOTYPES = "ensemblBiotypes";

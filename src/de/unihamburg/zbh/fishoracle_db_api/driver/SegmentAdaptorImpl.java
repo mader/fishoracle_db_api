@@ -303,23 +303,18 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		return loc;
 	}
 
-	private String getThresholdSQLClause(Double lowerTh, Double upperTh) {
+	private String getThresholdSQLClause(Double segMean) {
 		String qrystr = "";
-		if (lowerTh == null && upperTh != null) {
-			qrystr = qrystr + " AND mean > '" + upperTh + "'";
+		if (segMean > 0) {
+			qrystr = qrystr + " AND mean > '" + segMean + "'";
 		}
-		if (lowerTh != null && upperTh == null) {
-			qrystr = qrystr + " AND mean < '" + lowerTh + "'";
-		}
-		if (lowerTh != null && upperTh != null) {
-			qrystr =
-					qrystr + " AND (mean < '" + lowerTh + "' AND "
-							+ "mean > '" + upperTh + "')";
+		if (segMean < 0) {
+			qrystr = qrystr + " AND mean < '" + segMean + "'";
 		}
 		return qrystr;
 	}
 
-	private String getProjectSQLClause(int[] projectFilter) {
+	private String getProjectSQLClause(String[] projectFilter) {
 
 		String projectFilterStr = "";
 		if (projectFilter != null && projectFilter.length > 0) {
@@ -338,7 +333,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		return projectFilterStr;
 	}
 
-	private String getOrganSQLClause(int[] organFilter) {
+	private String getOrganSQLClause(String[] organFilter) {
 		String organFilterStr = "";
 		if (organFilter != null && organFilter.length > 0) {
 			for (int i = 0; i < organFilter.length; i++) {
@@ -355,7 +350,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		return organFilterStr;
 	}
 
-	private String getExperimentSQLClause(int[] experimentFilter) {
+	private String getExperimentSQLClause(String[] experimentFilter) {
 
 		String experimentFilterStr = "";
 		if (experimentFilter != null && experimentFilter.length > 0) {
@@ -379,11 +374,10 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 			String chr,
 			int start,
 			int end,
-			Double lowerTh,
-			Double upperTh,
-			int[] projectFilter,
-			int[] organFilter,
-			int[] experimentFilter) {
+			Double segMean,
+			String[] projectFilter,
+			String[] organFilter,
+			String[] experimentFilter) {
 
 		Location loc = null;
 		Connection conn = null;
@@ -411,7 +405,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" WHERE ")
 				.append("location_chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
-		query.append(getThresholdSQLClause(lowerTh, upperTh));
+		query.append(getThresholdSQLClause(segMean));
 		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
 		// query.append(getExperimentSQLClause(experimentFilter));
@@ -504,11 +498,10 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 			String chr,
 			int start,
 			int end,
-			Double lowerTh,
-			Double upperTh,
-			int[] projectFilter,
-			int[] organFilter,
-			int[] experimentFilter) {
+			Double segMean,
+			String[] projectFilter,
+			String[] organFilter,
+			String[] experimentFilter) {
 
 		Connection conn = null;
 		Segment segment = null;
@@ -539,7 +532,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" WHERE ")
 				.append("location_chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
-		query.append(getThresholdSQLClause(lowerTh, upperTh));
+		query.append(getThresholdSQLClause(segMean));
 		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
 		query.append(getExperimentSQLClause(experimentFilter));
