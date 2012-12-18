@@ -121,6 +121,7 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			TrackConfigAdaptor tca = driver.getTrackConfigAdaptor();
 			
 			for(int i = 0; i < cd.getTracks().length; i++){
+				cd.getTracks()[i].setConfigId(newConfigId);
 				tca.storeTrackConfig(cd.getTracks()[i]);
 			}
 			
