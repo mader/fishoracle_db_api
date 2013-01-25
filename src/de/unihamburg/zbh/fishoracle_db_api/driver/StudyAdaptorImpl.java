@@ -96,6 +96,9 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				newStudyId = mstudyRs.getInt(1);
 			}
 			
+			mstudyRs.getStatement().close();
+			mstudyRs.close();
+			
 			TissueSampleAdaptor tsa = (TissueSampleAdaptor) driver.getAdaptor("TissueSampleAdaptor");
 			tsa.storeTissueSample(study.getOrganId(), study.getPropertyIds(), newStudyId);
 			

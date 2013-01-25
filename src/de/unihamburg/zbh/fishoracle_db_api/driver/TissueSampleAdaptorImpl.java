@@ -91,7 +91,7 @@ public class TissueSampleAdaptorImpl extends BaseAdaptor implements TissueSample
 			if(rs.next()){
 				newTissueSampleId = rs.getInt(1);
 			}
-			
+			rs.getStatement().close();
 			rs.close();
 			
 			int i;

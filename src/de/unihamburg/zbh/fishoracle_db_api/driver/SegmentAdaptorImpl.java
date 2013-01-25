@@ -96,7 +96,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 			if (rs.next()) {
 				newLocId = rs.getInt(1);
 			}
-
+			rs.getStatement().close();
 			rs.close();
 
 			segment_query
@@ -121,11 +121,11 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 							"', '" + studyId + "')");
 
 			rs = executeUpdateGetKeys(conn, segment_query.toString());
-
+			
 			if (rs.next()) {
 				newSegmentId = rs.getInt(1);
 			}
-
+			rs.getStatement().close();
 			rs.close();
 
 		} catch (Exception e) {

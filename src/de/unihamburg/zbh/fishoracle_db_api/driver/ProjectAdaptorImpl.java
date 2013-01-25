@@ -84,7 +84,7 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 			if(rs.next()){
 				newProjectId = rs.getInt(1);
 			}
-			
+			rs.getStatement().close();
 			rs.close();
 			
 		} catch (Exception e){
