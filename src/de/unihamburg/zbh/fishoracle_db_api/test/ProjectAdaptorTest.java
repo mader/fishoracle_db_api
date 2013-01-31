@@ -120,7 +120,12 @@ public class ProjectAdaptorTest extends TestCase{
 	
 	public void testFetchProjectAccessForGroups(){
 		
-		ProjectAccess[] pacs = pa.fetchProjectAccessForGroups(dbtestgroups, true, false);
+		ProjectAccess[] pacs = null;
+		try {
+			pacs = pa.fetchProjectAccessForGroups(dbtestgroups, true, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		for(int i = 0; i < pacs.length; i++){
 			assertTrue(pacs[i].getId() == dbtestpacs[i].getId());

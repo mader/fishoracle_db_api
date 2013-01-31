@@ -344,11 +344,15 @@ public class ProjectAdaptorImpl extends BaseAdaptor implements ProjectAdaptor {
 	}
 	
 	@Override
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups){
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups) throws Exception{
 		return fetchProjectAccessForGroups(groups, false, true);
 	}
 	
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite, boolean withChildren){
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean ReadWrite, boolean withChildren) throws Exception{
+		
+		if(groups.length == 0){
+			throw new Exception("At least one group has to be specified.");
+		}
 		
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();

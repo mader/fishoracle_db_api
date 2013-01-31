@@ -165,8 +165,9 @@ public interface ProjectAdaptor {
 	 *          objects are ordered by the project access ID. If there are no
 	 *          project accesses stored in the database an array of length 0
 	 *          is returned.
+	 * @throws Exception 
 	 */
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups);
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups) throws Exception;
 	
 	/**
 	 * Fetches all ProjectAccess objects for a given set of groups.
@@ -181,8 +182,9 @@ public interface ProjectAdaptor {
 	 *          objects are ordered by the project access ID. If there are no
 	 *          project accesses stored in the database an array of length 0
 	 *          is returned.
+	 * @throws Exception 
 	 */
-	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean write, boolean withChildren);
+	public ProjectAccess[] fetchProjectAccessForGroups(Group[] groups, boolean write, boolean withChildren) throws Exception;
 	
 	/**
 	 * Fetches all projects for which access rights exists including all
