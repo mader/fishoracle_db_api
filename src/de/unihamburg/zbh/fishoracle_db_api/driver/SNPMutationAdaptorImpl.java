@@ -40,10 +40,9 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 	@Override
 	protected String[] columns() {
 		return new String[]{"mutation.mutation_id",
-				"location.location_id",
-				"location.location_chromosome",
-				"location.location_start",
-				"location.location_end",
+				"mutation.chromosome",
+				"mutation.start",
+				"mutation.end",
 				"mutation.db_snp_id",
 				"mutation.mut_ref",
 				"mutation.mut_alt",
@@ -58,8 +57,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 
 	@Override
 	protected String[][] leftJoins() {
-		return new String[][]{{"location","mutation.location_id = location.location_id"},
-								{"study","study.study_id = mutation.study_id"},
+		return new String[][]{{"study","study.study_id = mutation.study_id"},
 								{"study_in_project","study.study_id = study_in_project.study_id"},
 								{"platform","platform.platform_id = mutation.platform_id"},
 								{"tissue_sample","tissue_sample.study_id = study.study_id"},
@@ -72,7 +70,6 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		Location loc = null;
 		SNPMutation snpMut = null;
 		int id = 0;
-		int loc_id = 0;
 		String chromosome = null;
 		int start = 0;
 		int end = 0;
@@ -92,23 +89,22 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		try {
 			if(rs.next()){
 				id = rs.getInt(1);
-				loc_id = rs.getInt(2);
-				chromosome = rs.getString(3);
-				start = rs.getInt(4);
-				end = rs.getInt(5);
+				chromosome = rs.getString(2);
+				start = rs.getInt(3);
+				end = rs.getInt(4);
 				
-				db_snp_id = rs.getString(6);
-				ref = rs.getString(7);
-				alt = rs.getString(8);
-				quality = rs.getDouble(9);
-				somatic = rs.getString(10);
-				confidence = rs.getString(11);
-				snpTool = rs.getString(12);
-				platformId = rs.getInt(13);
-				platformName = rs.getString(14);
-				studyId = rs.getInt(15);
+				db_snp_id = rs.getString(5);
+				ref = rs.getString(6);
+				alt = rs.getString(7);
+				quality = rs.getDouble(8);
+				somatic = rs.getString(9);
+				confidence = rs.getString(10);
+				snpTool = rs.getString(11);
+				platformId = rs.getInt(12);
+				platformName = rs.getString(13);
+				studyId = rs.getInt(14);
 				
-				loc = new Location(loc_id, chromosome, start, end);
+				loc = new Location(chromosome, start, end);
 				
 				snpMut = new SNPMutation(id, loc, db_snp_id, ref, alt, quality, somatic, confidence, snpTool);
 				
@@ -127,34 +123,17 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 	@Override
 	public int storeSNPMutation(SNPMutation snpMut, int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer mutation_query = new StringBuffer();
-		int newLocId = 0;
 		int newMutationId = 0;
 		
 		try{
 			
 			conn = getConnection();
 			
-			loc_query.append("INSERT INTO location ")
-			.append("(location_chromosome, " +
-					"location_start, " + 
-					"location_end) ")
-			.append(" VALUES ")
-			.append("('" + snpMut.getLocation().getChromosome() + 
-					"', '" + snpMut.getLocation().getStart() + 
-					"', '" + snpMut.getLocation().getEnd() + "')");
-			
-			ResultSet rs = executeUpdateGetKeys(conn, loc_query.toString());
-
-			if(rs.next()){
-				newLocId = rs.getInt(1);
-			}
-			
-			rs.close();
-			
 			mutation_query.append("INSERT INTO ").append(getPrimaryTableName())
-			.append("(location_id" +
+			.append("(chromosome" +
+					", start " + 
+					", end " +
 					", db_snp_id" +
 					", mut_ref" +
 					", mut_alt" +
@@ -166,7 +145,9 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 					", study_id" +
 					")")
 			.append(" VALUES ")
-			.append("('" + newLocId +
+			.append("('" + snpMut.getLocation().getChromosome() +
+					"', '" + snpMut.getLocation().getStart() + 
+					"', '" + snpMut.getLocation().getEnd() + 
 					"', '" + snpMut.getDbSnpId() +
 					"', '" + snpMut.getRef() + 
 					"', '" + snpMut.getAlt() + 
@@ -177,7 +158,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 					"', '" + snpMut.getPlatformId() + 
 					"', '" + studyId + "')");
 			
-			rs = executeUpdateGetKeys(conn, mutation_query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, mutation_query.toString());
 			
 			if(rs.next()){
 				newMutationId = rs.getInt(1);
@@ -215,7 +196,6 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			query.append("SELECT ")
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("mutation_id = " + mutationId);
 			
@@ -253,7 +233,6 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON mutation.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY mutation_id ASC");
@@ -304,7 +283,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		
 		query.append(getBaseQuery())
 		.append(" WHERE ")
-		.append("location_chromosome = '" + chr + "'");
+		.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getScoreSQLWhereClause("mutation.quality", qualityFilter, true));
 		query.append(getArrayFilterSQLWhereClause("mutation.somatic", somaticFilter));
@@ -346,17 +325,11 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 	@Override
 	public void deleteSNPMutation(SNPMutation snpMut) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
-			
-			loc_query.append("DELETE FROM location")
-			.append(" WHERE ").append("location_id = " + snpMut.getLocation().getId());
-			
-			executeUpdate(conn, loc_query.toString());
 			
 			segment_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
@@ -376,19 +349,11 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 	@Override
 	public void deleteSNPMutation(int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
-			
-			loc_query.append("DELETE location.* FROM ")
-			.append(" location ")
-			.append(" LEFT JOIN mutation ON mutation.location_id = location.location_id")
-			.append(" WHERE ").append("study_id = " + studyId);
-			
-			executeUpdate(conn, loc_query.toString());
 			
 			segment_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())

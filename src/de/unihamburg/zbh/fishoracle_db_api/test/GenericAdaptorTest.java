@@ -128,7 +128,6 @@ public class GenericAdaptorTest extends TestCase {
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) gfa).fetchCount() == 0){
-			td.emptyLocationTable();
 			td.emptyFeatureTable();
 		}
 	}

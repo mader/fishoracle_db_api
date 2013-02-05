@@ -64,7 +64,9 @@ CREATE TABLE `property` (
 
 CREATE TABLE `segment` (
   `segment_id` int UNSIGNED NOT NULL auto_increment,
-  `location_id` int NOT NULL,
+  `chromosome` varchar(16) NOT NULL,
+  `start` int NOT NULL,
+  `end` int NOT NULL,
   `mean` double NOT NULL DEFAULT 0.0,
   `markers` int NOT NULL DEFAULT 0,
   `status` int NOT NULL DEFAULT -1,
@@ -73,11 +75,11 @@ CREATE TABLE `segment` (
   `platform_id` int,
   `study_id` int,
   PRIMARY KEY(`segment_id`),
+  INDEX (`chromosome`,`start`,`end`),
   INDEX (`mean`),
   INDEX (`status`),
   INDEX (`platform_id`),
-  INDEX (`study_id`),
-  INDEX (`location_id`)
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -201,7 +203,9 @@ CREATE TABLE `study_in_project` (
 
 CREATE TABLE `mutation` (
   `mutation_id` int UNSIGNED NOT NULL auto_increment,
-  `location_id` int NOT NULL,
+  `chromosome` varchar(16) NOT NULL,
+  `start` int NOT NULL,
+  `end` int NOT NULL,
   `db_snp_id` varchar(64),
   `mut_ref` varchar(1),
   `mut_alt` varchar(1),
@@ -212,11 +216,11 @@ CREATE TABLE `mutation` (
   `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`mutation_id`),
+  INDEX (`chromosome`,`start`,`end`),
   INDEX (`quality`),
   INDEX (`somatic`),
   INDEX (`confidence`),
   INDEX (`snp_tool`),
-  INDEX (`location_id`),
   INDEX (`platform_id`),
   INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -229,31 +233,18 @@ CREATE TABLE `mutation` (
 
 CREATE TABLE `translocation` (
   `translocation_id` int UNSIGNED NOT NULL auto_increment,
-  `location_id` int NOT NULL,
+  `chromosome` varchar(16) NOT NULL,
+  `start` int NOT NULL,
+  `end` int NOT NULL,
   `translocation_ref_id` int NOT NULL,
   `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`translocation_id`),
+  INDEX (`chromosome`,`start`,`end`),
   INDEX (`translocation_ref_id`),
-  INDEX (`location_id`),
   INDEX (`platform_id`),
   INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `location`
--- 
-
-CREATE TABLE `location` (
-  `location_id` int UNSIGNED NOT NULL auto_increment,
-  `location_chromosome` varchar(16) NOT NULL,
-  `location_start` int NOT NULL,
-  `location_end` int NOT NULL,
-  PRIMARY KEY  (`location_id`),
-  INDEX (`location_chromosome`,`location_start`,`location_end`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -263,13 +254,15 @@ CREATE TABLE `location` (
 
 CREATE TABLE `feature` (
   `feature_id` int UNSIGNED NOT NULL auto_increment,
-  `location_id` int NOT NULL,
+  `chromosome` varchar(16) NOT NULL,
+  `start` int NOT NULL,
+  `end` int NOT NULL,
   `feature_type` varchar(128) NOT NULL,
   `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`feature_id`),
+  INDEX (`chromosome`,`start`,`end`),
   INDEX (`feature_type`),
-  INDEX (`location_id`),
   INDEX (`platform_id`),
   INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

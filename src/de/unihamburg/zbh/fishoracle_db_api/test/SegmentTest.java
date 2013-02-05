@@ -241,7 +241,6 @@ public class SegmentTest extends TestCase{
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) sa).fetchCount() == 0){
-			td.emptyLocationTable();
 			td.emptyCnSegmentTable();
 		}
 	}

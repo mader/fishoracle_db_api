@@ -147,7 +147,6 @@ public class SNPMutationAdaptorTest extends TestCase {
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) ma).fetchCount() == 0){
-			td.emptyLocationTable();
 			td.emptySNPMutationTable();
 		}
 	}

@@ -22,8 +22,7 @@ package de.unihamburg.zbh.fishoracle_db_api.data;
  *
  */
 public class Location {
-
-	private int id;
+	
 	private String chrosmome;
 	private int start;
 	private int end;
@@ -31,8 +30,7 @@ public class Location {
 	public Location() {
 	}
 
-	public Location(int id, String chrosmome, int start, int end) {
-		this.id = id;
+	public Location(String chrosmome, int start, int end) {
 		this.chrosmome = chrosmome;
 		this.start = start;
 		this.end = end;
@@ -60,14 +58,6 @@ public class Location {
 
 	public void setEnd(int end) {
 		this.end = end;
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/**

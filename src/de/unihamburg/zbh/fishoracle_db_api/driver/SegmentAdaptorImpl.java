@@ -47,10 +47,9 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 	@Override
 	protected String[] columns() {
 		return new String[] { "segment.segment_id",
-								"location.location_id",
-								"location.location_chromosome",
-								"location.location_start",
-								"location.location_end",
+								"segment.chromosome",
+								"segment.start",
+								"segment.end",
 								"mean",
 								"markers",
 								"status",
@@ -71,38 +70,18 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 	public int storeSegment(Segment segment, int studyId) {
 		Connection conn = null;
 		StringBuffer segment_query = new StringBuffer();
-		StringBuffer loc_query = new StringBuffer();
-		int newLocId = 0;
 		int newSegmentId = 0;
 
 		try {
 
 			conn = getConnection();
 
-			loc_query
-					.append("INSERT INTO location ")
-					.append("(location_chromosome, " + 
-							"location_start, " +
-							"location_end) ")
-					.append(" VALUES ")
-					.append("('" + segment.getLocation().getChromosome() +
-							 "', '" +
-							 segment.getLocation().getStart() +
-							 "', '" +
-							 segment.getLocation().getEnd() + "')");
-
-			ResultSet rs = executeUpdateGetKeys(conn, loc_query.toString());
-
-			if (rs.next()) {
-				newLocId = rs.getInt(1);
-			}
-			rs.getStatement().close();
-			rs.close();
-
 			segment_query
 					.append("INSERT INTO ")
 					.append(getPrimaryTableName())
-					.append("(location_id, " + 
+					.append("(chromosome, " +
+							"start, " +
+							"end, " +
 							"mean, " +
 							"markers, " +
 							"status, " +
@@ -111,7 +90,9 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 							"platform_id, " +
 							"study_id)")
 					.append(" VALUES ")
-					.append("('" + newLocId + 
+					.append("('" + segment.getLocation().getChromosome() +
+							"', '" + segment.getLocation().getStart() +
+							"', '" + segment.getLocation().getEnd() +
 							"', '" + segment.getMean() +
 							"', '" + segment.getNumberOfMarkers() +
 							"', '" + segment.getStatus() +
@@ -120,7 +101,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 							"', '" + segment.getPlatformId() +
 							"', '" + studyId + "')");
 
-			rs = executeUpdateGetKeys(conn, segment_query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, segment_query.toString());
 			
 			if (rs.next()) {
 				newSegmentId = rs.getInt(1);
@@ -150,7 +131,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		Location loc = null;
 		Segment segment = null;
 		int id = 0;
-		int loc_id = 0;
 		String chromosome = null;
 		int start = 0;
 		int end = 0;
@@ -167,20 +147,19 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		try {
 			if (rs.next()) {
 				id = rs.getInt(1);
-				loc_id = rs.getInt(2);
-				chromosome = rs.getString(3);
-				start = rs.getInt(4);
-				end = rs.getInt(5);
-				mean = rs.getDouble(6);
-				numberOfMarkers = rs.getInt(7);
-				status = rs.getInt(8);
-				statusScore = rs.getDouble(9);
-				type = rs.getString(10);
-				platformId = rs.getInt(11);
-				platformName = rs.getString(12);
-				studyId = rs.getInt(13);
+				chromosome = rs.getString(2);
+				start = rs.getInt(3);
+				end = rs.getInt(4);
+				mean = rs.getDouble(5);
+				numberOfMarkers = rs.getInt(6);
+				status = rs.getInt(7);
+				statusScore = rs.getDouble(8);
+				type = rs.getString(9);
+				platformId = rs.getInt(10);
+				platformName = rs.getString(11);
+				studyId = rs.getInt(12);
 
-				loc = new Location(loc_id, chromosome, start, end);
+				loc = new Location(chromosome, start, end);
 
 				segment = new Segment(id,
 										loc,
@@ -221,8 +200,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 					.append(super.columnsToString(columns()))
 					.append(" FROM ")
 					.append(super.getPrimaryTableName())
-					.append(" LEFT JOIN location ON segment.location_id =" +
-							" location.location_id")
 					.append(" LEFT JOIN platform ON segment.platform_id = platform.platform_id")
 					.append(" WHERE ")
 					.append("segment_id = " + segmentId);
@@ -262,33 +239,25 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 			query
 					.append("SELECT ")
-					.append(
-							"location.location_id, "
-									+ "location.location_chromosome, "
-									+ "location.location_start, "
-									+ "location.location_end")
+					.append("chromosome, "
+							+ "start, "
+							+ "end")
 					.append(" FROM ")
 					.append(getPrimaryTableName())
-					.append(
-							" LEFT JOIN location ON segment.location_id = " +
-							"location.location_id")
-					.append(" LEFT JOIN platform ON segment.platform_id = platform.platform_id")
 					.append(" WHERE ")
 					.append("segment_id = " + segmentId);
 
 			ResultSet rs = executeQuery(conn, query.toString());
-
-			int loc_id = 0;
+			
 			int start = 0;
 			int end = 0;
 			String chr = null;
 			while (rs.next()) {
-				loc_id = rs.getInt(1);
-				chr = rs.getString(2);
-				start = rs.getInt(3);
-				end = rs.getInt(4);
+				chr = rs.getString(1);
+				start = rs.getInt(2);
+				end = rs.getInt(3);
 
-				loc = new Location(loc_id, chr, start, end);
+				loc = new Location(chr, start, end);
 			}
 
 			rs.close();
@@ -386,13 +355,10 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 		query
 				.append("SELECT ")
-				.append("location.location_id, " +
-						"MIN(location_start) as minstart, " +
-						"MAX(location_end) as maxend")
+				.append("MIN(start) as minstart, " +
+						"MAX(end) as maxend")
 				.append(" FROM ")
 				.append(getPrimaryTableName())
-				.append(" LEFT JOIN location " +
-						"ON segment.location_id = location.location_id")
 				.append(" LEFT JOIN platform ON segment.platform_id = platform.platform_id")
 				.append(" LEFT JOIN study " +
 						"ON study.study_id = segment.study_id")
@@ -403,7 +369,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" LEFT JOIN organ ON " +
 						"organ_id = tissue_sample_organ_id ")
 				.append(" WHERE ")
-				.append("location_chromosome = '" + chr + "'");
+				.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getThresholdSQLClause(segMean));
 		query.append(getProjectSQLClause(projectFilter));
@@ -413,23 +379,21 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		try {
 			conn = getConnection();
 			ResultSet rangeRs = executeQuery(conn, query.toString());
-
-			int loc_id = 0;
+			
 			int qstart = 0;
 			int qend = 0;
 
 			if (rangeRs.next()) {
-				loc_id = rangeRs.getInt(1);
-				qstart = rangeRs.getInt(2);
-				qend = rangeRs.getInt(3);
+				qstart = rangeRs.getInt(1);
+				qend = rangeRs.getInt(2);
 			}
 
 			rangeRs.close();
 
 			if (qstart == 0 && qend == 0) {
-				loc = new Location(loc_id, chr, start, end);
+				loc = new Location(chr, start, end);
 			} else {
-				loc = new Location(loc_id, chr, qstart, qend);
+				loc = new Location(chr, qstart, qend);
 			}
 
 		} catch (Exception e) {
@@ -459,9 +423,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 					.append(super.columnsToString(columns()))
 					.append(" FROM ")
 					.append(super.getPrimaryTableName())
-					.append(
-							" LEFT JOIN location " +
-							"ON segment.location_id = location.location_id")
 					.append(" LEFT JOIN platform ON segment.platform_id = platform.platform_id")
 					.append(" WHERE ")
 					.append("study_id = '" + studyId + "'")
@@ -507,8 +468,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		Segment segment = null;
 		ArrayList<Segment> segmentContainer = new ArrayList<Segment>();
 		Segment[] segments = null;
-		StudyAdaptor sa = driver.getStudyAdaptor();
-		Study s;
 
 		StringBuffer query = new StringBuffer();
 
@@ -517,8 +476,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(super.columnsToString(columns()))
 				.append(" FROM ")
 				.append(super.getPrimaryTableName())
-				.append(" LEFT JOIN location ON " +
-						"segment.location_id = location.location_id")
 				.append(" LEFT JOIN platform ON " +
 						"segment.platform_id = platform.platform_id")
 				.append(" LEFT JOIN study ON " +
@@ -530,7 +487,7 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" LEFT JOIN organ ON " +
 						"organ_id = tissue_sample_organ_id ")
 				.append(" WHERE ")
-				.append("location_chromosome = '" + chr + "'");
+				.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getThresholdSQLClause(segMean));
 		query.append(getProjectSQLClause(projectFilter));
@@ -570,19 +527,11 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 	@Override
 	public void deleteSegment(Segment segment) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
 
 		try {
 
 			conn = getConnection();
-
-			loc_query
-					.append("DELETE FROM location")
-					.append(" WHERE ")
-					.append("location_id = " + segment.getLocation().getId());
-
-			executeUpdate(conn, loc_query.toString());
 
 			segment_query
 					.append("DELETE FROM ")
@@ -603,23 +552,11 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 	public void deleteSegment(int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
 
 		try {
 
 			conn = getConnection();
-
-			loc_query
-					.append("DELETE location.* FROM")
-					.append(" location")
-					.append(
-							" LEFT JOIN segment ON " +
-							"segment.location_id = location.location_id")
-					.append(" WHERE ")
-					.append("study_id = " + studyId);
-
-			executeUpdate(conn, loc_query.toString());
 
 			segment_query
 					.append("DELETE FROM ")

@@ -335,7 +335,7 @@ public class TestData {
 					segment13, segment14;
 		
 		segment1 = new Segment(1,
-								new Location(0, "1", 1, 3000),
+								new Location("1", 1, 3000),
 								"dnacopy");
 		
 		segment1.setMean(0.5);
@@ -344,7 +344,7 @@ public class TestData {
 		segment1.setStudyId(1);
 		
 		segment2 = new Segment(2,
-								new Location(0, "1", 3001, 5000),
+								new Location("1", 3001, 5000),
 								"dnacopy");
 		
 		segment2.setMean(0.7);
@@ -353,7 +353,7 @@ public class TestData {
 		segment2.setStudyId(1);
 		
 		segment3 = new Segment(3,
-								new Location(0, "2", 5000, 7000),
+								new Location("2", 5000, 7000),
 								"dnacopy");
 		
 		segment3.setMean(0.3);
@@ -362,7 +362,7 @@ public class TestData {
 		segment3.setStudyId(1);
 		
 		segment4 = new Segment(4,
-								new Location(0,"3", 2000, 3000),
+								new Location("3", 2000, 3000),
 								"dnacopy");
 		
 		segment4.setMean(-1.2);
@@ -371,7 +371,7 @@ public class TestData {
 		segment4.setStudyId(1);
 		
 		segment5 = new Segment(5,
-								new Location(0, "1", 2000, 4000),
+								new Location("1", 2000, 4000),
 								"dnacopy");
 		
 		segment5.setMean(0.2);
@@ -380,7 +380,7 @@ public class TestData {
 		segment5.setStudyId(2);
 		
 		segment6 = new Segment(6,
-								new Location(0, "2", 1000, 4000),
+								new Location("2", 1000, 4000),
 								"dnacopy");
 		
 		segment6.setMean(0.55);
@@ -389,7 +389,7 @@ public class TestData {
 		segment6.setStudyId(2);
 		
 		segment7 = new Segment(7,
-								new Location(0, "3", 2500, 3500),
+								new Location("3", 2500, 3500),
 								"dnacopy");
 		
 		segment7.setMean(-0.52);
@@ -398,7 +398,7 @@ public class TestData {
 		segment7.setStudyId(2);
 		
 		segment8 = new Segment(8,
-								new Location(0, "4", 1, 1111),
+								new Location("4", 1, 1111),
 								"dnacopy");
 		
 		segment8.setMean(1.32);
@@ -407,7 +407,7 @@ public class TestData {
 		segment8.setStudyId(2);
 		
 		segment9 = new Segment(9,
-								new Location(0, "1", 1000, 2000),
+								new Location("1", 1000, 2000),
 								"dnacopy");
 		
 		segment9.setMean(0.3);
@@ -416,7 +416,7 @@ public class TestData {
 		segment9.setStudyId(3);
 		
 		segment10 = new Segment(10,
-								new Location(0, "2", 5000, 10000),
+								new Location("2", 5000, 10000),
 								"dnacopy");
 		
 		segment10.setMean(0.55);
@@ -425,7 +425,7 @@ public class TestData {
 		segment10.setStudyId(3);
 		
 		segment11 = new Segment(11,
-								new Location(0, "3", 1, 2222),
+								new Location("3", 1, 2222),
 								"dnacopy");
 		
 		segment11.setMean(-0.32);
@@ -434,7 +434,7 @@ public class TestData {
 		segment11.setStudyId(3);
 		
 		segment12 = new Segment(12,
-								new Location(0, "4", 2222, 3333),
+								new Location("4", 2222, 3333),
 								"dnacopy");
 		
 		segment12.setMean(1.32);
@@ -443,7 +443,7 @@ public class TestData {
 		segment12.setStudyId(3);
 		
 		segment13 = new Segment(13,
-								new Location(0, "5", 1000, 2000),
+								new Location("5", 1000, 2000),
 								"penncnv");
 
 		segment13.setStatus(0);
@@ -452,7 +452,7 @@ public class TestData {
 		segment13.setStudyId(3);
 		
 		segment14 = new Segment(14,
-								new Location(0, "5", 2000, 3000),
+								new Location("5", 2000, 3000),
 								"penncnv");
 
 		segment14.setStatus(1);
@@ -475,7 +475,7 @@ public class TestData {
 		SNPMutation mut1, mut2, mut3, mut4;
 		
 		mut1 = new SNPMutation(1,
-								new Location(0, "1", 3000, 3000),
+								new Location("1", 3000, 3000),
 								"id1",
 								"T",
 								"G",
@@ -487,7 +487,7 @@ public class TestData {
 		mut1.setStudyId(1);
 		
 		mut2 = new SNPMutation(2,
-								new Location(0, "1", 500, 500),
+								new Location("1", 500, 500),
 								"id2",
 								"A",
 								"C",
@@ -499,7 +499,7 @@ public class TestData {
 		mut2.setStudyId(2);
 		
 		mut3 = new SNPMutation(3,
-								new Location(0, "2", 1700, 1700),
+								new Location("2", 1700, 1700),
 								"id3",
 								"G",
 								"C",
@@ -511,7 +511,7 @@ public class TestData {
 		mut3.setStudyId(3);
 		
 		mut4 = new SNPMutation(4,
-								new Location(0, "3", 2000, 2000),
+								new Location("3", 2000, 2000),
 								"id4",
 								"A",
 								"T",
@@ -537,37 +537,37 @@ public class TestData {
 		t3 = new Translocation[2];
 		
 		t1[0] = new Translocation(1,
-								new Location(0, "1", 1000, 1000),
+								new Location("1", 1000, 1000),
 								0);
 		t1[0].setPlatformId(1);
 		t1[0].setStudyId(1);
 		
 		t1[1] = new Translocation(1,
-								new Location(0, "2", 5000, 5000),
+								new Location("2", 5000, 5000),
 								0);
 		t1[1].setPlatformId(1);
 		t1[1].setStudyId(1);
 		
 		t2[0] = new Translocation(1,
-								new Location(0, "1", 2000, 2000),
+								new Location("1", 2000, 2000),
 								0);
 		t2[0].setPlatformId(1);
 		t2[0].setStudyId(2);
 		
 		t2[1] = new Translocation(1,
-								new Location(0, "3", 5000, 5000),
+								new Location("3", 5000, 5000),
 								0);
 		t2[1].setPlatformId(1);
 		t2[1].setStudyId(2);
 		
 		t3[0] = new Translocation(1,
-								new Location(0, "1", 3000, 3000),
+								new Location("1", 3000, 3000),
 								0);
 		t3[0].setPlatformId(1);
 		t3[0].setStudyId(3);
 		
 		t3[1] = new Translocation(1,
-								new Location(0, "4", 5000, 5000),
+								new Location("4", 5000, 5000),
 								0);
 		t3[1].setPlatformId(1);
 		t3[1].setStudyId(3);
@@ -582,19 +582,19 @@ public class TestData {
 		GenericFeature f1, f2, f3;
 		
 		f1 = new GenericFeature(1,
-								new Location(0, "1", 3000, 3000),
+								new Location("1", 3000, 3000),
 								"Methylation");
 		f1.setPlatformId(1);
 		f1.setStudyId(1);
 		
 		f2 = new GenericFeature(2,
-								new Location(0, "1", 500, 500),
+								new Location("1", 500, 500),
 								"myAnnotation");
 		f2.setPlatformId(1);
 		f2.setStudyId(2);
 		
 		f3 = new GenericFeature(3,
-								new Location(0, "2", 1700, 1700),
+								new Location("2", 1700, 1700),
 								"whatever");
 		f3.setPlatformId(1);
 		f3.setStudyId(3);
@@ -770,10 +770,6 @@ public class TestData {
 	
 	public void emptyCnSegmentTable(){
 		((BaseAdaptor) csa).truncateTable(((BaseAdaptor) csa).getPrimaryTableName());
-	}
-	
-	public void emptyLocationTable(){
-		((BaseAdaptor) csa).truncateTable("location");
 	}
 	
 	public void emptySNPMutationTable(){

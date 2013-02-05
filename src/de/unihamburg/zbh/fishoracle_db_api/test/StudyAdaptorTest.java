@@ -169,7 +169,6 @@ public class StudyAdaptorTest extends TestCase{
 			td.emptyTissueSampleTable();
 			td.emptyTissueSamplePropertyTable();
 			td.emptyCnSegmentTable();
-			td.emptyLocationTable();
 			td.emptyStudyInProjectTable();
 		}
 	}

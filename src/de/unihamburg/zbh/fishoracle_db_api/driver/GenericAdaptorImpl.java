@@ -40,10 +40,9 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 	@Override
 	protected String[] columns() {
 		return new String[]{"feature.feature_id",
-				"location.location_id",
-				"location.location_chromosome",
-				"location.location_start",
-				"location.location_end",
+				"feature.chromosome",
+				"feature.start",
+				"feature.end",
 				"feature.feature_type",
 				"feature.platform_id",
 				"platform.platform_name",
@@ -52,8 +51,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 
 	@Override
 	protected String[][] leftJoins() {
-		return new String[][]{{"location","feature.location_id = location.location_id"},
-				{"study","study.study_id = feature.study_id"},
+		return new String[][]{{"study","study.study_id = feature.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
 				{"platform","platform.platform_id = feature.platform_id"},
 				{"tissue_sample","tissue_sample.study_id = study.study_id"},
@@ -66,7 +64,6 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		Location loc = null;
 		GenericFeature feature = null;
 		int id = 0;
-		int loc_id = 0;
 		String chromosome = null;
 		int start = 0;
 		int end = 0;
@@ -79,16 +76,15 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		try {
 			if(rs.next()){
 				id = rs.getInt(1);
-				loc_id = rs.getInt(2);
-				chromosome = rs.getString(3);
-				start = rs.getInt(4);
-				end = rs.getInt(5);
-				featureType = rs.getString(6);
-				platformId = rs.getInt(7);
-				platformName = rs.getString(8);
-				studyId = rs.getInt(9);
+				chromosome = rs.getString(2);
+				start = rs.getInt(3);
+				end = rs.getInt(4);
+				featureType = rs.getString(5);
+				platformId = rs.getInt(6);
+				platformName = rs.getString(7);
+				studyId = rs.getInt(8);
 				
-				loc = new Location(loc_id, chromosome, start, end);
+				loc = new Location(chromosome, start, end);
 				
 				feature = new GenericFeature(id, loc, featureType);
 				feature.setPlatformId(platformId);
@@ -106,45 +102,30 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 	@Override
 	public int storeGenericFeature(GenericFeature feature, int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer feature_query = new StringBuffer();
-		int newLocId = 0;
 		int newFeatureId = 0;
 		
 		try{
 			
 			conn = getConnection();
 			
-			loc_query.append("INSERT INTO location ")
-			.append("(location_chromosome, " +
-					"location_start, " + 
-					"location_end) ")
-			.append(" VALUES ")
-			.append("('" + feature.getLocation().getChromosome() + 
-					"', '" + feature.getLocation().getStart() + 
-					"', '" + feature.getLocation().getEnd() + "')");
-			
-			ResultSet rs = executeUpdateGetKeys(conn, loc_query.toString());
-
-			if(rs.next()){
-				newLocId = rs.getInt(1);
-			}
-			
-			rs.close();
-			
 			feature_query.append("INSERT INTO ").append(getPrimaryTableName())
-			.append("(location_id" +
+			.append("(chromosome" +
+					", start " + 
+					", end " + 
 					", feature_type" +
 					", platform_id" +
 					", study_id" +
 					")")
 			.append(" VALUES ")
-			.append("('" + newLocId +
+			.append("('" + feature.getLocation().getChromosome() +
+					"', '" + feature.getLocation().getStart() + 
+					"', '" + feature.getLocation().getEnd() + 
 					"', '" + feature.getType() +
 					"', '" + feature.getPlatformId() +
 					"', '" + studyId + "')");
 			
-			rs = executeUpdateGetKeys(conn, feature_query.toString());
+			ResultSet rs = executeUpdateGetKeys(conn, feature_query.toString());
 			
 			if(rs.next()){
 				newFeatureId = rs.getInt(1);
@@ -182,7 +163,6 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			query.append("SELECT ")
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON feature.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON feature.platform_id = platform.platform_id")
 			.append(" WHERE ").append("feature_id = " + featureId);
 			
@@ -260,7 +240,6 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON feature.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON feature.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" ORDER BY feature_id ASC");
@@ -308,7 +287,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		
 		query.append(getBaseQuery())
 		.append(" WHERE ")
-		.append("location_chromosome = '" + chr + "'");
+		.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getArrayFilterSQLWhereClause("feature.feature_type", featureTypeFilter));
 		query.append(getArrayFilterSQLWhereClause("project_id", projectFilter));
@@ -345,17 +324,11 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 	@Override
 	public void deleteGenericFeature(GenericFeature feature) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer feature_query = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
-			
-			loc_query.append("DELETE FROM location")
-			.append(" WHERE ").append("location_id = " + feature.getLocation().getId());
-			
-			executeUpdate(conn, loc_query.toString());
 			
 			feature_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
@@ -375,19 +348,11 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 	@Override
 	public void deleteGenericFeature(int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer feature_query = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
-			
-			loc_query.append("DELETE location.* FROM ")
-			.append(" location ")
-			.append(" LEFT JOIN feature ON feature.location_id = location.location_id")
-			.append(" WHERE ").append("study_id = " + studyId);
-			
-			executeUpdate(conn, loc_query.toString());
 			
 			feature_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())

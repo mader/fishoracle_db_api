@@ -44,10 +44,9 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 	@Override
 	protected String[] columns() {
 		return new String[]{"translocation.translocation_id",
-								"location.location_id",
-								"location.location_chromosome",
-								"location.location_start",
-								"location.location_end",
+								"translocation.chromosome",
+								"translocation.start",
+								"translocation.end",
 								"translocation.translocation_ref_id",
 								"translocation.platform_id",
 								"platform_name",
@@ -56,8 +55,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 
 	@Override
 	protected String[][] leftJoins() {
-		return new String[][]{{"location","translocation.location_id = location.location_id"},
-				{"study","study.study_id = translocation.study_id"},
+		return new String[][]{{"study","study.study_id = translocation.study_id"},
 				{"study_in_project","study.study_id = study_in_project.study_id"},
 				{"platform","platform.platform_id = translocation.platform_id"},
 				{"tissue_sample","tissue_sample.study_id = study.study_id"},
@@ -70,7 +68,6 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 		Location loc = null;
 		Translocation transloc = null;
 		int id = 0;
-		int loc_id = 0;
 		String chromosome = null;
 		int start = 0;
 		int end = 0;
@@ -83,16 +80,15 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 		try {
 			if(rs.next()){
 				id = rs.getInt(1);
-				loc_id = rs.getInt(2);
-				chromosome = rs.getString(3);
-				start = rs.getInt(4);
-				end = rs.getInt(5);
-				ref_id = rs.getInt(6);
-				platformId = rs.getInt(7);
-				platformName = rs.getString(8);
-				studyId = rs.getInt(9);
+				chromosome = rs.getString(2);
+				start = rs.getInt(3);
+				end = rs.getInt(4);
+				ref_id = rs.getInt(5);
+				platformId = rs.getInt(6);
+				platformName = rs.getString(7);
+				studyId = rs.getInt(8);
 				
-				loc = new Location(loc_id, chromosome, start, end);
+				loc = new Location(chromosome, start, end);
 				
 				transloc = new Translocation(id, loc, ref_id);
 				
@@ -111,10 +107,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 	@Override
 	public int[] storeTranslocation(Translocation[] transloc, int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query;
 		StringBuffer transloc_query;
 		StringBuffer update_query;
-		int newLocId = 0;
 		int[] newTranslocIds = new int[2];
 		
 		try{
@@ -123,39 +117,25 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			
 			for(int i = 0; i < transloc.length; i++){
 			
-				loc_query = new StringBuffer();
 				transloc_query = new StringBuffer();
 				
-				loc_query.append("INSERT INTO location ")
-				.append("(location_chromosome, " +
-						"location_start, " + 
-						"location_end) ")
-						.append(" VALUES ")
-						.append("('" + transloc[i].getLocation().getChromosome() + 
-								"', '" + transloc[i].getLocation().getStart() + 
-								"', '" + transloc[i].getLocation().getEnd() + "')");
-				
-				ResultSet rs = executeUpdateGetKeys(conn, loc_query.toString());
-
-				if(rs.next()){
-					newLocId = rs.getInt(1);
-				}
-			
-				rs.close();
-				
 				transloc_query.append("INSERT INTO ").append(getPrimaryTableName())
-				.append("(location_id" +
+				.append("(chromosome" +
+						", start " +
+						", end " +
 						", translocation_ref_id" +
 						", platform_id" +
 						", study_id" +
 						")")
 						.append(" VALUES ")
-						.append("('" + newLocId +
+						.append("('" + transloc[i].getLocation().getChromosome() +
+								"', '" + transloc[i].getLocation().getStart() +
+								"', '" + transloc[i].getLocation().getEnd() +
 								"', '0', " + 
 								"'" + transloc[i].getPlatformId() +
 								"', '" + studyId + "')");
 				
-				rs = executeUpdateGetKeys(conn, transloc_query.toString());
+				ResultSet rs = executeUpdateGetKeys(conn, transloc_query.toString());
 			
 				if(rs.next()){
 					newTranslocIds[i] = rs.getInt(1);
@@ -221,7 +201,6 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			query.append("SELECT ")
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON translocation.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON translocation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("translocation_id = " + translocationId);
 			
@@ -268,7 +247,6 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
-			.append(" LEFT JOIN location ON translocation.location_id = location.location_id")
 			.append(" LEFT JOIN platform ON translocation.platform_id = platform.platform_id")
 			.append(" WHERE ").append("study_id = '" + studyId + "'")
 			.append(" AND ").append("translocation_id = (translocation_ref_id - 1)")
@@ -319,7 +297,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 		
 		query.append(getBaseQuery())
 		.append(" WHERE ")
-		.append("location_chromosome = '" + chr + "'");
+		.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
 		query.append(getArrayFilterSQLWhereClause("project_id", projectFilter));
 		query.append(getArrayFilterSQLWhereClause("organ_id", organFilter));
@@ -365,7 +343,6 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 	@Override
 	public void deleteTranslocation(Translocation[] transloc) {
 		Connection conn = null;
-		StringBuffer loc_query;
 		StringBuffer transloc_query;
 		
 		try{
@@ -374,13 +351,7 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			
 			for(int i = 0; i < transloc.length; i++){
 			
-				loc_query = new StringBuffer();
 				transloc_query = new StringBuffer();
-				
-				loc_query.append("DELETE FROM location")
-				.append(" WHERE ").append("location_id = " + transloc[i].getLocation().getId());
-				
-				executeUpdate(conn, loc_query.toString());
 			
 				transloc_query.append("DELETE FROM ")
 				.append(super.getPrimaryTableName())
@@ -402,19 +373,11 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 	@Override
 	public void deleteTranslocation(int studyId) {
 		Connection conn = null;
-		StringBuffer loc_query = new StringBuffer();
 		StringBuffer segment_query = new StringBuffer();
 		
 		try{
 			
 			conn = getConnection();
-			
-			loc_query.append("DELETE location.* FROM ")
-			.append(" location ")
-			.append(" LEFT JOIN translocation ON translocation.location_id = location.location_id")
-			.append(" WHERE ").append("study_id = " + studyId);
-			
-			executeUpdate(conn, loc_query.toString());
 			
 			segment_query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())

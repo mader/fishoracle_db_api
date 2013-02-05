@@ -102,7 +102,6 @@ public class TranslocationAdaptorTest extends TestCase {
 	protected void tearDown() {
 		
 		if(((BaseAdaptor) ta).fetchCount() == 0){
-			td.emptyLocationTable();
 			td.emptyTranslocationTable();
 		}
 	}	

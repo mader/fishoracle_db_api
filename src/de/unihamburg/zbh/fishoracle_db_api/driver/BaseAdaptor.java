@@ -235,17 +235,17 @@ public abstract class BaseAdaptor implements Adaptor{
 	public String getMaxiamlOverlappingSQLWhereClause(int start, int end){
 		StringBuffer query = new StringBuffer();
 		
-		query.append(" AND ((location_start <= " + start) 
-		.append(" AND location_end >= " + end + ")")
+		query.append(" AND ((start <= " + start) 
+		.append(" AND end >= " + end + ")")
 		.append(" OR ")
-		.append("(location_start >= " + start)
-		.append(" AND location_end <= " + end + ")")
+		.append("(start >= " + start)
+		.append(" AND end <= " + end + ")")
 		.append(" OR ")
-	    .append("(location_start >= " + start)
-	    .append(" AND location_start <= " + end + ")")
+	    .append("(start >= " + start)
+	    .append(" AND start <= " + end + ")")
 	    .append(" OR ")
-	    .append("(location_end >= " + start)
-	    .append(" AND location_end <= " + end + "))");
+	    .append("(end >= " + start)
+	    .append(" AND end <= " + end + "))");
 		return query.toString();
 	}
 	
