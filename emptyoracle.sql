@@ -106,7 +106,8 @@ CREATE TABLE `tissue_sample` (
   `tissue_sample_id` int UNSIGNED  NOT NULL auto_increment,
   `tissue_sample_organ_id` int NOT NULL,
   `study_id` int NOT NULL,
-  PRIMARY KEY  (`tissue_sample_id`)
+  PRIMARY KEY  (`tissue_sample_id`),
+  INDEX (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
