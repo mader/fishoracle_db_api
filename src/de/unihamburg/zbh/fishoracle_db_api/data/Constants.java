@@ -22,4 +22,10 @@ public class Constants {
 	public static final String ENSEMBL_BIOTYPES = "ensemblBiotypes";
 	public static final String SORTED_SEGMENTS = "sortedSegments";
 	public static final String SHOW_SEGMENT_CAPTION = "showSegmentCaption";
+	
+	public static final String COLOR_RED = "red";
+	public static final String COLOR_GREEN = "green";
+	public static final String COLOR_BLUE = "blue";
+	public static final String COLOR_ALPHA = "aplha";
+	public static final String COLOR_CUSTOM = "custom";
 }
