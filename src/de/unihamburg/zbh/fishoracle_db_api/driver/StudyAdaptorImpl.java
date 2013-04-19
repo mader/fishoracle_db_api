@@ -423,7 +423,7 @@ public class StudyAdaptorImpl extends BaseAdaptor implements StudyAdaptor{
 				}
 			
 				query.append(whereClause);
-				query.append(" ORDER BY study.study_id");
+				query.append(" ORDER BY study.study_name");
 			
 				ResultSet rs = executeQuery(conn, query.toString());
 			

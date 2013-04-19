@@ -94,6 +94,8 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return feature;

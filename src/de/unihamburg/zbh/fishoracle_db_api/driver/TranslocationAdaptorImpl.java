@@ -99,6 +99,8 @@ public class TranslocationAdaptorImpl extends BaseAdaptor implements Translocati
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return transloc;

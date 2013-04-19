@@ -115,6 +115,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return snpMut;

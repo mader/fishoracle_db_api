@@ -178,6 +178,8 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return segment;

@@ -30,7 +30,12 @@ public class Location {
 	public Location() {
 	}
 
-	public Location(String chrosmome, int start, int end) {
+	public Location(String chrosmome, int start, int end) throws Exception {
+		
+		if(start > end){
+			throw new Exception("Start > End: " + start + " > " + end );
+		}
+		
 		this.chrosmome = chrosmome;
 		this.start = start;
 		this.end = end;
