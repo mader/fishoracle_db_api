@@ -52,6 +52,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				"mutation.snp_tool",
 				"mutation.platform_id",
 				"platform.platform_name",
+				"study.study_name",
 				"mutation.study_id"};
 	}
 
@@ -81,6 +82,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 		String somatic = null;
 		String confidence = null;
 		String snpTool = null;
+		String studyName = null;
 		int studyId = 0;
 		
 		int platformId = 0;
@@ -102,7 +104,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				snpTool = rs.getString(11);
 				platformId = rs.getInt(12);
 				platformName = rs.getString(13);
-				studyId = rs.getInt(14);
+				studyName = rs.getString(14);
+				studyId = rs.getInt(15);
 				
 				loc = new Location(chromosome, start, end);
 				
@@ -110,6 +113,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 				
 				snpMut.setPlatformId(platformId);
 				snpMut.setPlatformName(platformName);
+				snpMut.setStudyName(studyName);
 				snpMut.setStudyId(studyId);
 			}
 			

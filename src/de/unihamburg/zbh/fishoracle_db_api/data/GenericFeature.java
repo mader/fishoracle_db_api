@@ -28,6 +28,7 @@ public class GenericFeature {
 	private String type;
 	private int platformId;
 	private String platformName;
+	private String studyName;
 	private int studyId;
 	
 	public GenericFeature(int id, Location location, String featureType) {
@@ -37,6 +38,7 @@ public class GenericFeature {
 		this.type = featureType;
 		this.platformName = "";
 		this.platformId = 0;
+		this.studyName = "";
 		this.studyId = 0;
 	}
 
@@ -80,6 +82,14 @@ public class GenericFeature {
 		this.platformName = platformName;
 	}
 
+	public String getStudyName() {
+		return studyName;
+	}
+
+	public void setStudyName(String studyName) {
+		this.studyName = studyName;
+	}
+	
 	public int getStudyId() {
 		return studyId;
 	}
