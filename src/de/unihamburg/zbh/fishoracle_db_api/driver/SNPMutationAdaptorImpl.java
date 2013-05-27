@@ -203,6 +203,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			.append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
+			.append(" LEFT JOIN study ON mutation.study_id = study.study_id")
 			.append(" WHERE ").append("mutation_id = " + mutationId);
 			
 			ResultSet rs = executeQuery(conn, query.toString());
@@ -240,7 +241,8 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 			query.append("SELECT ").append(super.columnsToString(columns()))
 			.append(" FROM ").append(super.getPrimaryTableName())
 			.append(" LEFT JOIN platform ON mutation.platform_id = platform.platform_id")
-			.append(" WHERE ").append("study_id = '" + studyId + "'")
+			.append(" LEFT JOIN study ON mutation.study_id = study.study_id")
+			.append(" WHERE ").append("mutation.study_id = '" + studyId + "'")
 			.append(" ORDER BY mutation_id ASC");
 			
 			ResultSet rs = executeQuery(conn, query.toString());
