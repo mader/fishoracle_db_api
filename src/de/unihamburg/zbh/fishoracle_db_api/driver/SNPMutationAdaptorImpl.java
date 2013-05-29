@@ -39,7 +39,7 @@ public class SNPMutationAdaptorImpl extends BaseAdaptor implements SNPMutationAd
 
 	@Override
 	protected String[] columns() {
-		return new String[]{"mutation.mutation_id",
+		return new String[]{"DISTINCT(mutation.mutation_id)",
 				"mutation.chromosome",
 				"mutation.start",
 				"mutation.end",
