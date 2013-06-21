@@ -35,6 +35,25 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 		implements
 		SegmentAdaptor {
 
+	String[] segmentStati;
+	Double segmentIntensity;
+	
+	public Double getSegmentIntensity() {
+		return segmentIntensity;
+	}
+
+	public void setSegmentIntensity(Double segmentIntensity) {
+		this.segmentIntensity = segmentIntensity;
+	}
+
+	public String[] getSegmentStati() {
+		return segmentStati;
+	}
+
+	public void setSegmentStati(String[] segmentStati) {
+		this.segmentStati = segmentStati;
+	}
+
 	protected SegmentAdaptorImpl(FODriverImpl driver) {
 		super(driver, TYPE);
 	}
@@ -276,11 +295,14 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 
 	private String getThresholdSQLClause(Double segMean) {
 		String qrystr = "";
-		if (segMean > 0) {
-			qrystr = qrystr + " AND mean > '" + segMean + "'";
-		}
-		if (segMean < 0) {
-			qrystr = qrystr + " AND mean < '" + segMean + "'";
+		
+		if(segMean != null){
+			if (segMean > 0) {
+				qrystr = qrystr + " AND mean > '" + segMean + "'";
+			}
+			if (segMean < 0) {
+				qrystr = qrystr + " AND mean < '" + segMean + "'";
+			}
 		}
 		return qrystr;
 	}
@@ -345,7 +367,6 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 			String chr,
 			int start,
 			int end,
-			Double segMean,
 			String[] projectFilter,
 			String[] organFilter,
 			String[] experimentFilter) {
@@ -373,7 +394,8 @@ public class SegmentAdaptorImpl extends BaseAdaptor
 				.append(" WHERE ")
 				.append("chromosome = '" + chr + "'");
 		query.append(getMaxiamlOverlappingSQLWhereClause(start, end));
-		query.append(getThresholdSQLClause(segMean));
+		query.append(getThresholdSQLClause(segmentIntensity));
+		query.append(getArrayFilterSQLWhereClause("status" , segmentStati));
 		query.append(getProjectSQLClause(projectFilter));
 		query.append(getOrganSQLClause(organFilter));
 		// query.append(getExperimentSQLClause(experimentFilter));

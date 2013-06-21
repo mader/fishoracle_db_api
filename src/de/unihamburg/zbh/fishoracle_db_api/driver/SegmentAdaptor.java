@@ -86,7 +86,6 @@ public interface SegmentAdaptor {
 	public Location fetchMaximalOverlappingSegmentRange(String chr,
 															int start,
 															int end,
-															Double segMean,
 															String[] projectFilter,
 															String[] organFilter,
 															String[] experimentFilter);
@@ -150,6 +149,11 @@ public interface SegmentAdaptor {
 	 *         for which all segments will be removed. 
 	 */
 	public void deleteSegment(int[] studyIds);
+	
+	public Double getSegmentIntensity();
+	public void setSegmentIntensity(Double segmentIntensity);
+	public String[] getSegmentStati();
+	public void setSegmentStati(String[] segmentStati);
 	
 	final static String TYPE = "SegmentAdaptor";
 }

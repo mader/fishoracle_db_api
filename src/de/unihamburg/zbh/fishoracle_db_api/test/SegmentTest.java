@@ -164,7 +164,8 @@ public class SegmentTest extends TestCase{
 	public void testFetchMaximalOverlappingSegmentRange(){
 		
 		//TODO Test this in more detail...
-		Location loc = sa.fetchMaximalOverlappingSegmentRange("1", 2000, 3000, 0.1, null, null, null);
+		sa.setSegmentIntensity(0.1);
+		Location loc = sa.fetchMaximalOverlappingSegmentRange("1", 2000, 3000, null, null, null);
 		
 		 assertTrue(loc.getChromosome().equals("1"));
 		 assertTrue(loc.getStart() == 1);
