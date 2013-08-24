@@ -1,0 +1,30 @@
+This directory contains the source code for the FISH Oracle database API.
+
+Copyright (c) 2011-2013 Malte Mader
+Copyright (c) 2011-2013 Center for Bioinformatics, University of Hamburg
+
+All Java source code is deposited in src/de/unihamburg/zbh/fishoracle_db_api.
+Following refered to as src/.
+
+src/lib/                   JUnit and MySQL libraries
+src/data/                  Source code for all objects storing data fetched
+                           from the database.
+src/driver/                Source code for adaptor objects fetching the data
+                           from the database.
+src/test/                  JUnit unit tests.
+src/util/                  Source code for database connection and data encyption.
+testdata/                  Contains testdata in CSV format.
+emtpyoracle.sql            Contains the database structure for the FISH Oracle
+                           database.
+data.sql                   Contains some useful sample/basic data.
+
+BUILDING THE API
+--------------------------
+In the root directory of source tree, run
+
+  ``ant'' or
+  ``ant compile''      to compile the code
+  ``ant test''         to run the unit tests
+  ``ant jar''          to build a JAR-file containing the classfiles
+  ``ant clean''        to remove all compiled binaries.
+  ``ant cleanup''      to remove all compiled binaries and jar file.
