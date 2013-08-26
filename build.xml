@@ -24,6 +24,9 @@
 
   <target name="cleanup" depends="clean" description="remove all artifact files">
     <delete file="fo_db_api.jar"/>
+    <delete failonerror="false">
+      <fileset dir="." includes="**/*.tar.gz"/>
+    </delete>
   </target>
 
   <target name="compile" description="compile the Java source code to class files">
@@ -52,6 +55,15 @@
       <formatter type="plain" usefile="false" />
       <classpath refid="test.classpath" />
     </junit>
+  </target>
+
+  <target name="tar_head">
+    <exec executable="git">
+      <arg value="archive"/>
+      <arg value="-o"/>
+      <arg value="fishoracle_db_api_latest.tar.gz"/>
+      <arg value="HEAD"/>
+    </exec>
   </target>
 
   <target name="jar" depends="compile" description="create a Jar file containing the library">
