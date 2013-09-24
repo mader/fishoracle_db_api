@@ -251,6 +251,12 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 	}
 
 	@Override
+	public int updateConfigData(ConfigData cd) {
+		//TODO
+		return 0;
+	}
+	
+	@Override
 	public void deleteConfig(int configId) {
 		Connection conn = null;
 		StringBuffer query = new StringBuffer();
