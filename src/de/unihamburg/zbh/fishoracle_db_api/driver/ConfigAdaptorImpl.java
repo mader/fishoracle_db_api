@@ -265,6 +265,14 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			
 			conn = getConnection();
 			
+			TrackConfigAdaptor tca = driver.getTrackConfigAdaptor();
+			
+			TrackData[] td = tca.fetchTrackConfigForConfigId(configId);
+			
+			for(int i = 0; i< td.length; i++){
+				tca.deleteTrackConfig(td[i].getId());
+			}
+			
 			query.append("DELETE FROM ")
 			.append(super.getPrimaryTableName())
 			.append(" WHERE ").append("config_id = " + configId);
