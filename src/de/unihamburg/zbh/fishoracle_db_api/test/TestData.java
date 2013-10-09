@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2011-2013 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2013 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -339,7 +339,7 @@ public class TestData {
 		try {
 			segment1 = new Segment(1,
 									new Location("1", 1, 3000),
-									"dnacopy");
+									"cnv_intensity");
 		
 		
 			segment1.setMean(0.5);
@@ -349,7 +349,7 @@ public class TestData {
 		
 			segment2 = new Segment(2,
 								new Location("1", 3001, 5000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment2.setMean(0.7);
 			segment2.setNumberOfMarkers(300);
@@ -358,7 +358,7 @@ public class TestData {
 		
 			segment3 = new Segment(3,
 								new Location("2", 5000, 7000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment3.setMean(0.3);
 			segment3.setNumberOfMarkers(600);
@@ -367,7 +367,7 @@ public class TestData {
 		
 			segment4 = new Segment(4,
 								new Location("3", 2000, 3000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment4.setMean(-1.2);
 			segment4.setNumberOfMarkers(250);
@@ -376,7 +376,7 @@ public class TestData {
 		
 			segment5 = new Segment(5,
 								new Location("1", 2000, 4000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment5.setMean(0.2);
 			segment5.setNumberOfMarkers(2300);
@@ -385,7 +385,7 @@ public class TestData {
 		
 			segment6 = new Segment(6,
 								new Location("2", 1000, 4000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment6.setMean(0.55);
 			segment6.setNumberOfMarkers(400);
@@ -394,7 +394,7 @@ public class TestData {
 		
 			segment7 = new Segment(7,
 								new Location("3", 2500, 3500),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment7.setMean(-0.52);
 			segment7.setNumberOfMarkers(630);
@@ -403,7 +403,7 @@ public class TestData {
 		
 			segment8 = new Segment(8,
 								new Location("4", 1, 1111),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment8.setMean(1.32);
 			segment8.setNumberOfMarkers(280);
@@ -412,7 +412,7 @@ public class TestData {
 		
 			segment9 = new Segment(9,
 								new Location("1", 1000, 2000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment9.setMean(0.3);
 			segment9.setNumberOfMarkers(2300);
@@ -421,7 +421,7 @@ public class TestData {
 		
 			segment10 = new Segment(10,
 								new Location("2", 5000, 10000),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment10.setMean(0.55);
 			segment10.setNumberOfMarkers(400);
@@ -430,7 +430,7 @@ public class TestData {
 		
 			segment11 = new Segment(11,
 								new Location("3", 1, 2222),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment11.setMean(-0.32);
 			segment11.setNumberOfMarkers(630);
@@ -439,7 +439,7 @@ public class TestData {
 		
 			segment12 = new Segment(12,
 								new Location("4", 2222, 3333),
-								"dnacopy");
+								"cnv_intensity");
 		
 			segment12.setMean(1.32);
 			segment12.setNumberOfMarkers(280);
@@ -448,7 +448,7 @@ public class TestData {
 		
 			segment13 = new Segment(13,
 								new Location("5", 1000, 2000),
-								"penncnv");
+								"cnv_status");
 
 			segment13.setStatus(0);
 			segment13.setStatusScore(50.5);
@@ -457,7 +457,7 @@ public class TestData {
 		
 			segment14 = new Segment(14,
 								new Location("5", 2000, 3000),
-								"penncnv");
+								"cnv_status");
 
 			segment14.setStatus(1);
 			segment14.setStatusScore(60.3);

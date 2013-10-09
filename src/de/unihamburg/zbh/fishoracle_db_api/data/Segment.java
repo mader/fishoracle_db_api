@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2011-2013 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2013 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -40,7 +40,7 @@ public class Segment extends GenericFeature {
 	 *         different types of deletion or amplification.
 	 *         Which kind of score is stored is determined by the type.
 	 * @param type Stores the segment type. Currently supported are:
-	 *         DNACopy and PennCNV.  
+	 *         cnv_intensity and cnv_status.  
 	 * @param numberOfMarkers The number of SNP markers covered by the segment. 
 	 */
 	public Segment(int id,

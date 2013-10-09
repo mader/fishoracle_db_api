@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2011-2012 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2011-2012 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2011-2013 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2011-2013 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -113,7 +113,7 @@ public interface SegmentAdaptor {
 	 *         should be fetched.
 	 * @param organFilter An array of organ IDs for which segments
 	 *         should be fetched.
-	 * @param experimentFilter An array of microarraystudy IDs for which
+	 * @param experimentFilter An array of study IDs for which
 	 *         segments should be fetched.
 	 * @return Returns an array of Segment objects. The Segment objects are
 	 *          ordered by the CnSegment ID. If there are no segments stored in
