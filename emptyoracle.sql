@@ -259,6 +259,7 @@ CREATE TABLE `feature` (
   `start` int NOT NULL,
   `end` int NOT NULL,
   `feature_type` varchar(128) NOT NULL,
+  `name` varchar(128),
   `platform_id` int NOT NULL,
   `study_id` int,
   PRIMARY KEY(`feature_id`),

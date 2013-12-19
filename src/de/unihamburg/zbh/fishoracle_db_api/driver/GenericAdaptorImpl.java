@@ -44,6 +44,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				"feature.start",
 				"feature.end",
 				"feature.feature_type",
+				"feature.name",
 				"feature.platform_id",
 				"platform.platform_name",
 				"feature.study_id"};
@@ -69,6 +70,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 		int end = 0;
 		
 		String featureType = null;
+		String featureName = null;
 		int platformId = 0;
 		String platformName = "";
 		int studyId = 0;
@@ -80,13 +82,15 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 				start = rs.getInt(3);
 				end = rs.getInt(4);
 				featureType = rs.getString(5);
-				platformId = rs.getInt(6);
-				platformName = rs.getString(7);
-				studyId = rs.getInt(8);
+				featureName = rs.getString(6);
+				platformId = rs.getInt(7);
+				platformName = rs.getString(8);
+				studyId = rs.getInt(9);
 				
 				loc = new Location(chromosome, start, end);
 				
 				feature = new GenericFeature(id, loc, featureType);
+				feature.setName(featureName);
 				feature.setPlatformId(platformId);
 				feature.setPlatformName(platformName);
 				feature.setStudyId(studyId);
@@ -116,6 +120,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 					", start " + 
 					", end " + 
 					", feature_type" +
+					", name" +
 					", platform_id" +
 					", study_id" +
 					")")
@@ -124,6 +129,7 @@ public class GenericAdaptorImpl extends BaseAdaptor implements GenericAdaptor {
 					"', '" + feature.getLocation().getStart() + 
 					"', '" + feature.getLocation().getEnd() + 
 					"', '" + feature.getType() +
+					"', '" + feature.getName() +
 					"', '" + feature.getPlatformId() +
 					"', '" + studyId + "')");
 			
