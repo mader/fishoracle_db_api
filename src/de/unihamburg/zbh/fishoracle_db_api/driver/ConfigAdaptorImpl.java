@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2012-2013 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2012-2013 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2012-2014 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2012-2014 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -43,7 +43,6 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 	protected String[] columns() {
 		return new String[]{"config.config_id",
 				"config.user_id",
-				"config.ensembl_db_id",
 				"config.name"};
 	}
 
@@ -57,7 +56,6 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 		
 		int id = 0;
 		int userId = 0;
-		int ensemblDBId = 0;
 		String name = "";
 		ConfigData cd = null;
 		
@@ -65,13 +63,11 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			if(rs.next()){
 				id = rs.getInt(1);
 				userId = rs.getInt(2);
-				ensemblDBId = rs.getInt(3);
-				name = rs.getString(4);
+				name = rs.getString(3);
 				
 				cd = new ConfigData();
 				cd.setId(id);
 				cd.setUserId(userId);
-				cd.setEnsemblDBId(ensemblDBId);
 				cd.setName(name);
 				
 				ConfigAttributeAdaptor caa = driver.getConfigAttributeAdaptor();
@@ -120,12 +116,10 @@ public class ConfigAdaptorImpl extends BaseAdaptor implements ConfigAdaptor {
 			
 			query.append("INSERT INTO config")
 			.append("(user_id, " +
-					"name, " +
-					"ensembl_db_id) ")
+					"name ) ")
 			.append(" VALUES ")
 			.append("('" + cd.getUserId() +
-					"', '" + cd.getName() +
-					"', '" + cd.getEnsemblDBId() + "')");
+					"', '" + cd.getName() + "')");
 			
 			ResultSet rs = executeUpdateGetKeys(conn, query.toString());
 			
