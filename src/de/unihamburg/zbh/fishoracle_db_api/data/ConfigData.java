@@ -1,6 +1,6 @@
 /*
-  Copyright (c) 2012 Malte Mader <mader@zbh.uni-hamburg.de>
-  Copyright (c) 2012 Center for Bioinformatics, University of Hamburg
+  Copyright (c) 2012 - 2014 Malte Mader <mader@zbh.uni-hamburg.de>
+  Copyright (c) 2012 - 2014 Center for Bioinformatics, University of Hamburg
 
   Permission to use, copy, modify, and distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,6 @@ public class ConfigData extends Config {
 
 	private int id;
 	private int userId;
-	private int ensemblDBId;
 	private String name;
 	private TrackData[] tracks;
 	
@@ -43,14 +42,6 @@ public class ConfigData extends Config {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public int getEnsemblDBId() {
-		return ensemblDBId;
-	}
-
-	public void setEnsemblDBId(int ensemblDBId) {
-		this.ensemblDBId = ensemblDBId;
 	}
 	
 	public String getName() {

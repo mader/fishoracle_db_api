@@ -745,14 +745,12 @@ public class TestData {
 		cd1 = new ConfigData();
 		cd1.setName("Config1");
 		cd1.setUserId(1);
-		cd1.setEnsemblDBId(1);
 		cd1.setTracks(new TrackData[]{td[0]});
 		cd1.addStrArray("globalAttrib", new String[]{"1"});
 		
 		cd2 = new ConfigData();
 		cd2.setName("Config2");
 		cd2.setUserId(2);
-		cd2.setEnsemblDBId(2);
 		cd2.setTracks(new TrackData[]{td[1], td[2]});
 		
 		ConfigData[] cds = new ConfigData[]{cd1, cd2};
