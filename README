@@ -1,7 +1,7 @@
 This directory contains the source code for the FISH Oracle database API.
 
-Copyright (c) 2011-2013 Malte Mader
-Copyright (c) 2011-2013 Center for Bioinformatics, University of Hamburg
+Copyright (c) 2011-2014 Malte Mader
+Copyright (c) 2011-2014 Center for Bioinformatics, University of Hamburg
 
 All Java source code is deposited in src/de/unihamburg/zbh/fishoracle_db_api.
 Following refered to as src/.
