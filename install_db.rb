@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require 'mysql'
+require 'mysql2'
 
 begin
     print "\n"
@@ -13,7 +13,7 @@ access to the mysql server.\n"
     system "stty -echo"
     rpw = gets
     system "stty echo"
-    con = Mysql.new('localhost', 'root', rpw.chomp)
+    con = Mysql2::Client.new(:host => "localhost", :username => "root", :password => rpw.chomp)
     
     puts "\n"
     
@@ -63,7 +63,7 @@ access to the mysql server.\n"
     (1, 'Admin', 'Admin', 'admin', 'admin@example.com', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 01)"
     )
 
-rescue Mysql::Error => e
+rescue Mysql2::Error => e
     puts e.errno
     puts e.error
     
